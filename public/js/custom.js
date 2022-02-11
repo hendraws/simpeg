@@ -33,3 +33,4 @@ function getDataTable(url, target){
 		Swal.fire({html: 'No response from server', icon: 'error', toast: true, position: 'top-end', showConfirmButton: false, timer: 10000, timerProgressBar: true,});
 	});
 }
+

@@ -42,27 +42,27 @@
 				</a>
 				<ul class="nav nav-treeview" style="display: none;">
 					<li class="nav-item">
-						<a href="" class="nav-link">
+						<a href="{{ action('JabatanController@index') }}" class="nav-link">
 							<p>Jabatan</p>
 						</a>
 					</li>
 					<li class="nav-item">
-						<a href="" class="nav-link">
+						<a href="{{ action('KantorController@index') }}" class="nav-link">
 							<p>Kantor/Cabang</p>
 						</a>
 					</li>
 					<li class="nav-item">
-						<a href="" class="nav-link">
+						<a href="{{ action('JenisPelanggaranController@index') }}" class="nav-link">
 							<p>Jenis Pelanggaran</p>
 						</a>
 					</li>
 					<li class="nav-item">
-						<a href="" class="nav-link">
+						<a href="{{ action('PersusController@index') }}" class="nav-link">
 							<p>Persus</p>
 						</a>
 					</li>
 					<li class="nav-item">
-						<a href="" class="nav-link">
+						<a href="{{ action('IndikatorPenilaianController@index') }}" class="nav-link">
 							<p>Indikator Penilaian</p>
 						</a>
 					</li>
@@ -78,7 +78,7 @@
 				</a>
 			</li>	 --}}
 			<li class="nav-item">
-				<a href="" class="nav-link">
+				<a href="{{ action('JabatanController@index') }}" class="nav-link">
 					<i class="nav-icon fa fa-calendar"></i>
 					<p>
 						Data Pegawai
