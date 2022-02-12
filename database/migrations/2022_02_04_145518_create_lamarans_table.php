@@ -33,7 +33,7 @@ class CreateLamaransTable extends Migration
             $table->string('tempat_cabang')->comment('sanggup_bekerja_dengan_cabang_manapun');
             $table->string('peraturan')->comment('sanggup_menaati_peraturn');            
             $table->string('surat_lamaran');            
-            $table->string('surat_pertanyaan');            
+            $table->string('surat_pernyataan');            
             $table->string('surat_tanggung_jawab')->comment('surat penanggung jawab orang tua');            
             $table->string('ijazah')->comment('Ijazah Terkahir');            
             $table->string('cv')->comment('Daftar Riwayat Hidup / cv');            

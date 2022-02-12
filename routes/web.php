@@ -10,6 +10,7 @@ Route::get('/', function () {
 })->name('front');
 
 Route::get('/karir', 'LamaranController@index');
+Route::post('/karir', 'LamaranController@store');
 // dibawah ini dibutuhkan akses autitentifikasi
 Route::group(['middleware' => 'auth'], function () { 
 	Route::get('/home', 'HomeController@index')->name('home');
