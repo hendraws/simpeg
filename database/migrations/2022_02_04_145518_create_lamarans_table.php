@@ -16,9 +16,11 @@ class CreateLamaransTable extends Migration
         Schema::create('lamarans', function (Blueprint $table) {
             $table->id();
             $table->string('no_tiket');
+            $table->string('nik');
             $table->string('nama');
             $table->string('tempat');
             $table->date('tanggal_lahir');
+            $table->date('usia');
             $table->text('alamat');
             $table->string('pendidikan_terakhir');
             $table->string('agama');

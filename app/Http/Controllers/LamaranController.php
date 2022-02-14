@@ -8,6 +8,7 @@ use App\Models\RefOption;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class LamaranController extends Controller
 {
@@ -80,83 +81,87 @@ class LamaranController extends Controller
             if ($request->has('surat_lamaran')) {
 
                 $extension = $request->file('surat_lamaran')->extension();
-                $imgName = 'lamaran/' . date('dmhHis') . '-' . time() . '.' . $extension;
+                $imgName = 'lamaran/' . date('dmh') . '-' .rand(1,10).'-'. Str::slug($request->nama) . '1.' . $extension;
                 $path = Storage::putFileAs('public', $request->file('surat_lamaran'), $imgName);
                 $lamar['surat_lamaran'] = $path;
             }
             if ($request->has('surat_pernyataan')) {
 
                 $extension = $request->file('surat_pernyataan')->extension();
-                $imgName = 'lamaran/' . date('dmhHis') . '-' . time() . '.' . $extension;
+                $imgName = 'lamaran/' . date('dmh') . '-' .rand(1,10).'-'. Str::slug($request->nama) . '2.' . $extension;
                 $path = Storage::putFileAs('public', $request->file('surat_pernyataan'), $imgName);
                 $lamar['surat_pernyataan'] = $path;
             }
             if ($request->has('surat_tanggung_jawab')) {
 
                 $extension = $request->file('surat_tanggung_jawab')->extension();
-                $imgName = 'lamaran/' . date('dmhHis') . '-' . time() . '.' . $extension;
+                $imgName = 'lamaran/' . date('dmh') . '-' .rand(1,10).'-'. Str::slug($request->nama) . '3.' . $extension;
                 $path = Storage::putFileAs('public', $request->file('surat_tanggung_jawab'), $imgName);
                 $lamar['surat_tanggung_jawab'] = $path;
             }
             if ($request->has('ijazah')) {
 
                 $extension = $request->file('ijazah')->extension();
-                $imgName = 'lamaran/' . date('dmhHis') . '-' . time() . '.' . $extension;
+                $imgName = 'lamaran/' . date('dmh') . '-' .rand(1,10).'-'. Str::slug($request->nama) . '4.' . $extension;
                 $path = Storage::putFileAs('public', $request->file('ijazah'), $imgName);
                 $lamar['ijazah'] = $path;
             }
             if ($request->has('cv')) {
 
                 $extension = $request->file('cv')->extension();
-                $imgName = 'lamaran/' . date('dmhHis') . '-' . time() . '.' . $extension;
+                $imgName = 'lamaran/' . date('dmh') . '-' .rand(1,10).'-'. Str::slug($request->nama) . '5.' . $extension;
                 $path = Storage::putFileAs('public', $request->file('cv'), $imgName);
                 $lamar['cv'] = $path;
             }
             if ($request->has('skck')) {
 
                 $extension = $request->file('skck')->extension();
-                $imgName = 'lamaran/' . date('dmhHis') . '-' . time() . '.' . $extension;
+                $imgName = 'lamaran/' . date('dmh') . '-' .rand(1,10).'-'. Str::slug($request->nama) . '6.' . $extension;
                 $path = Storage::putFileAs('public', $request->file('skck'), $imgName);
                 $lamar['skck'] = $path;
             }
             if ($request->has('foto')) {
 
                 $extension = $request->file('foto')->extension();
-                $imgName = 'lamaran/' . date('dmhHis') . '-' . time() . '.' . $extension;
+                $imgName = 'lamaran/' . date('dmh') . '-' .rand(1,10).'-'. Str::slug($request->nama) . '7.' . $extension;
                 $path = Storage::putFileAs('public', $request->file('foto'), $imgName);
                 $lamar['foto'] = $path;
             }
             if ($request->has('sim')) {
 
                 $extension = $request->file('sim')->extension();
-                $imgName = 'lamaran/' . date('dmhHis') . '-' . time() . '.' . $extension;
+                $imgName = 'lamaran/' . date('dmh') . '-' .rand(1,10).'-'. Str::slug($request->nama) . '8.' . $extension;
                 $path = Storage::putFileAs('public', $request->file('sim'), $imgName);
                 $lamar['sim'] = $path;
             }
             if ($request->has('ktp')) {
 
                 $extension = $request->file('ktp')->extension();
-                $imgName = 'lamaran/' . date('dmhHis') . '-' . time() . '.' . $extension;
+                $imgName = 'lamaran/' . date('dmh') . '-' .rand(1,10).'-'. Str::slug($request->nama) . '9.' . $extension;
                 $path = Storage::putFileAs('public', $request->file('ktp'), $imgName);
                 $lamar['ktp'] = $path;
             }
             if ($request->has('ktp_orangtua')) {
 
                 $extension = $request->file('ktp_orangtua')->extension();
-                $imgName = 'lamaran/' . date('dmhHis') . '-' . time() . '.' . $extension;
+                $imgName = 'lamaran/' . date('dmh') . '-' .rand(1,10).'-'. Str::slug($request->nama) . '10.' . $extension;
                 $path = Storage::putFileAs('public', $request->file('ktp_orangtua'), $imgName);
                 $lamar['ktp_orangtua'] = $path;
             }
             if ($request->has('kk')) {
 
                 $extension = $request->file('kk')->extension();
-                $imgName = 'lamaran/' . date('dmhHis') . '-' . time() . '.' . $extension;
+                $imgName = 'lamaran/' . date('dmh') . '-' .rand(1,10).'-'. Str::slug($request->nama) . '11.' . $extension;
                 $path = Storage::putFileAs('public', $request->file('kk'), $imgName);
                 $lamar['kk'] = $path;
             }
             do {
-            $no_tiket = date('dmhHis').rand(1,10);
+            $no_tiket = date('Ymd').rand(1,100);
             } while (Lamaran::where('no_tiket', $no_tiket)->exists());
+            $lamar['no_tiket'] = $no_tiket;
+            $lamar['status_karyawan'] = 'masuk-lamaran';
+            $lamar['status_dokumen'] = 'belum-diverifikasi';
+            $lamar['status_lamaran'] = 'menunggu-verifikasi';
             $lamar['no_tiket'] = $no_tiket;
             // dd($lamar);
             Lamaran::create($lamar);
@@ -184,9 +189,11 @@ class LamaranController extends Controller
      * @param  \App\Models\Lamaran  $lamaran
      * @return \Illuminate\Http\Response
      */
-    public function show(Lamaran $lamaran)
+    public function show($no_tiket)
     {
-        //
+    	$detail = Lamaran::where('no_tiket', $no_tiket)->first();
+    	return view('frontend.detail', compact('detail'));
+        dd($lamaran);
     }
 
     /**
@@ -221,5 +228,21 @@ class LamaranController extends Controller
     public function destroy(Lamaran $lamaran)
     {
         //
+    }
+
+    public function calonKaryawan()
+    {
+    	$data = Lamaran::get();
+
+    	return view('admin.verifikasi_tugas.index', compact('data'));
+    }
+
+    public function detailPelamar($id)
+    {
+    	// dd($id);
+
+    	$data = Lamaran::find($id);
+
+    	return view('admin.verifikasi_tugas.detail_pelamar', compact('data'));
     }
 }

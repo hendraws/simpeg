@@ -11,6 +11,7 @@ Route::get('/', function () {
 
 Route::get('/karir', 'LamaranController@index');
 Route::post('/karir', 'LamaranController@store');
+Route::get('/karir/{no_tiket}', 'LamaranController@show');
 // dibawah ini dibutuhkan akses autitentifikasi
 Route::group(['middleware' => 'auth'], function () { 
 	Route::get('/home', 'HomeController@index')->name('home');
@@ -22,6 +23,11 @@ Route::group(['middleware' => 'auth'], function () {
 		Route::resource('/persus', 'PersusController');
 		Route::resource('/indikator-penilaian', 'IndikatorPenilaianController');
 	});
+
+	Route::get('/verifikasi-tugas', 'LamaranController@calonKaryawan');
+	Route::get('/verifikasi-tugas/{id}/detail-pelamar', 'LamaranController@detailPelamar');
+
+
 	// command
 	Route::group(['prefix'=>'/command/artisan','as'=>'account.'], function(){ 
 		Route::get('/migrate', function(){

@@ -31,6 +31,16 @@ class OptionSeeder extends Seeder
             ['key'=>'Belum-Menikah', 'option'=>'Belum Menikah', 'modul' => 'status_pernikahan'],
             ['key'=>'Sudah-Menikah', 'option'=>'Sudah Menikah', 'modul' => 'status_pernikahan'],
             ['key'=>'Bercerai', 'option'=>'Bercerai', 'modul' => 'status_pernikahan'],
+            ['key'=>'belum-diverifikasi', 'option'=>'Belum Diverikasi', 'modul' => 'status_dokumen'],
+            ['key'=>'terverifikasi', 'option'=>'Terverifikasi', 'modul' => 'status_dokumen'],
+            ['key'=>'diterima', 'option'=>'diterima', 'modul' => 'status_lamaran'],
+            ['key'=>'ditolak', 'option'=>'ditolak', 'modul' => 'status_lamaran'],
+            ['key'=>'menunggu-verifikasi', 'option'=>'Sedang Di Verifikasi', 'modul' => 'status_lamaran'],
+            ['key'=>'masuk-lamaran', 'option'=>'Masuk Lamaran', 'modul' => 'status_karyawan'],
+            ['key'=>'calon-pdl', 'option'=>'Calon PDL', 'modul' => 'status_karyawan'],
+            ['key'=>'PDL', 'option'=>'PDL', 'modul' => 'status_karyawan'],
+            ['key'=>'mutasi', 'option'=>'Mutasi', 'modul' => 'status_karyawan'],
+            ['key'=>'promosi', 'option'=>'Promosi', 'modul' => 'status_karyawan'],
         ];
 
         foreach($data as $key => $value){
