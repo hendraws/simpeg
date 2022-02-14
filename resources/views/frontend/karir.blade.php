@@ -197,6 +197,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                                 Data Diri Anda</label>
                                             <div class="col-sm-12">
                                                 <div class="form-group row">
+                                                    <label for="nik" class="col-sm-2 col-form-label">Nik</label>
+                                                    <div class="col-sm-10">
+                                                        <input type="text" class="form-control" id="nik" name="nik">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
                                                     <label for="nama" class="col-sm-2 col-form-label">Nama</label>
                                                     <div class="col-sm-10">
                                                         <input type="text" class="form-control" id="nama" name="nama">
@@ -290,49 +296,49 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                                         Surat Lamaran</label>
                                                     <div class="col-sm-3">
                                                         <input type="file" class="form-control-file" name="surat_lamaran"
-                                                            id="exampleFormControlFile1">
+                                                            >
                                                     </div>
                                                     <label for="kontak_dadurat" class="col-sm-3 col-form-label">b.
                                                         Surat Pernyataan</label>
                                                     <div class="col-sm-3">
                                                         <input type="file" class="form-control-file"
-                                                            id="exampleFormControlFile1" name="surat_pernyataan">
+                                                             name="surat_pernyataan">
                                                     </div>
                                                     <label for="kontak_dadurat" class="col-sm-3 col-form-label">c.
                                                         Surat Pertanggung Jawaban Orang Tua</label>
                                                     <div class="col-sm-3">
                                                         <input type="file" class="form-control-file"
-                                                            id="exampleFormControlFile1" name="surat_tanggung_jawab">
+                                                             name="surat_tanggung_jawab">
                                                     </div>
                                                     <label for="kontak_dadurat" class="col-sm-3 col-form-label">d. Foto
                                                         Ijazah Terakhir Legalisir</label>
                                                     <div class="col-sm-3">
                                                         <input type="file" class="form-control-file"
-                                                            id="exampleFormControlFile1" name="ijazah">
+                                                             name="ijazah">
                                                     </div>
                                                     <label for="kontak_dadurat" class="col-sm-3 col-form-label">e.
                                                         Daftar Riwayat Hidup / CV </label>
                                                     <div class="col-sm-3">
                                                         <input type="file" class="form-control-file"
-                                                            id="exampleFormControlFile1" name="cv">
+                                                             name="cv">
                                                     </div>
                                                     <label for="kontak_dadurat" class="col-sm-3 col-form-label">f. SKCK
                                                         yang masih berlaku</label>
                                                     <div class="col-sm-3">
                                                         <input type="file" class="form-control-file"
-                                                            id="exampleFormControlFile1" name="skck">
+                                                             name="skck">
                                                     </div>
                                                     <label for="kontak_dadurat" class="col-sm-3 col-form-label">g. Pas
                                                         Foto 4x6</label>
                                                     <div class="col-sm-3">
                                                         <input type="file" class="form-control-file"
-                                                            id="exampleFormControlFile1" name="foto">
+                                                             name="foto">
                                                     </div>
                                                     <label for="kontak_dadurat" class="col-sm-3 col-form-label">h. Foto
                                                         SIM</label>
                                                     <div class="col-sm-3">
                                                         <input type="file" class="form-control-file"
-                                                            id="exampleFormControlFile1" name="sim">
+                                                             name="sim">
                                                             <small id="passwordHelpInline" class="text-muted">
                                                               * Foto SIM Wajib upload jika Petugas Dinas Luar
                                                             </small>
@@ -341,19 +347,19 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                                         KTP Diri</label>
                                                     <div class="col-sm-3">
                                                         <input type="file" class="form-control-file"
-                                                            id="exampleFormControlFile1" name="ktp">
+                                                             name="ktp">
                                                     </div>
                                                     <label for="kontak_dadurat" class="col-sm-3 col-form-label">j. Foto
                                                         KTP Orang Tua</label>
                                                     <div class="col-sm-3">
                                                         <input type="file" class="form-control-file"
-                                                            id="exampleFormControlFile1" name="ktp_orangtua">
+                                                             name="ktp_orangtua">
                                                     </div>
                                                     <label for="kontak_dadurat" class="col-sm-3 col-form-label">k. Foto
                                                         KTP KK</label>
                                                     <div class="col-sm-3">
                                                         <input type="file" class="form-control-file"
-                                                            id="exampleFormControlFile1" name="kk">
+                                                             name="kk">
                                                     </div>
                                                     <label for="kontak_dadurat"
                                                         class="col-sm-12 col-form-label">*Catatan:</label>

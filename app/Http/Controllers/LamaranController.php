@@ -44,12 +44,13 @@ class LamaranController extends Controller
      */
     public function store(Request $request)
     {
-       
+
         DB::beginTransaction();
         try {
 
             $lamar = $request->validate([
                 'jabatan' => 'required',
+                'nik' => 'required',
                 'usia' => 'required',
                 'tekanan' => 'required',
                 'tim' => 'required',
@@ -77,7 +78,7 @@ class LamaranController extends Controller
                 'ktp_orangtua' => 'required|max:550',
                 'kk' => 'required|max:550'
             ]);
-            
+
             if ($request->has('surat_lamaran')) {
 
                 $extension = $request->file('surat_lamaran')->extension();
@@ -193,7 +194,7 @@ class LamaranController extends Controller
     {
     	$detail = Lamaran::where('no_tiket', $no_tiket)->first();
     	return view('frontend.detail', compact('detail'));
-        dd($lamaran);
+
     }
 
     /**
@@ -244,5 +245,14 @@ class LamaranController extends Controller
     	$data = Lamaran::find($id);
 
     	return view('admin.verifikasi_tugas.detail_pelamar', compact('data'));
+    }
+
+    public function verifikasiLamaran($id)
+    {
+    	// dd($id);
+
+    	$data = Lamaran::find($id);
+
+    	return view('admin.verifikasi_tugas.verifikasi_pelamar', compact('data'));
     }
 }
