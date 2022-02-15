@@ -14,7 +14,7 @@
 		}
 	});
 
-	$(function() {	
+	$(function() {
 		$('#table').DataTable({
 			 "aaSorting": []
 		});
@@ -22,10 +22,8 @@
 
 	$(document).on('click','.hapus',function(e){
 		e.preventDefault();
-		var id = $(this).data('id');
-		var url = '{{ action('IndikatorPenilaianController@destroy',':id') }}';
-		url = url.replace(':id',id);
-	
+		var url = $(this).data('url');
+
 		Swal.fire({
 			title: 'Apakah Anda Yakin ?',
 			text: "Data akan terhapus tidak dapat dikembalikan lagi !",
@@ -49,7 +47,7 @@
 								'Your file has been deleted.',
 								'success'
 								);
-							 setTimeout(function() { 
+							 setTimeout(function() {
 									location.reload();
 						    }, 2000);
 						}
@@ -102,15 +100,22 @@
 										<td>{{ date('d-m-Y', strtotime($value->created_at)) }}</td>
 										<td>{{ $value->nama }}</td>
 										<td></td>
-										<td></td>
+										<td>{{ date('d-m-Y h:i', strtotime($value->tanggal_interview))  }}</td>
 										<td>{{ $value->status_lamaran }}</td>
 										<td></td>
 										<td>{{ $value->getJabatan->jabatan }}</td>
 										<td>
-											<a href="{{ action('LamaranController@detailPelamar', $value->id) }}">Detail</a>
-											<a href="">Verifikasi</a>
-											<a href="">Terima</a>
-											<a href="">Hapus</a>
+											<a class="btn btn-sm btn-primary"href="{{ action('LamaranController@detailPelamar', $value->id) }}">Detail</a>
+                                            @if($value->status_lamaran != 'ditolak')
+                                            @if($value->status_lamaran == 'menunggu-verifikasi')
+											<a class="btn btn-sm btn-warning"href="{{ action('LamaranController@verifikasiLamaran', $value->id) }}">Verifikasi</a>
+                                            @endif
+                                            @if($value->status_lamaran == 'interview')
+											<a class="btn btn-sm btn-success"href="{{ action('LamaranController@terimaLamaran', $value->id) }}">Terima</a>
+											<a class="btn btn-sm btn-warning"href="{{ action('LamaranController@tolakLamaran', $value->id) }}">Tolak</a>
+                                            @endif
+                                            @endif
+											<button class="btn btn-sm btn-danger hapus" data-url="{{ action('LamaranController@destroy', $value->id) }}">Hapus</button>
 										</td>
 									</tr>
 									@endforeach

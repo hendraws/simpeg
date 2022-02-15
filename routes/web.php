@@ -28,7 +28,9 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/verifikasi-tugas/{id}/detail-pelamar', 'LamaranController@detailPelamar');
 	Route::get('/verifikasi-tugas/{id}/verifikasi-lamaran', 'LamaranController@verifikasiLamaran');
 	Route::get('/verifikasi-tugas/{id}/tolak-lamaran', 'LamaranController@tolakLamaran');
+	Route::get('/verifikasi-tugas/{id}/terima-lamaran', 'LamaranController@terimaLamaran');
 	Route::put('/verifikasi-tugas/{id}/interview-lamaran', 'LamaranController@interviewLamaran');
+	Route::delete('/verifikasi-tugas/{id}/destroy', 'LamaranController@destroy');
 
 
 	// command

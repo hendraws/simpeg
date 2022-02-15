@@ -226,9 +226,12 @@ class LamaranController extends Controller
      * @param  \App\Models\Lamaran  $lamaran
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Lamaran $lamaran)
+    public function destroy($id)
     {
-        //
+        $data = Lamaran::where('id',$id)->first();
+        $data->delete();
+    	$result['code'] = '200';
+    	return response()->json($result);
     }
 
     public function calonKaryawan()
@@ -269,10 +272,14 @@ class LamaranController extends Controller
 
     public function interviewLamaran(Request $request, $id)
     {
-    	dd($request, $id);
-    	
+    	// dd($request, $id);
+
         DB::beginTransaction();
         try {
+            Lamaran::where('id', $id)->update([
+                'status_lamaran' => 'interview',
+                'tanggal_interview' => $request->tanggal_interview,
+            ]);
 
         } catch (\Exception $e) {
             DB::rollback();
@@ -289,6 +296,11 @@ class LamaranController extends Controller
         // dd($request);
         DB::commit();
         toastr()->success('Data telah ditambahkan', 'Berhasil');
-        return redirect(action('LamaranController@show', compact('no_tiket')));
+        return redirect(action('LamaranController@calonKaryawan'));
+    }
+
+    public function terimaLamaran($id)
+    {
+        dd($id);
     }
 }
