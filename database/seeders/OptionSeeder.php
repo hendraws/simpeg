@@ -35,6 +35,7 @@ class OptionSeeder extends Seeder
             ['key'=>'terverifikasi', 'option'=>'Terverifikasi', 'modul' => 'status_dokumen'],
             ['key'=>'diterima', 'option'=>'diterima', 'modul' => 'status_lamaran'],
             ['key'=>'ditolak', 'option'=>'ditolak', 'modul' => 'status_lamaran'],
+            ['key'=>'interview', 'option'=>'interview', 'modul' => 'status_lamaran'],
             ['key'=>'menunggu-verifikasi', 'option'=>'Sedang Di Verifikasi', 'modul' => 'status_lamaran'],
             ['key'=>'masuk-lamaran', 'option'=>'Masuk Lamaran', 'modul' => 'status_karyawan'],
             ['key'=>'calon-pdl', 'option'=>'Calon PDL', 'modul' => 'status_karyawan'],

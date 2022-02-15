@@ -103,7 +103,7 @@
 										<td>{{ $value->nama }}</td>
 										<td></td>
 										<td></td>
-										<td></td>
+										<td>{{ $value->status_lamaran }}</td>
 										<td></td>
 										<td>{{ $value->getJabatan->jabatan }}</td>
 										<td>

@@ -255,4 +255,40 @@ class LamaranController extends Controller
 
     	return view('admin.verifikasi_tugas.verifikasi_pelamar', compact('data'));
     }
+
+    public function tolakLamaran($id)
+    {
+
+    	$data = Lamaran::find($id);
+    	$data->update([
+    		'status_lamaran' => 'ditolak'
+    	]);
+    	toastr()->success('Data Berhasil Di Update', 'Berhasil');
+    	return redirect(action('LamaranController@calonKaryawan'));
+    }
+
+    public function interviewLamaran(Request $request, $id)
+    {
+    	dd($request, $id);
+    	
+        DB::beginTransaction();
+        try {
+
+        } catch (\Exception $e) {
+            DB::rollback();
+            dd($e->getMessage());
+            toastr()->error($e->getMessage(), 'Error');
+
+            return back();
+        } catch (\Throwable $e) {
+            DB::rollback();
+            dd($e->getMessage());
+            toastr()->error($e->getMessage(), 'Error');
+            throw $e;
+        }
+        // dd($request);
+        DB::commit();
+        toastr()->success('Data telah ditambahkan', 'Berhasil');
+        return redirect(action('LamaranController@show', compact('no_tiket')));
+    }
 }
