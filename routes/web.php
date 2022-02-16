@@ -30,9 +30,10 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/verifikasi-tugas/{id}/tolak-lamaran', 'LamaranController@tolakLamaran');
 	Route::get('/verifikasi-tugas/{id}/terima-lamaran', 'LamaranController@terimaLamaran');
 	Route::put('/verifikasi-tugas/{id}/interview-lamaran', 'LamaranController@interviewLamaran');
+	Route::put('/verifikasi-tugas/{id}/penempatan', 'LamaranController@penempatanLamaran');
 	Route::delete('/verifikasi-tugas/{id}/destroy', 'LamaranController@destroy');
 
-
+	Route::resource('/data-pegawai', 'PegawaiController');
 	// command
 	Route::group(['prefix'=>'/command/artisan','as'=>'account.'], function(){
 		Route::get('/migrate', function(){

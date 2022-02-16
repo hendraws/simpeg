@@ -5,8 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Jabatan;
 use App\Models\Lamaran;
 use App\Models\RefOption;
+use App\Models\User;
+use App\Models\kantor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -236,7 +239,7 @@ class LamaranController extends Controller
 
     public function calonKaryawan()
     {
-    	$data = Lamaran::get();
+    	$data = Lamaran::orderBy('created_at', 'desc')->get();
 
     	return view('admin.verifikasi_tugas.index', compact('data'));
     }
@@ -279,6 +282,7 @@ class LamaranController extends Controller
             Lamaran::where('id', $id)->update([
                 'status_lamaran' => 'interview',
                 'tanggal_interview' => $request->tanggal_interview,
+                'status_dokumen' => 'terverifikasi',
             ]);
 
         } catch (\Exception $e) {
@@ -301,6 +305,53 @@ class LamaranController extends Controller
 
     public function terimaLamaran($id)
     {
-        dd($id);
+       $data = Lamaran::where('id',$id)->first();
+       $jabatan = Jabatan::pluck('jabatan','id');
+       $kantor = kantor::pluck('kantor','id');
+
+       return view('admin.verifikasi_tugas.penempatan', compact('data', 'kantor','jabatan'));
+    }
+
+    public function penempatanLamaran(Request $request,$id)
+    {
+    	DB::beginTransaction();
+        try {
+        	$no = 1;
+        	do {
+	            $nip = 'SMART/'.date('ymd'). $no++;
+            } while (Lamaran::where('no_tiket', $nip)->exists());
+
+            $dataKaryawan = Lamaran::where('id', $id)->first();
+
+            $user = User::create([
+            	'name' => $dataKaryawan->nama,
+            	'email' => $dataKaryawan->email,
+            	'password' => Hash::make(date('ymd', strtotime($dataKaryawan->tanggal_lahir))),
+            ]);
+
+            $dataKaryawan->update([
+                'nip' => $request->nip,
+                'penempatan' => $request->penempatan,
+                'jabatan' => $request->jabatan,
+                'status_lamaran' => 'diterima',
+                'user_id' => $user->id,
+            ]);
+
+        } catch (\Exception $e) {
+            DB::rollback();
+            dd($e->getMessage());
+            toastr()->error($e->getMessage(), 'Error');
+
+            return back();
+        } catch (\Throwable $e) {
+            DB::rollback();
+            dd($e->getMessage());
+            toastr()->error($e->getMessage(), 'Error');
+            throw $e;
+        }
+        // dd($request);
+        DB::commit();
+        toastr()->success('Penempatan Berhasil', 'Berhasil');
+        return redirect(action('LamaranController@calonKaryawan'));
     }
 }

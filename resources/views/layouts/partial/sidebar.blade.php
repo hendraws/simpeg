@@ -78,8 +78,8 @@
 				</a>
 			</li>	 --}}
 			<li class="nav-item">
-				<a href="{{ action('JabatanController@index') }}" class="nav-link">
-					<i class="nav-icon fa fa-calendar"></i>
+				<a href="{{ action('PegawaiController@index') }}" class="nav-link">
+					<i class="nav-icon fas fa-users"></i>
 					<p>
 						Data Pegawai
 						{{-- <span class="right badge badge-danger">New</span> --}}
