@@ -329,14 +329,14 @@ class LamaranController extends Controller
             	'password' => Hash::make(date('ymd', strtotime($dataKaryawan->tanggal_lahir))),
             ]);
 
-            $dataKaryawan->update([
-                'nip' => $request->nip,
+            Lamaran::where('id', $id)->update([
+                'nip' => $nip,
                 'penempatan' => $request->penempatan,
                 'jabatan' => $request->jabatan,
                 'status_lamaran' => 'diterima',
                 'user_id' => $user->id,
             ]);
-
+            // dd($dataKaryawan);
         } catch (\Exception $e) {
             DB::rollback();
             dd($e->getMessage());

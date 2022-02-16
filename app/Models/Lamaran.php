@@ -16,4 +16,12 @@ class Lamaran extends Model
     public function getJabatan(){
     	return $this->belongsTo(Jabatan::class, 'jabatan','id');
     }
+
+    public function getKantor(){
+    	return $this->belongsTo(Kantor::class, 'penempatan','id');
+    }
+
+    public function getUser(){
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
 }
