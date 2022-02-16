@@ -48,7 +48,9 @@ class PegawaiController extends Controller
      */
     public function show($id)
     {
-        //
+        $data = Lamaran::find($id);
+
+        return view('admin.pegawai.detail', compact('data'));
     }
 
     /**

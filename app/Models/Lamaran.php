@@ -18,7 +18,7 @@ class Lamaran extends Model
     }
 
     public function getKantor(){
-    	return $this->belongsTo(Kantor::class, 'penempatan','id');
+    	return $this->belongsTo(kantor::class, 'penempatan','id');
     }
 
     public function getUser(){

@@ -101,20 +101,7 @@
                                             <td>{{ $value->getKantor->kantor }}</td>
                                             <td>{{ $value->getUser->is_active }}</td>
                                             <td>
-                                                <a class="btn btn-sm btn-primary"
-                                                    href="{{ action('LamaranController@detailPelamar', $value->id) }}">Detail</a>
-                                                @if ($value->status_lamaran != 'ditolak')
-                                                    @if ($value->status_lamaran == 'menunggu-verifikasi')
-                                                        <a class="btn btn-sm btn-warning"
-                                                            href="{{ action('LamaranController@verifikasiLamaran', $value->id) }}">Verifikasi</a>
-                                                    @endif
-                                                    @if ($value->status_lamaran == 'interview')
-                                                        <a class="btn btn-sm btn-success"
-                                                            href="{{ action('LamaranController@terimaLamaran', $value->id) }}">Terima</a>
-                                                        <a class="btn btn-sm btn-warning"
-                                                            href="{{ action('LamaranController@tolakLamaran', $value->id) }}">Tolak</a>
-                                                    @endif
-                                                @endif
+                                                <a class="btn btn-sm btn-primary" href="{{ action('PegawaiController@show', $value->id) }}">Detail</a>
                                                 <button class="btn btn-sm btn-danger hapus"
                                                     data-url="{{ action('LamaranController@destroy', $value->id) }}">Hapus</button>
                                             </td>
