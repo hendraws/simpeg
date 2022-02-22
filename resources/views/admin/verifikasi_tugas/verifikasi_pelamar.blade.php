@@ -11,7 +11,6 @@
 @section('js')
 <script src="{{ asset('vendors/DataTables/datatables.min.js') }}"></script>
 <script src="{{ asset('plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-<script src="{{ asset('vendors/datetimepicker/jquery.datetimepicker.full.min.js') }}"></script>
 <script type="text/javascript">
 	$.ajaxSetup({
 		headers: {

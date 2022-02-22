@@ -1,14 +1,16 @@
 @extends('layouts.app')
-@section('title', 'Promosi')
-@section('content-title', 'Promosi')
+@section('title', 'Sponsor')
+@section('content-title', 'Sponsor')
 @section('css')
 <link rel="stylesheet" href="{{ asset('plugins/select2/css/select2.min.css')}}">
 <link rel="stylesheet" href="{{ asset('plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css')}}">
+<link href="{{ asset('vendors/datetimepicker/jquery.datetimepicker.min.css') }}" rel="stylesheet">
 @endsection
 @section('js')
 <script src="{{ asset('plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
 <script src="{{ asset('plugins/select2/js/select2.full.min.js')}}"></script>
 
+<script src="{{ asset('vendors/datetimepicker/jquery.datetimepicker.full.min.js') }}"></script>
 <script type="text/javascript">
 	$.ajaxSetup({
 		headers: {
@@ -23,6 +25,11 @@
 			placeholder: "Pilih Pegawai",
 			allowClear: true
 		})
+
+        $('.tanggal').datetimepicker({
+            timepicker: false,
+            format: 'Y/m/d',
+        });
 
 		$('#pegawai').on("select2:select", function(e) {
 
@@ -39,13 +46,13 @@
 							console.log(data.pegawai);
 							$('#nip').val(data.pegawai.nip);
 							$('#nama').val(data.pegawai.nama);
-							$('#cabang').val(data.pegawai.get_kantor.kantor);
-							$('#jabatan_kini').val(data.pegawai.get_jabatan.jabatan);
-							$('#jabatan_kini_id').val(data.pegawai.jabatan);
+							$('#jabatan').val(data.pegawai.get_jabatan.jabatan);
+							$('#kantor_kini').val(data.pegawai.get_kantor.kantor);
+							$('#kantor_kini_id').val(data.pegawai.penempatan);
 						}
 					}
 				});
-		   console.log($(this).val());
+
 		});
 	});
 
@@ -102,7 +109,7 @@
     		<div class="col-md-12">
     			<div class="card">
     				<div class="card-body">
-    					<form action="{{ action('PromosiController@store') }}" method="POST" >
+    					<form action="{{ action('SponsorController@store') }}" method="POST" >
     						<div class="modal-body">
     							@csrf
     							<div class="form-group row">
@@ -130,25 +137,37 @@
     								</div>
     							</div>
     							<div class="form-group row">
-    								<label for="cabang" class="col-sm-2 col-form-label">Kantor/Cabang</label>
+    								<label for="jabatan" class="col-sm-2 col-form-label">Jabatan</label>
     								<div class="col-sm-8">
-    									<input required type="text" class="form-control" id="cabang" value="" name="cabang" readonly>
+    									<input required type="text" class="form-control" id="jabatan" value="" name="jabatan" readonly>
     								</div>
     							</div>
     							<div class="form-group row">
-    								<label for="jabatan_kini" class="col-sm-2 col-form-label">Jabatan Kini</label>
+    								<label for="kantor_kini" class="col-sm-2 col-form-label">Kantor/Cabang</label>
     								<div class="col-sm-8">
-    									<input required type="text" class="form-control" id="jabatan_kini" value="" name="jabatan_kini" readonly>
-    									<input type="hidden" class="form-control" value="" name="jabatan_kini_id" id="jabatan_kini_id" readonly>
+    									<input required type="text" class="form-control" id="kantor_kini" value="" name="kantor_kini" readonly>
+    									<input type="hidden" class="form-control" value="" name="kantor_kini_id" id="kantor_kini_id" readonly>
     								</div>
     							</div>
     							<div class="form-group row">
-    								<label for="jabatan_baru" class="col-sm-2 col-form-label">Jabatan Baru</label>
+    								<label for="tanggal_mulai" class="col-sm-2 col-form-label">Tanggal Mulai</label>
     								<div class="col-sm-8">
-    									<select class="form-control " name="jabatan_baru" id="jabatan_baru">
+    									<input required type="text" class="form-control tanggal" id="tanggal_mulai" value="" autocomplete="off" name="tanggal_mulai">
+    								</div>
+    							</div>
+    							<div class="form-group row">
+    								<label for="tanggal_akhir" class="col-sm-2 col-form-label">Tanggal Mulai</label>
+    								<div class="col-sm-8">
+    									<input required type="text" class="form-control tanggal" id="tanggal_akhir" value="" autocomplete="off" name="tanggal_akhir">
+    								</div>
+    							</div>
+    							<div class="form-group row">
+    								<label for="kantor_tugas" class="col-sm-2 col-form-label">Kantor Tugas</label>
+    								<div class="col-sm-8">
+    									<select class="form-control " name="kantor_tugas" id="kantor_tugas">
     										{{-- <option></option> --}}
-    										@foreach($dataJabatan as $value)
-    										<option value="{{ $value->id }}" >{{ $value->jabatan }}</option>
+    										@foreach($dataKantor as $value)
+    										<option value="{{ $value->id }}" >{{ $value->kantor }}</option>
     										@endforeach
     									</select>
     								</div>

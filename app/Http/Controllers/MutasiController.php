@@ -63,7 +63,7 @@ class MutasiController extends Controller
     		// $input['created_by'] = ;
     		// $input['updated_by'] = ;
     		// $input['deleted_by'] = ;
-    		$input['approved_at'] = now();
+    		// $input['approved_at'] = now();
 
     		Mutasi::create($input);
 
@@ -131,7 +131,7 @@ class MutasiController extends Controller
     {
 
     	return view('admin.proses_resmi.mutasi.upload_form', compact('id'));
-    }  
+    }
 
     public function upload(Request $request, $id)
     {
@@ -170,13 +170,13 @@ class MutasiController extends Controller
     	return back();
 
     	return view('admin.proses_resmi.mutasi.upload_form', compact('id'));
-    } 
+    }
 
     public function verifikasiForm($id)
     {
 
     	return view('admin.proses_resmi.mutasi.verifikasi_form', compact('id'));
-    }  
+    }
 
     public function verifikasi(Request $request, $id)
     {

@@ -92,10 +92,10 @@
 			</div>
 			<div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
 				@include('admin.proses_resmi.mutasi.index')
-			</div>	
+			</div>
 			<div class="tab-pane fade" id="nav-sponsor" role="tabpanel" aria-labelledby="nav-sponsor-tab">
-				{{-- @include('admin.pegawai.history') --}}
-			</div>	
+				@include('admin.proses_resmi.sponsor.index')
+			</div>
 			<div class="tab-pane fade" id="nav-sp" role="tabpanel" aria-labelledby="nav-sp-tab">
 				{{-- @include('admin.pegawai.history') --}}
 			</div>

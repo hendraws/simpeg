@@ -16,8 +16,10 @@ class CreateSponsorsTable extends Migration
         Schema::create('sponsors', function (Blueprint $table) {
             $table->id();
         	$table->bigInteger('lamaran_id');
-    		$table->string('kantor_awal')->nullable();
-    		$table->string('kantor_baru')->nullable();
+    		$table->date('tanggal_mulai')->nullable();
+    		$table->date('tanggal_akhir')->nullable();
+    		$table->unsignedBigInteger('kantor_tugas')->nullable();
+    		$table->string('keterangan')->nullable();
     		$table->string('sk')->nullable();
     		$table->string('status')->nullable();
     		$table->unsignedBigInteger('approved_by')->nullable();

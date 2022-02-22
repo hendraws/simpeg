@@ -49,7 +49,13 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::put('proses-resmi/mutasi/{id}/upload-form-update', 'MutasiController@upload');
 	Route::get('proses-resmi/mutasi/{id}/verifikasi-form', 'MutasiController@verifikasiForm');
 	Route::put('proses-resmi/mutasi/{id}/verifikasi-form-update', 'MutasiController@verifikasi');
-	
+
+	Route::resource('proses-resmi/sponsor', 'SponsorController');
+	Route::get('proses-resmi/sponsor/{id}/upload-form', 'SponsorController@uploadForm');
+	Route::put('proses-resmi/sponsor/{id}/upload-form-update', 'SponsorController@upload');
+	Route::get('proses-resmi/sponsor/{id}/verifikasi-form', 'SponsorController@verifikasiForm');
+	Route::put('proses-resmi/sponsor/{id}/verifikasi-form-update', 'SponsorController@verifikasi');
+
 	Route::resource('/data-pegawai', 'PegawaiController');
 	// command
 	Route::group(['prefix'=>'/command/artisan','as'=>'account.'], function(){
