@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use Spatie\Activitylog\Models\Activity;
 
 Auth::routes();
 
@@ -10,6 +11,9 @@ Route::get('/', function () {
 })->name('front');
 
 Route::get('/karir', 'LamaranController@index');
+Route::get('/log', function(){
+	return Activity::all()->last();
+});
 Route::post('/karir', 'LamaranController@store');
 Route::get('/karir/{no_tiket}', 'LamaranController@show');
 // dibawah ini dibutuhkan akses autitentifikasi
@@ -33,6 +37,19 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::put('/verifikasi-tugas/{id}/penempatan', 'LamaranController@penempatanLamaran');
 	Route::delete('/verifikasi-tugas/{id}/destroy', 'LamaranController@destroy');
 
+	Route::get('proses-resmi', 'ProsesResmiController@index');
+	Route::resource('proses-resmi/promosi', 'PromosiController');
+	Route::get('proses-resmi/promosi/{id}/upload-form', 'PromosiController@uploadForm');
+	Route::put('proses-resmi/promosi/{id}/upload-form-update', 'PromosiController@upload');
+	Route::get('proses-resmi/promosi/{id}/verifikasi-form', 'PromosiController@verifikasiForm');
+	Route::put('proses-resmi/promosi/{id}/verifikasi-form-update', 'PromosiController@verifikasi');
+
+	Route::resource('proses-resmi/mutasi', 'MutasiController');
+	Route::get('proses-resmi/mutasi/{id}/upload-form', 'MutasiController@uploadForm');
+	Route::put('proses-resmi/mutasi/{id}/upload-form-update', 'MutasiController@upload');
+	Route::get('proses-resmi/mutasi/{id}/verifikasi-form', 'MutasiController@verifikasiForm');
+	Route::put('proses-resmi/mutasi/{id}/verifikasi-form-update', 'MutasiController@verifikasi');
+	
 	Route::resource('/data-pegawai', 'PegawaiController');
 	// command
 	Route::group(['prefix'=>'/command/artisan','as'=>'account.'], function(){

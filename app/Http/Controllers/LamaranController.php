@@ -279,7 +279,8 @@ class LamaranController extends Controller
 
         DB::beginTransaction();
         try {
-            Lamaran::where('id', $id)->update([
+            $lamaran = Lamaran::where('id', $id)->first();
+            $lamaran->update([
                 'status_lamaran' => 'interview',
                 'tanggal_interview' => $request->tanggal_interview,
                 'status_dokumen' => 'terverifikasi',
@@ -328,8 +329,9 @@ class LamaranController extends Controller
             	'email' => $dataKaryawan->email,
             	'password' => Hash::make(date('ymd', strtotime($dataKaryawan->tanggal_lahir))),
             ]);
-
-            Lamaran::where('id', $id)->update([
+			// dd($user);
+            
+            $dataKaryawan->update([
                 'nip' => $nip,
                 'penempatan' => $request->penempatan,
                 'jabatan' => $request->jabatan,
