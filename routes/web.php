@@ -56,6 +56,12 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('proses-resmi/sponsor/{id}/verifikasi-form', 'SponsorController@verifikasiForm');
 	Route::put('proses-resmi/sponsor/{id}/verifikasi-form-update', 'SponsorController@verifikasi');
 
+	Route::resource('proses-resmi/surat-peringatan', 'SuratPeringatanController');
+	Route::get('proses-resmi/surat-peringatan/{id}/upload-form', 'SuratPeringatanController@uploadForm');
+	Route::put('proses-resmi/surat-peringatan/{id}/upload-form-update', 'SuratPeringatanController@upload');
+	Route::get('proses-resmi/surat-peringatan/{id}/verifikasi-form', 'SuratPeringatanController@verifikasiForm');
+	Route::put('proses-resmi/surat-peringatan/{id}/verifikasi-form-update', 'SuratPeringatanController@verifikasi');
+
 	Route::resource('/data-pegawai', 'PegawaiController');
 	// command
 	Route::group(['prefix'=>'/command/artisan','as'=>'account.'], function(){

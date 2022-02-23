@@ -128,6 +128,12 @@ class SponsorController extends Controller
         //
     }
 
+  	public function uploadForm($id)
+    {
+
+    	return view('admin.proses_resmi.sponsor.upload_form', compact('id'));
+    }
+
     public function upload(Request $request, $id)
     {
 
@@ -183,11 +189,16 @@ class SponsorController extends Controller
     			'status' => 'required'
     		]);
 
+    		$keterangan = 'Belum Aktif';
+    		if($request->status == 'sukses'){
+    			$keterangan = 'Aktif';
+    		}
     		$sponsor = Sponsor::where('id', $id)->first();
     		$sponsor->update([
-                'status' => $request->status,
-                'keterangan' => 'aktif',
-            ]);
+    			'status' => $request->status,
+    			'keterangan' => $keterangan,
+    			'approved_by' => auth()->user()->id,
+    		]);
 
     	} catch (\Exception $e) {
     		DB::rollback();
