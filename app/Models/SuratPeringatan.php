@@ -12,7 +12,7 @@ class SuratPeringatan extends Model
 {
 
 	use HasFactory, SoftDeletes, LogsActivity, Userstamps;
-	
+
     protected $fillable = ['lamaran_id', 'sp', 'tanggal_akhir',  'jenis_pelanggaran', 'persus', 'sk', 'status', 'approved_by', 'created_by', 'updated_by', 'deleted_by', 'approved_at', ];
 
     protected static $logAttributes = ['lamaran_id', 'sp', 'tanggal_akhir',  'jenis_pelanggaran', 'persus', 'sk', 'status', 'approved_by', 'created_by', 'updated_by', 'deleted_by', 'approved_at', ];
@@ -24,8 +24,8 @@ class SuratPeringatan extends Model
 	}
 
     public function getJenisPelanggaran(){
-		return $this->belongsTo(JensiPelanggaran::class, 'jenis_pelanggaran','id');
-	}    
+		return $this->belongsTo(JenisPelanggaran::class, 'jenis_pelanggaran','id');
+	}
 
 	public function getPersus(){
 		return $this->belongsTo(Persus::class, 'persus','id');

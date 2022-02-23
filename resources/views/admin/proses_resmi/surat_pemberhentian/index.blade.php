@@ -11,10 +11,9 @@
 						<th>Tanggal</th>
 						<th>NIP</th>
 						<th>Nama</th>
-						<th>SP</th>
-						<th>Tanggal Selesai</th>
 						<th>Kantor / Cabang</th>
-						<th>Ket.</th>
+						<th>Tanggal PHK</th>
+						<th>Pelanggaran</th>
 						<th>Aksi</th>
 						<th>Status</th>
 						<th>Proses</th>
@@ -23,23 +22,14 @@
 					</tr>
 				</thead>
 				<tbody>
-					@foreach($dataSp as $data)
+					@foreach($dataSuratPemberhentian as $data)
 					<tr>
 						<td>{{ date('d M Y', strtotime($data->created_at)) }}</td>
 						<td>{{ optional($data->getPegawai)->nip }}</td>
 						<td>{{ optional($data->getPegawai)->nama }}</td>
-						<td>{{ $data->sp }}</td>
+						<td>{{ optional(optional($data->getPegawai)->getKantor)->kantor }}</td>
 						<td>{{ date('d-m-Y', strtotime($data->tanggal_akhir)) }}</td>
-						<td>{{ optional($data->getKantorTugas)->kantor }}</td>
-						<td>
-							@if($data->status =='pending')
-							Belum Verifikasi
-							@elseif($data->status =='sukses')
-							Aktif
-							@else
-							Verifikasi Ditolak
-							@endif
-						</td>
+						<td>{{ $data->sp }}</td>
 						<td>
 							<a href="">Hapus</a>
 						</td>

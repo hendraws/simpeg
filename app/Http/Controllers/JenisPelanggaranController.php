@@ -95,6 +95,7 @@ class JenisPelanggaranController extends Controller
      */
     public function update(Request $request, JenisPelanggaran $jenis_pelanggaran)
     {
+       
     	$request->validate([
     		'jenis_pelanggaran' => 'required|max:255',
     	]);

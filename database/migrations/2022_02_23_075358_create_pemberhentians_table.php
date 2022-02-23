@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSuratPeringatansTable extends Migration
+class CreatePemberhentiansTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,13 @@ class CreateSuratPeringatansTable extends Migration
      */
     public function up()
     {
-    	Schema::create('surat_peringatans', function (Blueprint $table) {
-    		$table->id();
-    		$table->bigInteger('lamaran_id');
-    		$table->string('sp')->nullable();
-    		$table->date('tanggal_akhir')->nullable();
-    		$table->unsignedBigInteger('jenis_pelanggaran')->nullable();
+        Schema::create('pemberhentians', function (Blueprint $table) {
+            $table->id();
+            $table->bigInteger('lamaran_id');
+    		$table->date('tanggal_phk')->nullable();
+    		$table->string('jenis_pelanggaran')->nullable();
     		$table->unsignedBigInteger('persus')->nullable();
-    		$table->string('sk')->nullable();
+    		$table->unsignedBigInteger('sk')->nullable();
     		$table->string('status')->nullable();
     		$table->unsignedBigInteger('approved_by')->nullable();
     		$table->unsignedBigInteger('created_by')->nullable();
@@ -29,7 +28,7 @@ class CreateSuratPeringatansTable extends Migration
     		$table->timestamp('approved_at')->nullable();
     		$table->timestamps();
     		$table->softDeletes();
-    	});
+        });
     }
 
     /**
@@ -39,6 +38,6 @@ class CreateSuratPeringatansTable extends Migration
      */
     public function down()
     {
-    	Schema::dropIfExists('surat_peringatans');
+        Schema::dropIfExists('pemberhentians');
     }
 }

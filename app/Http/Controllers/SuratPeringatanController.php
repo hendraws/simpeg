@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\JenisPelanggaran;
-use App\Models\SuratPeringatan;
+use App\Models\Persus;
+use App\Models\Lamaran;
 use Illuminate\Http\Request;
+use App\Models\SuratPeringatan;
+use App\Models\JenisPelanggaran;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class SuratPeringatanController extends Controller
 {
@@ -23,16 +27,18 @@ class SuratPeringatanController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        if($request->ajax()){
-    		$result['code'] = '200';
-    		$result['pegawai'] = Lamaran::find($request->pegawai_id);
-    		return response()->json($result);
-    	}
-    	$data = Lamaran::where('status_lamaran','diterima')->whereNotNull('nip')->get();
-    	$dataJabatan = JenisPelanggaran::get('yyy');
-    	return view('admin.proses_resmi.promosi.create', compact('data','dataJabatan'));
+        if ($request->ajax()) {
+            $result['code'] = '200';
+            $result['pegawai'] = Lamaran::find($request->pegawai_id);
+            return response()->json($result);
+        }
+        $data = Lamaran::where('status_lamaran', 'diterima')->whereNotNull('nip')->get();
+        $jenisPelanggaran = JenisPelanggaran::pluck('jenis_pelanggaran', 'id');
+        $persus = Persus::pluck('judul', 'id');
+        $sp = ['sp1', 'sp2', 'sp3'];
+        return view('admin.proses_resmi.surat_peringatan.create', compact('data', 'jenisPelanggaran', 'persus', 'sp'));
     }
 
     /**
@@ -43,7 +49,38 @@ class SuratPeringatanController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'lamaran_id' => 'required',
+            'sp' => 'required',
+            'jenis_pelanggaran' => 'required',
+            'persus' => 'required',
+            'tanggal_akhir' => 'required|date_format:Y/m/d',
+        ]);
+
+        DB::beginTransaction();
+        try {
+            $input['lamaran_id'] = $request->lamaran_id;
+            $input['sp'] = $request->sp;
+            $input['jenis_pelanggaran'] = $request->jenis_pelanggaran;
+            $input['tanggal_akhir'] = $request->tanggal_akhir;
+            $input['persus'] = $request->persus;
+            $input['status'] = 'pending';
+            // $input['approved_at'] = now();
+
+            SuratPeringatan::create($input);
+        } catch (\Exception $e) {
+            DB::rollback();
+            toastr()->success($e->getMessage(), 'Error');
+            return back();
+        } catch (\Throwable $e) {
+            DB::rollback();
+            toastr()->success($e->getMessage(), 'Error');
+            throw $e;
+        }
+
+        DB::commit();
+        toastr()->success('Data telah ditambahkan', 'Berhasil');
+        return redirect(action('ProsesResmiController@index'));
     }
 
     /**
@@ -89,5 +126,90 @@ class SuratPeringatanController extends Controller
     public function destroy(SuratPeringatan $suratPeringatan)
     {
         //
+    }
+
+    public function uploadForm($id)
+    {
+
+        return view('admin.proses_resmi.surat_peringatan.upload_form', compact('id'));
+    }
+
+    public function upload(Request $request, $id)
+    {
+
+        DB::beginTransaction();
+        try {
+
+            $request->validate([
+                'file' => 'required|max:550'
+            ]);
+
+            if ($request->has('file')) {
+                $extension = $request->file('file')->extension();
+                $imgName = 'berkas_sk/surat_peringatan/' . date('dmh') . '-' . rand(1, 10) . '-' . $id . '.' . $extension;
+                $path = Storage::putFileAs('public', $request->file('file'), $imgName);
+                $lamar['sk'] = $path;
+            }
+            $suratPeringatan = SuratPeringatan::where('id', $id)->first();
+            $suratPeringatan->update($lamar);
+        } catch (\Exception $e) {
+            DB::rollback();
+            dd($e->getMessage());
+            toastr()->error($e->getMessage(), 'Error');
+
+            return back();
+        } catch (\Throwable $e) {
+            DB::rollback();
+            dd($e->getMessage());
+            toastr()->error($e->getMessage(), 'Error');
+            throw $e;
+        }
+        // dd($request);
+        DB::commit();
+        toastr()->success('Data telah ditambahkan', 'Berhasil');
+        return back();
+
+        return view('admin.proses_resmi.surat_peringatan.upload_form', compact('id'));
+    }
+
+    public function verifikasiForm($id)
+    {
+
+        return view('admin.proses_resmi.surat_peringatan.verifikasi_form', compact('id'));
+    }
+
+    public function verifikasi(Request $request, $id)
+    {
+
+        DB::beginTransaction();
+        try {
+
+            $request->validate([
+                'status' => 'required'
+            ]);
+
+            $suratPeringatan = SuratPeringatan::where('id', $id)->first();
+            $suratPeringatan->update([
+                'status' => $request->status,
+                'approved_by' => auth()->user()->id,
+            ]);
+        } catch (\Exception $e) {
+            DB::rollback();
+            dd($e->getMessage());
+            toastr()->error($e->getMessage(), 'Error');
+
+            return back();
+        } catch (\Throwable $e) {
+            DB::rollback();
+            dd($e->getMessage());
+            toastr()->error($e->getMessage(), 'Error');
+            throw $e;
+        }
+        // dd($request);
+        DB::commit();
+        toastr()->success('Verifikasi Berhasil', 'Berhasil');
+        return back();
+
+        return view('admin.proses_resmi.surat_peringatan.verifikasi_form', compact('id'));
     }
 }

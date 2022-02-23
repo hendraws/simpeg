@@ -3,7 +3,7 @@
     transform: scale(1.5);
 }
 </style>
-<form action="{{ action('SuratPeringatanController@verifikasi', $id) }}" method="POST" id="kantorCabangForm" enctype="multipart/form-data">
+<form action="{{ action('SponsorController@verifikasi', $id) }}" method="POST" id="kantorCabangForm" enctype="multipart/form-data">
 	<div class="modal-header">
 		<h5 class="modal-title" id="exampleModalLabel">Verifikasi Berkas</h5>
 		<button type="button" class="close" data-dismiss="modal" aria-label="Close">

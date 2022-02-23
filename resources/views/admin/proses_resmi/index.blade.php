@@ -94,13 +94,13 @@
 				@include('admin.proses_resmi.mutasi.index')
 			</div>
 			<div class="tab-pane fade" id="nav-sponsor" role="tabpanel" aria-labelledby="nav-sponsor-tab">
-				@include('admin.proses_resmi.surat_peringatan.index')
+				@include('admin.proses_resmi.sponsor.index')
 			</div>
 			<div class="tab-pane fade" id="nav-sp" role="tabpanel" aria-labelledby="nav-sp-tab">
 				@include('admin.proses_resmi.surat_peringatan.index')
 			</div>
 			<div class="tab-pane fade" id="nav-pemberhentian" role="tabpanel" aria-labelledby="nav-pemberhentian-tab">
-				{{-- @include('admin.pegawai.history') --}}
+				@include('admin.proses_resmi.surat_pemberhentian.index')
 			</div>
 		</div>
 
