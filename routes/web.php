@@ -69,7 +69,10 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::put('proses-resmi/pemberhentian/{id}/verifikasi-form-update', 'PemberhentianController@verifikasi');
 
 	Route::resource('/data-pegawai', 'PegawaiController');
-	// command
+
+    Route::resource('penilaian-pegawai', 'PenilaianPegawaiController');
+    Route::get('penilaian-pegawai/{id}/daftar-pegawai', 'PenilaianPegawaiController@detailGroup');
+    // command
 	Route::group(['prefix'=>'/command/artisan','as'=>'account.'], function(){
 		Route::get('/migrate', function(){
 			Artisan::call('migrate');
