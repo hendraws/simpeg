@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Mutasi;
+use App\Models\Pemberhentian;
 use App\Models\Promosi;
 use App\Models\Sponsor;
 use App\Models\SuratPeringatan;
@@ -17,6 +18,7 @@ class ProsesResmiController extends Controller
     	$dataMutasi = Mutasi::orderBy('updated_at', 'DESC')->get();
     	$dataSponsor = Sponsor::orderBy('updated_at', 'DESC')->get();
     	$dataSp = SuratPeringatan::orderBy('updated_at', 'DESC')->get();
-    	return view('admin.proses_resmi.index', compact('dataPromosi', 'dataMutasi', 'dataSponsor','dataSp'));
+    	$dataPemberhentian = Pemberhentian::orderBy('updated_at', 'DESC')->get();
+    	return view('admin.proses_resmi.index', compact('dataPromosi', 'dataMutasi', 'dataSponsor','dataSp','dataPemberhentian'));
     }
 }

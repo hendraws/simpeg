@@ -1,6 +1,6 @@
 <div class="card">
 	<div class="card-header">
-		<a class="btn btn-sm btn-primary" href="{{ action('SuratPeringatanController@create') }}"  data-toggle="tooltip" data-placement="top" title="Tambah" >Tambah Surat Peringatan</a>
+		<a class="btn btn-sm btn-primary" href="{{ action('PemberhentianController@create') }}"  data-toggle="tooltip" data-placement="top" title="Tambah" >Tambah Surat Peringatan</a>
 	</div>
 
 	<div class="card-body">
@@ -22,14 +22,14 @@
 					</tr>
 				</thead>
 				<tbody>
-					@foreach($dataSuratPemberhentian as $data)
+					@foreach($dataPemberhentian as $data)
 					<tr>
 						<td>{{ date('d M Y', strtotime($data->created_at)) }}</td>
 						<td>{{ optional($data->getPegawai)->nip }}</td>
 						<td>{{ optional($data->getPegawai)->nama }}</td>
 						<td>{{ optional(optional($data->getPegawai)->getKantor)->kantor }}</td>
-						<td>{{ date('d-m-Y', strtotime($data->tanggal_akhir)) }}</td>
-						<td>{{ $data->sp }}</td>
+						<td>{{ date('d-m-Y', strtotime($data->tanggal_phk)) }}</td>
+						<td>{{ optional($data->getJenisPelanggaran)->jenis_pelanggaran }}</td>
 						<td>
 							<a href="">Hapus</a>
 						</td>
@@ -44,7 +44,7 @@
 						</td>
 						<td>
 							@if($data->status =='pending')
-							<a href="Javascript:void(0)" class="btn btn-xs btn-primary @if(empty($data->sk)) disable-links @endif modal-button"  data-target="ModalForm" data-url="{{ action('SuratPeringatanController@verifikasiForm', $data->id ) }}">Verifikasi</a>
+							<a href="Javascript:void(0)" class="btn btn-xs btn-primary @if(empty($data->sk)) disable-links @endif modal-button"  data-target="ModalForm" data-url="{{ action('PemberhentianController@verifikasiForm', $data->id ) }}">Verifikasi</a>
 							@else
 							<a href="Javascript:void(0)" class="btn btn-xs btn-info">Terverifikasi</a>
 							@endif
@@ -52,7 +52,7 @@
 						</td>
 						<td><a class="btn btn-xs btn-info modal-button" href="">Download</a></td>
 						<td>
-							<a class="btn btn-xs btn-warning modal-button @if(!empty($data->sk)) disable-links @endif" href="Javascript:void(0)"  data-target="ModalForm" data-url="{{ action('SuratPeringatanController@uploadForm', $data->id ) }}" >Upload Berkas</a>
+							<a class="btn btn-xs btn-warning modal-button @if(!empty($data->sk)) disable-links @endif" href="Javascript:void(0)"  data-target="ModalForm" data-url="{{ action('PemberhentianController@uploadForm', $data->id ) }}" >Upload Berkas</a>
 							<a class="btn btn-xs btn-info" href="">Download</a>
 						</td>
 					</tr>

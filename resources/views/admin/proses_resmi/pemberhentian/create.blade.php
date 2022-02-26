@@ -109,7 +109,7 @@
     		<div class="col-md-12">
     			<div class="card">
     				<div class="card-body">
-    					<form action="{{ action('SuratPeringatanController@store') }}" method="POST" >
+    					<form action="{{ action('PemberhentianController@store') }}" method="POST" >
     						<div class="modal-body">
     							@csrf
     							<div class="form-group row">
@@ -150,20 +150,9 @@
     								</div>
     							</div>
     							<div class="form-group row">
-    								<label for="sp" class="col-sm-2 col-form-label">SP</label>
+    								<label for="tanggal_phk" class="col-sm-2 col-form-label">PHK</label>
     								<div class="col-sm-8">
-    									<select class="form-control " name="sp" id="sp">
-    										{{-- <option></option> --}}
-    										@foreach($sp as $value)
-    										<option value="{{ $value }}" >{{ $value }}</option>
-    										@endforeach
-    									</select>
-    								</div>
-    							</div>
-    							<div class="form-group row">
-    								<label for="tanggal_akhir" class="col-sm-2 col-form-label">Tanggal Akhir</label>
-    								<div class="col-sm-8">
-    									<input required type="text" class="form-control tanggal" id="tanggal_akhir" value="" autocomplete="off" name="tanggal_akhir">
+    									<input required type="text" class="form-control tanggal" id="tanggal_phk" value="" autocomplete="off" name="tanggal_phk">
     								</div>
     							</div>
     							<div class="form-group row">

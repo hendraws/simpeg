@@ -19,7 +19,7 @@ class CreatePemberhentiansTable extends Migration
     		$table->date('tanggal_phk')->nullable();
     		$table->string('jenis_pelanggaran')->nullable();
     		$table->unsignedBigInteger('persus')->nullable();
-    		$table->unsignedBigInteger('sk')->nullable();
+    		$table->string('sk')->nullable();
     		$table->string('status')->nullable();
     		$table->unsignedBigInteger('approved_by')->nullable();
     		$table->unsignedBigInteger('created_by')->nullable();

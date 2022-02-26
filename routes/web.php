@@ -62,11 +62,11 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('proses-resmi/surat-peringatan/{id}/verifikasi-form', 'SuratPeringatanController@verifikasiForm');
 	Route::put('proses-resmi/surat-peringatan/{id}/verifikasi-form-update', 'SuratPeringatanController@verifikasi');
 
-	Route::resource('proses-resmi/surat-pemberhentian', 'SuratPeringatanController');
-	Route::get('proses-resmi/surat-pemberhentian/{id}/upload-form', 'SuratPeringatanController@uploadForm');
-	Route::put('proses-resmi/surat-pemberhentian/{id}/upload-form-update', 'SuratPeringatanController@upload');
-	Route::get('proses-resmi/surat-pemberhentian/{id}/verifikasi-form', 'SuratPeringatanController@verifikasiForm');
-	Route::put('proses-resmi/surat-pemberhentian/{id}/verifikasi-form-update', 'SuratPeringatanController@verifikasi');
+	Route::resource('proses-resmi/pemberhentian', 'PemberhentianController');
+	Route::get('proses-resmi/pemberhentian/{id}/upload-form', 'PemberhentianController@uploadForm');
+	Route::put('proses-resmi/pemberhentian/{id}/upload-form-update', 'PemberhentianController@upload');
+	Route::get('proses-resmi/pemberhentian/{id}/verifikasi-form', 'PemberhentianController@verifikasiForm');
+	Route::put('proses-resmi/pemberhentian/{id}/verifikasi-form-update', 'PemberhentianController@verifikasi');
 
 	Route::resource('/data-pegawai', 'PegawaiController');
 	// command

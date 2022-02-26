@@ -1,4 +1,4 @@
-<form action="{{ action('SponsorController@upload', $id) }}" method="POST" id="kantorCabangForm" enctype="multipart/form-data">
+<form action="{{ action('PemberhentianController@upload', $id) }}" method="POST" id="kantorCabangForm" enctype="multipart/form-data">
 	<div class="modal-header">
 		<h5 class="modal-title" id="exampleModalLabel">Upload Berkas</h5>
 		<button type="button" class="close" data-dismiss="modal" aria-label="Close">

@@ -100,7 +100,7 @@
 				@include('admin.proses_resmi.surat_peringatan.index')
 			</div>
 			<div class="tab-pane fade" id="nav-pemberhentian" role="tabpanel" aria-labelledby="nav-pemberhentian-tab">
-				@include('admin.proses_resmi.surat_pemberhentian.index')
+				@include('admin.proses_resmi.pemberhentian.index')
 			</div>
 		</div>
 
