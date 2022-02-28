@@ -1,6 +1,6 @@
 @extends('layouts.app')
-@section('title', 'Indikator Penilaian')
-@section('content-title', 'Master Indikator Penilaian')
+@section('title', 'Penilaian Pegawai')
+@section('content-title', 'Penilaian Pegawai')
 @section('css')
 <link href="{{ asset('vendors/DataTables/datatables.min.css') }}" rel="stylesheet">
 @endsection
@@ -13,16 +13,17 @@
 			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 		}
 	});
-	$(function() {	
-		$('#table').DataTable();
+	$(function() {
+		$('#table').DataTable({
+            "aaSorting": [],
+            // "order": []
+        });
 	});
 
 	$(document).on('click','.hapus',function(e){
 		e.preventDefault();
-		var id = $(this).data('id');
-		var url = '{{ action('IndikatorPenilaianController@destroy',':id') }}';
-		url = url.replace(':id',id);
-	
+		var url = $(this).data('url');
+
 		Swal.fire({
 			title: 'Apakah Anda Yakin ?',
 			text: "Data akan terhapus tidak dapat dikembalikan lagi !",
@@ -46,7 +47,7 @@
 								'Your file has been deleted.',
 								'success'
 								);
-							 setTimeout(function() { 
+							 setTimeout(function() {
 									location.reload();
 						    }, 2000);
 						}
@@ -59,7 +60,7 @@
 	</script>
 	@endsection
 	@section('button-title')
-	<a class="btn btn-sm btn-primary modal-button" href="Javascript:void(0)"  data-target="ModalForm" data-url="{{ action('IndikatorPenilaianController@create') }}"  data-toggle="tooltip" data-placement="top" title="Tambah" >Tambah</a>
+	<a class="btn btn-sm btn-primary" href="{{ action('PenilaianPegawaiController@create') }}"  data-toggle="tooltip" data-placement="top" title="Tambah" >Tambah</a>
 	@endsection
 	@section('content')
 	<div class="container">
@@ -67,7 +68,7 @@
 			<div class="col-md-12">
 				<div class="card">
 					<div class="card-header">
-						{{-- {{ __('Dashboard') }} --}}
+						Kantor : {{ $kantor->kantor }}
 					</div>
 
 					<div class="card-body">
@@ -76,20 +77,27 @@
 								<thead>
 									<tr>
 										<th scope="col">#</th>
+										<th scope="col">Nama</th>
 										<th scope="col">Jabatan</th>
-										<th scope="col">Indikator Penilaian</th>
-										<th scope="col">Action</th>
+										<th scope="col">Tanggal Penilaian </th>
+										<th scope="col">Penilai </th>
+										<th scope="col">Nilai </th>
+										<th scope="col">Action </th>
 									</tr>
 								</thead>
 								<tbody>
 									@foreach($data as $value)
 									<tr>
 										<th scope="row">{{ $loop->index + 1 }}</th>
+										<td>{{ optional($value->getPegawai)->nama }}</td>
 										<td>{{ optional($value->getJabatan)->jabatan }}</td>
-										<td>{{ $value->indikator }}</td>
+										<td>{{ date('d/m/Y', strtotime($value->tanggal)) }}</td>
+										<td>{{ optional($value->getPenilai)->nama }}</td>
+										<td>{{ optional($value->getNilai)->sum('nilai') }}</td>
 										<td>
-											<a class="btn btn-warning btn-sm modal-button" href="Javascript:void(0)"  data-target="ModalForm" data-url="{{ action('IndikatorPenilaianController@edit',$value) }}"  data-toggle="tooltip" data-placement="top" title="Edit" >Edit</a>
-											<button class="btn btn-sm btn-danger hapus " type="button" data-id="{{ $value->id }}">hapus</button>
+											<a class="btn btn-info btn-xs" href="{{ action('PenilaianPegawaiController@show',$value->id) }}"  data-toggle="tooltip" data-placement="top" title="detail" >Detail</a>
+											<a class="btn btn-warning btn-xs" href="{{ action('PenilaianPegawaiController@edit',$value->id) }}"  data-toggle="tooltip" data-placement="top" title="Edit" >Edit</a>
+											<button class="btn btn-xs btn-danger hapus " type="button" data-url="{{ action('PenilaianPegawaiController@destroy',$value->id) }}">hapus</button>
 										</td>
 									</tr>
 									@endforeach

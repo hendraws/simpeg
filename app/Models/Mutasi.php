@@ -13,9 +13,9 @@ class Mutasi extends Model
 {
 	use HasFactory, SoftDeletes, LogsActivity, Userstamps;
 
-    protected $fillable = [ 'lamaran_id', 'kantor_awal', 'kantor_baru', 'sk', 'status', 'approved_by', 'created_by', 'updated_by', 'deleted_by', 'approved_at',     ];
+    protected $fillable = [ 'lamaran_id', 'kantor_awal', 'kantor_baru', 'sk', 'status', 'approved_by', 'created_by', 'updated_by', 'deleted_by', 'approved_at',];
 
-	protected static $logAttributes = [ 'lamaran_id', 'kantor_awal', 'kantor_baru', 'sk', 'status', 'approved_by', 'created_by', 'updated_by', 'deleted_by','approved_at' ];
+	protected static $logAttributes = [ 'lamaran_id', 'kantor_awal', 'kantor_baru', 'sk', 'status', 'approved_by', 'created_by', 'updated_by', 'deleted_by','approved_at'];
 
 	protected $with = ['getPegawai', 'getKantorAwal','getKantorBaru'];
 

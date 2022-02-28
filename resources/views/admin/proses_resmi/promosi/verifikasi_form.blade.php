@@ -23,7 +23,7 @@
 					</label>
 				</div>
 				<div class="form-check">
-					<input class="form-check-input" type="radio" name="status" id="flexRadioDefault2"  value="sukes">
+					<input class="form-check-input" type="radio" name="status" id="flexRadioDefault2"  value="gagal">
 					<label class="form-check-label" for="flexRadioDefault2">
 						Gagal
 					</label>
