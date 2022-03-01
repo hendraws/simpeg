@@ -59,8 +59,8 @@
 		<aside class="main-sidebar sidebar-dark-primary elevation-4">
 			<!-- Brand Logo -->
 			<a href="/" class="brand-link">
-				<img src="{{ asset('dist/img/AdminLTELogo.png') }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-				<span class="brand-text font-weight-light">SIPERAN</span>
+                <img
+                src="{{ asset('frontend/images/logo.png') }}" alt="logo" class="logo-1" width="100%">
 			</a>
 
 			<!-- Sidebar -->
@@ -98,10 +98,10 @@
 		<footer class="main-footer">
 			<!-- To the right -->
 			<div class="float-right d-none d-sm-inline">
-				Sistem Informasi Perkembangan Perusahaan
+				Sistem Informasi Pegawai
 			</div>
 			<!-- Default to the left -->
-			<strong>Copyright &copy; {{ date('Y') }}</strong> 
+			<strong>Copyright &copy; {{ date('Y') }}</strong>
 		</footer>
 	</div>
 	<!-- ./wrapper -->

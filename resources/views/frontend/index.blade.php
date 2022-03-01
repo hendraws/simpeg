@@ -43,9 +43,15 @@
                         </form>
                     </li>
                     <li class="nav-item">
+                        @guest
                         <div class="input-group mb-3">
                                 <a href="{{ route('login') }}" class="btn btn-primary" >LOGIN</a>
                         </div>
+                        @else
+                        <div class="input-group mb-3">
+                            <a href="{{ route('login') }}" class="btn btn-primary" >Dashboard</a>
+                        </div>
+                        @endif
                     </li>
                 </ul>
             </div>
