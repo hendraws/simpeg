@@ -3,9 +3,9 @@
     transform: scale(1.5);
 }
 </style>
-<form action="{{ action('MutasiController@verifikasi', $id) }}" method="POST" id="kantorCabangForm" enctype="multipart/form-data">
+<form action="{{ action('LaporanController@verifikasi', $id) }}" method="POST" id="kantorCabangForm" enctype="multipart/form-data">
 	<div class="modal-header">
-		<h5 class="modal-title" id="exampleModalLabel">Verifikasi Berkas</h5>
+		<h5 class="modal-title" id="exampleModalLabel">Verifikasi Laporan</h5>
 		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 			<span aria-hidden="true">&times;</span>
 		</button>
@@ -14,7 +14,7 @@
 		@csrf
 		@method('PUT')
 		<div class="form-group row">
-			<label for="jabatan" class="col-sm-4 col-form-label">Verifikasi Berkas</label>
+			<label for="jabatan" class="col-sm-4 col-form-label">Verifikasi Laporan</label>
 			<div class="col-sm-12">
 				<div class="form-check">
 					<input class="form-check-input" type="radio" name="status"  checked id="flexRadioDefault1" value="sukses">

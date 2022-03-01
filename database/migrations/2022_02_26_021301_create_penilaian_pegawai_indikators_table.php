@@ -17,6 +17,7 @@ class CreatePenilaianPegawaiIndikatorsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('penilaian_pegawai_id')->nullable();
             $table->unsignedBigInteger('indikator_id')->nullable();
+            $table->string('nilai')->nullable();
             $table->timestamps();
         });
     }

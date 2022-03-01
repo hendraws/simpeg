@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\kantor;
+use App\Models\IndikatorPenilaian;
 use App\Models\Jabatan;
 use App\Models\Lamaran;
-use Illuminate\Http\Request;
 use App\Models\PenilaianPegawai;
+use App\Models\PenilaianPegawaiIndikator;
+use App\Models\kantor;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class PenilaianPegawaiController extends Controller
@@ -27,8 +29,15 @@ class PenilaianPegawaiController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
+
+    	if($request->ajax()){
+    		$result['code'] = '200';
+    		$result['indikator'] = IndikatorPenilaian::where('jabatan_id', $request->jabatan)->get();
+    		return response()->json($result);
+    	}
+
     	$dataPegawai = Lamaran::where('status_lamaran','diterima')->whereNotNull('nip')->get();
     	$dataKantor = kantor::pluck('kantor','id');
     	$dataJabatan = Jabatan::pluck('jabatan', 'id');
@@ -43,8 +52,7 @@ class PenilaianPegawaiController extends Controller
      */
     public function store(Request $request)
     {
-
-
+   
         $input = $request->validate([
             'pegawai_id' => 'required',
             'kantor' => 'required',
@@ -54,7 +62,16 @@ class PenilaianPegawaiController extends Controller
         ]);
         DB::beginTransaction();
         try {
-            PenilaianPegawai::create($input);
+            $penilaian = PenilaianPegawai::create($input);
+
+            foreach ($request->indikator as $key => $value) {
+	            PenilaianPegawaiIndikator::create([
+	            	'penilaian_pegawai_id' => $penilaian->id, 
+	            	'indikator_id' => $value['id'],
+	            	'nilai' => $value['nilai'],
+	            ]);
+            }
+
         } catch (\Exception $e) {
             DB::rollback();
             toastr()->success($e->getMessage(), 'Error');
@@ -67,7 +84,7 @@ class PenilaianPegawaiController extends Controller
 
         DB::commit();
         toastr()->success('Data telah ditambahkan', 'Berhasil');
-        return redirect(action('ProsesResmiController@index'));
+        return redirect(action('PenilaianPegawaiController@index'));
     }
 
     /**
@@ -76,9 +93,12 @@ class PenilaianPegawaiController extends Controller
      * @param  \App\Models\PenilaianPegawai  $penilaianPegawai
      * @return \Illuminate\Http\Response
      */
-    public function show(PenilaianPegawai $penilaianPegawai)
+    public function show($id)
     {
-        //
+
+        $data = PenilaianPegawai::findOrFail($id);
+       
+       return view('admin.penilaian_pegawai.detail', compact('data'));
     }
 
     /**
@@ -110,8 +130,19 @@ class PenilaianPegawaiController extends Controller
      * @param  \App\Models\PenilaianPegawai  $penilaianPegawai
      * @return \Illuminate\Http\Response
      */
-    public function destroy(PenilaianPegawai $penilaianPegawai)
+    public function destroy($id)
     {
-        //
+    	
+    	$penilaian = PenilaianPegawai::where('id',$id)->first();
+	    $penilaian->delete();
+    	$result['code'] = '200';
+    	return response()->json($result);
+    } 
+
+    public function detailGroup($id)
+    {
+        $data = PenilaianPegawai::where('kantor', $id)->get();
+        $kantor = kantor::where('id', $id)->first();
+    	return view('admin.penilaian_pegawai.detail_index', compact('data','kantor'));
     }
 }

@@ -88,10 +88,10 @@
 									@foreach($data as $value)
 									<tr>
 										<th scope="row">{{ $loop->index + 1 }}</th>
-										<td>{{ $value->kantor }}</td>
+										<td>{{ optional($value->getKantor)->kantor }}</td>
 										<td>{{ $value->jumlah }}</td>
 										<td>
-											<a class="btn btn-warning btn-sm modal-button" href="Javascript:void(0)"  data-target="ModalForm" data-url="{{ action('PenilaianPegawaiController@detailGroup',$value->kantor) }}"  data-toggle="tooltip" data-placement="top" title="Edit" >View</a>
+											<a class="btn btn-warning btn-sm" href="{{ action('PenilaianPegawaiController@detailGroup',$value->kantor) }}"  data-toggle="tooltip" data-placement="top" title="Edit" >View</a>
 										</td>
 									</tr>
 									@endforeach
