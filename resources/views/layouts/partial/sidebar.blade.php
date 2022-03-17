@@ -104,7 +104,7 @@
 			</li>
 			<li class="nav-item">
 				<a href="{{ action('PenilaianPegawaiController@index')}}" class="nav-link">
-					<i class="nav-icon fa fa-calendar"></i>
+					<i class="nav-icon far fa-file"></i>
 					<p>
 						Penilaian Pegawai
 						{{-- <span class="right badge badge-danger">New</span> --}}
@@ -113,7 +113,7 @@
 			</li>
 			<li class="nav-item">
 				<a href="{{ action('LaporanController@index') }}" class="nav-link">
-					<i class="nav-icon fa fa-calendar"></i>
+					<i class="nav-icon far fa-file-alt"></i>
 					<p>
 						Laporan Pegawai
 						{{-- <span class="right badge badge-danger">New</span> --}}
@@ -121,8 +121,8 @@
 				</a>
 			</li>
 			<li class="nav-item">
-				<a href="" class="nav-link">
-					<i class="nav-icon fa fa-calendar"></i>
+				<a href="{{ action('UserController@index') }}" class="nav-link">
+					<i class="nav-icon fas fa-user"></i>
 					<p>
 						User
 						{{-- <span class="right badge badge-danger">New</span> --}}

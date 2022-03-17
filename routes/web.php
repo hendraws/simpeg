@@ -78,6 +78,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/laporan/{id}/verifikasi-form', 'LaporanController@verifikasiForm');
 	Route::put('/laporan/{id}/verifikasi-form-update', 'LaporanController@verifikasi');
 
+	Route::get('/user', 'UserController@index');
     Route::resource('penilaian-pegawai', 'PenilaianPegawaiController');
     Route::get('penilaian-pegawai/{id}/daftar-pegawai', 'PenilaianPegawaiController@detailGroup');
     // command

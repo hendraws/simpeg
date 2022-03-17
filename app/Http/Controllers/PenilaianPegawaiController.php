@@ -10,6 +10,7 @@ use App\Models\PenilaianPegawaiIndikator;
 use App\Models\kantor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class PenilaianPegawaiController extends Controller
 {
@@ -97,8 +98,8 @@ class PenilaianPegawaiController extends Controller
     {
 
         $data = PenilaianPegawai::findOrFail($id);
-       
-       return view('admin.penilaian_pegawai.detail', compact('data'));
+       	 $qrcode = QrCode::format('svg')->size(100)->generate(optional($data->getPenilai)->nama);
+       return view('admin.penilaian_pegawai.detail', compact('data','qrcode'));
     }
 
     /**

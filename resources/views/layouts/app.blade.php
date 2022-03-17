@@ -6,7 +6,7 @@
 	<meta http-equiv="x-ua-compatible" content="ie=edge">
 	<meta name="csrf-token" content="{{ csrf_token() }}">
 
-	<title>@yield('title') | Sistem Informasi Perkembangan Perusahaan </title>
+	<title>@yield('title') | Sistem Informasi Manajemen Kepegawaian </title>
 
 	<link rel="stylesheet" href="{{ asset('plugins/fontawesome-free/css/all.min.css')}}">
 	<link rel="stylesheet" href="{{ asset('plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css')}}">
@@ -98,7 +98,7 @@
 		<footer class="main-footer">
 			<!-- To the right -->
 			<div class="float-right d-none d-sm-inline">
-				Sistem Informasi Pegawai
+				Sistem Informasi Manajemen Kepegawaian
 			</div>
 			<!-- Default to the left -->
 			<strong>Copyright &copy; {{ date('Y') }}</strong>

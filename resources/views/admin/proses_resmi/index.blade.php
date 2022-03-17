@@ -21,7 +21,12 @@
 
 	$(function() {
 		$('.table').DataTable({
-			"aaSorting": []
+			 "aaSorting": [],
+			'iDisplayLength': 50,
+			 dom: 'Bfrtip',
+	       	 buttons: [
+	            'print', 'pdf'
+	        ]
 		});
 	});
 

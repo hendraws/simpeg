@@ -11,7 +11,17 @@
 	}
 
 	.radio {
-	    pointer-events: none;
+		pointer-events: none;
+	}
+
+	@media print {
+		body * {
+			visibility: hidden;
+		}
+		#data-content, #data-content * {
+			visibility: visible;
+		}
+	
 	}
 </style>
 @endsection
@@ -19,6 +29,7 @@
 <script src="{{ asset('plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
 <script src="{{ asset('plugins/select2/js/select2.full.min.js')}}"></script>
 <script src="{{ asset('vendors/datetimepicker/jquery.datetimepicker.full.min.js') }}"></script>
+<script src="{{ asset('js/print-this.js') }}"></script>
 
 <script type="text/javascript">
 	$.ajaxSetup({
@@ -27,59 +38,66 @@
 		}
 	});
 
+	$('#cetak').click(function() {
+		window.print();
+	}); 
 </script>
 @endsection
 @section('button-title')	
-<a class="btn btn-sm btn-secondary" href="{{ url()->previous()  }}"  data-toggle="tooltip" data-placement="top"
-title="Kembali">Kembali</a>
+
+<a href="{{ action('PenilaianPegawaiController@edit',$data->id) }}" class="btn btn-info btn-sm ">Edit Penilaian</a>
+<a class="btn btn-sm btn-secondary" href="{{ url()->previous()  }}"  data-toggle="tooltip" data-placement="top" title="Kembali">Kembali</a>
+<button class="btn btn-warning btn-sm" id="cetak">Cetak</button>
 @endsection
 @section('content')
-<div class="">
+<div id="data-content">
 	<div class="row justify-content-center">
 		<div class="col-md-12">
 			<div class="card">
 				<div class="card-body">
 					<div class="modal-body">
-						@csrf
-						<div class="form-group row">
-							<label for="pegawai_id" class="col-sm-2 col-form-label">Pegawai</label>
-							<div class="col-sm-8">
-								<input type="text" readonly class="form-control white" value="{{ optional($data->getPegawai)->nama }}">
-							</div>
-						</div>
-						<div class="form-group row">
-							<label for="kantor" class="col-sm-2 col-form-label">Kantor Cabang</label>
-							<div class="col-sm-8">
-								<input type="text" readonly class="form-control white" value="{{ optional($data->getKantor)->kantor }}">
-							</div>
-						</div>
-						<div class="form-group row">
-							<label for="jabatan" class="col-sm-2 col-form-label">Jabatan</label>
-							<div class="col-sm-8">
-								<input type="text" readonly class="form-control white" value="{{ optional($data->getJabatan)->jabatan }}">
-							</div>
-						</div>
-						<div class="form-group row">
-							<label for="tanggal" class="col-sm-2 col-form-label">Tanggal</label>
-							<div class="col-sm-8">
-								<input type="text" readonly class="form-control white" value="{{ date('d/m/Y',strtotime($data->tanggal)) }}">
-							</div>
-						</div>
-						<div class="form-group row">
-							<label for="penilaian" class="col-sm-2 col-form-label">Penilai</label>
-							<div class="col-sm-8">
-								<input type="text" readonly class="form-control white" value="{{ optional($data->getPenilai)->nama }}">
+						<div class="row">
+							<div class="col-md-12 text-center">
+								<h5>LAPORAN HASIL</h5>
+								<h5>PENILAIAN KINERJA PEGAWAI</h5>
+								<h5>KSP SATRIA MULIA ARTHOMORO</h5>
 							</div>
 						</div>
 						<hr>
+						<div class="row mt-5">
+							<div for="pegawai_id" class="col-sm-2 col-form-div">Pegawai</div>
+							<div class="col-sm-8">
+								: {{ optional($data->getPegawai)->nama }}
+							</div>
+						</div>
+						<div class="row">
+							<div for="kantor" class="col-sm-2 col-form-div">Kantor Cabang</div>
+							<div class="col-sm-8">
+								<div class=" col-form-div" >: {{ optional($data->getKantor)->kantor }}</div>
+							</div>
+						</div>
+						<div class="row">
+							<div for="jabatan" class="col-sm-2 col-form-div">Jabatan</div>
+							<div class="col-sm-8">
+								<div class=" col-form-div" >: {{ optional($data->getJabatan)->jabatan }}</div>
+							</div>
+						</div>
+						<div class="row">
+							<div for="tanggal" class="col-sm-2 col-form-div">Tanggal</div>
+							<div class="col-sm-8">
+								<div class=" col-form-div" >: {{ date('d/m/Y',strtotime($data->tanggal)) }}</div>
+							</div>
+						</div>
+
+						<hr>
 						<div class="row">
 							<div class="col-md-12">
-								<table class="table">
+								<table class="table table-bordered table-sm">
 									<thead>	
 										<tr class="text-center">
 											<th width="10%">No</th>
 											<th width="60%">Keterangan</th>
-											<th colspan="5" width="30%">Nilai</th>
+											<th width="20%">Nilai</th>
 										</tr>
 									</thead>
 									<tbody id="indikator">
@@ -87,50 +105,34 @@ title="Kembali">Kembali</a>
 										<tr>
 											<td>{{ $loop->index + 1 }}</td>
 											<td>{{ $val->getIndikator->indikator }}</td>
-											<td>
-												<div class="form-check">
-													<input class="form-check-input radio" value="5" type="radio"  {{ $val->nilai == '5' ? 'checked' : '' }} >
-													<label class="form-check-label" >
-														SB
-													</label>
-												</div>
-											</td>
-											<td>
-												<div class="form-check">
-													<input class="form-check-input radio" value="4" type="radio"  {{ $val->nilai == '4' ? 'checked' : '' }} >
-													<label class="form-check-label" >
-														B
-													</label>
-												</div>
-											</td>
-											<td>
-												<div class="form-check">
-													<input class="form-check-input radio" value="3" type="radio" {{ $val->nilai == '3' ? 'checked' : '' }}>
-													<label class="form-check-label" >
-														C
-													</label>
-												</div>
-											</td>
-											<td>
-												<div class="form-check">
-													<input class="form-check-input radio" value="2" type="radio" {{ $val->nilai == '2' ? 'checked' : '' }} >
-													<label class="form-check-label">
-														K
-													</label>
-												</div>
-											</td>	
-											<td>
-												<div class="form-check">
-													<input class="form-check-input radio" value="1" type="radio" {{ $val->nilai == '1' ? 'checked' : '' }} >
-													<label class="form-check-label">
-														SK
-													</label>
-												</div>
-											</td>
+											<td class="text-center">{{  $val->nilai }}</td>
 										</tr>
 										@endforeach
+										<tr class="text-center">
+											<td colspan="2">Total</td>
+											<td>{{ $data->getNilai->sum('nilai') }}</td>
+										</tr>
 									</tbody>
 								</table>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-6">
+								<div>Keterangan Nilai</div>
+								<ul style="list-style: none;">
+									<li>5 = Sangat Baik</li>
+									<li>4 = Baik</li>
+									<li>3 = Cukup</li>
+									<li>2 = Kurang</li>
+									<li>1 = Sangat Kurang</li>
+								</ol>
+							</div>
+							<div class="col-md-6 text-center" >
+								<div>Penilai</div>
+								<br>
+								{!! $qrcode !!}
+								<br>
+								<div class=" col-form-div" >{{ optional($data->getPenilai)->nama }}</div>
 							</div>
 						</div>
 					</div>

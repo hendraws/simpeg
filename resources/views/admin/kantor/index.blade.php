@@ -14,7 +14,14 @@
 		}
 	});
 	$(function() {	
-		// $('#table').DataTable();
+		$('#table').DataTable({
+			"aaSorting": [],
+			'iDisplayLength': 50,
+			dom: 'Bfrtip',
+			buttons: [
+			'print', 'pdf'
+			]
+		});
 	});
 
 	$(document).on('click','.hapus',function(e){
@@ -22,7 +29,7 @@
 		var id = $(this).data('id');
 		var url = '{{ action('KantorController@destroy',':id') }}';
 		url = url.replace(':id',id);
-	
+		
 		Swal.fire({
 			title: 'Apakah Anda Yakin ?',
 			text: "Data akan terhapus tidak dapat dikembalikan lagi !",
@@ -46,9 +53,9 @@
 								'Your file has been deleted.',
 								'success'
 								);
-							 setTimeout(function() { 
-									location.reload();
-						    }, 2000);
+							setTimeout(function() { 
+								location.reload();
+							}, 2000);
 						}
 					}
 				});

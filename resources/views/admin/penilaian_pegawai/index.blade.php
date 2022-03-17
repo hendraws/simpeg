@@ -15,8 +15,12 @@
 	});
 	$(function() {
 		$('#table').DataTable({
-            "aaSorting": [],
-            // "order": []
+	    	 "aaSorting": [],
+			'iDisplayLength': 50,
+			 dom: 'Bfrtip',
+	       	 buttons: [
+	            'print', 'pdf'
+	        ]
         });
 	});
 
