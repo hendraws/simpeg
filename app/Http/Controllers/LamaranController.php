@@ -195,8 +195,8 @@ class LamaranController extends Controller
      */
     public function show($no_tiket)
     {
-    	$detail = Lamaran::where('no_tiket', $no_tiket)->first();
-    	return view('frontend.detail', compact('detail'));
+    	$data = Lamaran::where('no_tiket', $no_tiket)->first();
+    	return view('frontend.detail', compact('data'));
 
     }
 
@@ -330,7 +330,7 @@ class LamaranController extends Controller
             	'password' => Hash::make(date('ymd', strtotime($dataKaryawan->tanggal_lahir))),
             ]);
 			// dd($user);
-            
+
             $dataKaryawan->update([
                 'nip' => $nip,
                 'penempatan' => $request->penempatan,
