@@ -25,7 +25,7 @@
 				</ul>
 			</li> --}}
 			<li class="nav-item">
-				<a href="{{ url('/') }}" class="nav-link">
+				<a href="{{ action('HomeController@index') }}" class="nav-link">
 					<i class="nav-icon fa fa-tachometer-alt"></i>
 					<p>
 						Dashboard

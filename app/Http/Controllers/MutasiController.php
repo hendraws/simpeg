@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\HistoryLog;
 use App\Models\Jabatan;
 use App\Models\Lamaran;
 use App\Models\Mutasi;
@@ -190,7 +191,13 @@ class MutasiController extends Controller
 
     		$mutasi = Mutasi::where('id', $id)->first();
     		$mutasi->update(['status' => $request->status]);
+            dd($mutasi, $request->status);
+            if($request->status == 'sukses'){
+                $input['pesan'] = 'Mutasi Kayawan, Karyawan ';
+                $input['modul'] = 'App\Models\Mutasi';
 
+                HistoryLog::create($input);
+            }
     	} catch (\Exception $e) {
     		DB::rollback();
     		dd($e->getMessage());
