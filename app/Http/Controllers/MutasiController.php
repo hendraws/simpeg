@@ -190,10 +190,14 @@ class MutasiController extends Controller
     		]);
 
     		$mutasi = Mutasi::where('id', $id)->first();
-    		$mutasi->update(['status' => $request->status]);
-            dd($mutasi, $request->status);
+               
+    		$mutasi->update([
+    			'status' => $request->status,
+    			'approved_by' => auth()->user()->id
+    		]);
+
             if($request->status == 'sukses'){
-                $input['pesan'] = 'Mutasi Kayawan, Karyawan ';
+                 $input['pesan'] = 'Mutasi Kayawan, Karyawan '. optional($mutasi->getPegawai)->nama .' mutasi dari kantor/cabang '.optional($mutasi->getKantorAwal)->kantor . ' ke kantor/cabang '. optional($mutasi->getKantorBaru)->kantor. ' oleh '. auth()->user()->getProfile->nama ;
                 $input['modul'] = 'App\Models\Mutasi';
 
                 HistoryLog::create($input);

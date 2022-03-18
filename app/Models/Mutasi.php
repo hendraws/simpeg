@@ -31,4 +31,8 @@ class Mutasi extends Model
 	public function getKantorBaru(){
 		return $this->belongsTo(kantor::class, 'kantor_baru','id');
 	}
+
+	public function getApprovedBy(){
+		return $this->belongsTo(User::class, 'kantor_baru','id');
+	}
 }

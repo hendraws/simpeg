@@ -320,7 +320,7 @@ class LamaranController extends Controller
         	$no = 1;
         	do {
 	            $nip = 'SMART/'.date('ymd'). $no++;
-            } while (Lamaran::where('no_tiket', $nip)->exists());
+            } while (Lamaran::where('nip', $nip)->exists());
 
             $dataKaryawan = Lamaran::where('id', $id)->first();
 
