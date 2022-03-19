@@ -30,4 +30,8 @@ class SuratPeringatan extends Model
 	public function getPersus(){
 		return $this->belongsTo(Persus::class, 'persus','id');
 	}
+
+    public function getApprovedBy(){
+		return $this->belongsTo(User::class, 'approved_by','id');
+	}
 }

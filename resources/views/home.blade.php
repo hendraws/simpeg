@@ -28,7 +28,7 @@
                 <div class="icon">
                     <i class="ion ion-stats-bars"></i>
                 </div>
-                <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                <a href="{{ action('ProsesResmiController@index') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
         </div>
         <!-- ./col -->
@@ -43,7 +43,7 @@
                 <div class="icon">
                     <i class="ion ion-person-add"></i>
                 </div>
-                <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                <a href="{{ action('ProsesResmiController@index') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
         </div>
         <!-- ./col -->
@@ -51,14 +51,14 @@
             <!-- small box -->
             <div class="small-box bg-danger">
                 <div class="inner">
-                    <h3>65</h3>
+                    <h3>{{ $verifikasiLamaran->count() }}</h3>
 
                     <p>Verifikasi Pengajuan Lamaran</p>
                 </div>
                 <div class="icon">
                     <i class="ion ion-pie-graph"></i>
                 </div>
-                <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                <a href="{{ action('LamaranController@calonKaryawan') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
         </div>
         <!-- ./col -->
@@ -66,14 +66,14 @@
             <!-- small box -->
             <div class="small-box bg-danger">
                 <div class="inner">
-                    <h3>65</h3>
+                    <h3></h3>
 
                     <p>Verifikasi Laporan Pegawai</p>
                 </div>
                 <div class="icon">
                     <i class="ion ion-pie-graph"></i>
                 </div>
-                <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                <a href="{{ action('LaporanController@index') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
         </div>
         <!-- ./col -->
@@ -81,7 +81,7 @@
             <!-- small box -->
             <div class="small-box bg-danger">
                 <div class="inner">
-                    <h3>65</h3>
+                    <h3>{{ 'a' }}</h3>
 
                     <p>Verifikasi Proses Resmi Pegawai</p>
                 </div>

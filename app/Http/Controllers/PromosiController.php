@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Jabatan;
 use App\Models\Lamaran;
 use App\Models\Promosi;
+use App\Models\HistoryLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -130,7 +131,7 @@ class PromosiController extends Controller
     {
 
     	return view('admin.proses_resmi.promosi.upload_form', compact('id'));
-    }  
+    }
 
     public function upload(Request $request, $id)
     {
@@ -148,7 +149,9 @@ class PromosiController extends Controller
     			$path = Storage::putFileAs('public', $request->file('file'), $imgName);
     			$lamar['sk'] = $path;
     		}
+
     		$promosi = Promosi::where('id', $id)->first();
+            $lamar['status'] = 'proses-verifikasi';
     		$promosi->update($lamar);
 
     	} catch (\Exception $e) {
@@ -169,13 +172,13 @@ class PromosiController extends Controller
     	return back();
 
     	return view('admin.proses_resmi.promosi.upload_form', compact('id'));
-    } 
+    }
 
     public function verifikasiForm($id)
     {
 
     	return view('admin.proses_resmi.promosi.verifikasi_form', compact('id'));
-    }  
+    }
 
     public function verifikasi(Request $request, $id)
     {
@@ -188,7 +191,18 @@ class PromosiController extends Controller
     		]);
 
     		$promosi = Promosi::where('id', $id)->first();
-    		$promosi->update(['status' => $request->status]);
+    		$promosi->update([
+                'status' => $request->status,
+                'approved_by' => auth()->user()->id,
+                'approved_at' => now(),
+            ]);
+
+        //     if($request->status == 'sukses'){
+        //         $input['pesan'] = 'Promosi Karyawan, Karyawan '. optional($mutasi->getPegawai)->nama .' mutasi dari kantor/cabang '.optional($mutasi->getKantorAwal)->kantor . ' ke kantor/cabang '. optional($mutasi->getKantorBaru)->kantor. ' oleh '. auth()->user()->getProfile->nama ;
+        //        $input['modul'] = 'App\Models\Mutasi';
+
+        //        HistoryLog::create($input);
+        //    }
 
     	} catch (\Exception $e) {
     		DB::rollback();

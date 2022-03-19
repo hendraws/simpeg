@@ -31,25 +31,32 @@
 						<td>{{ optional($data->getJabatanBaru)->jabatan }}</td>
 						<td>
 							@if($data->status =='pending')
-								<button type="button"  class="btn btn-xs btn-warning ">Pending</button>
+								<button type="button"  class="btn btn-xs btn-warning ">Belum Upload Berkas</button>
 							@elseif($data->status =='sukses')
-								<button type="button"  class="btn btn-xs btn-success ">Sukses</button>
+								<button type="button"  class="btn btn-xs btn-success ">Promosi disetujui</button>
+							@elseif($data->status =='proses-verifikasi')
+								<button type="button"  class="btn btn-xs btn-success ">Proses Verifikasi</button>
 							@else
 								<button type="button"  class="btn btn-xs btn-danger ">Gagal</button>
 							@endif
 						</td>
 						<td>
-							@if($data->status =='pending')
-							<a href="Javascript:void(0)" class="btn btn-xs btn-primary @if(empty($data->sk)) disable-links @endif modal-button"  data-target="ModalForm" data-url="{{ action('PromosiController@verifikasiForm', $data->id ) }}">Verifikasi</a>
+                            @if(!empty($data->sk))
+							@if($data->status =='proses-verifikasi')
+							<a href="Javascript:void(0)" class="btn btn-xs btn-primary @if(empty($data->sk)) disable-links @endif modal-button"  data-target="ModalForm" data-url="{{ action('PromosiController@verifikasiForm', $data->id ) }}">Verifikasi Berkas</a>
 							@else
-							<a href="Javascript:void(0)" class="btn btn-xs btn-info">Terverifikasi</a>
-							@endif
+							{{-- <a href="Javascript:void(0)" class="btn btn-xs btn-info">Terverifikasi</a> --}}
 							<a href="Javascript:void(0)" class="btn btn-xs btn-danger modal-button">Ubah</a>
+							@endif
+                            @endif
 						</td>
 						<td><a class="btn btn-xs btn-info modal-button" href="">Download</a></td>
 						<td>
+                            @if(empty($data->sk))
 							<a class="btn btn-xs btn-warning modal-button @if(!empty($data->sk)) disable-links @endif" href="Javascript:void(0)"  data-target="ModalForm" data-url="{{ action('PromosiController@uploadForm', $data->id ) }}" >Upload Berkas</a>
+                            @else
 							<a class="btn btn-xs btn-info" href="">Download</a>
+                            @endif
 						</td>
 					</tr>
 					@endforeach

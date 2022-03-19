@@ -60,7 +60,7 @@ class SponsorController extends Controller
     		$input['lamaran_id'] = $request->lamaran_id;
     		$input['tanggal_mulai'] = $request->tanggal_mulai;
     		$input['tanggal_akhir'] = $request->tanggal_akhir;
-    		$input['keterangan'] = 'Belum Aktif';
+    		$input['keterangan'] = 'Tidak Aktif';
     		$input['kantor_tugas'] = $request->kantor_tugas;
     		$input['kantor_baru'] = $request->kantor_baru;
     		$input['status'] = 'pending';
@@ -150,6 +150,7 @@ class SponsorController extends Controller
     			$path = Storage::putFileAs('public', $request->file('file'), $imgName);
     			$lamar['sk'] = $path;
     		}
+            $lamar['status'] = 'proses-verifikasi';
     		$sponsor = Sponsor::where('id', $id)->first();
     		$sponsor->update($lamar);
 
@@ -189,7 +190,7 @@ class SponsorController extends Controller
     			'status' => 'required'
     		]);
 
-    		$keterangan = 'Belum Aktif';
+    		$keterangan = 'Tidak Aktif';
     		if($request->status == 'sukses'){
     			$keterangan = 'Aktif';
     		}
@@ -197,7 +198,8 @@ class SponsorController extends Controller
     		$sponsor->update([
     			'status' => $request->status,
     			'keterangan' => $keterangan,
-    			'approved_by' => auth()->user()->id,
+                'approved_by' => auth()->user()->id,
+                'approved_at' => now(),
     		]);
 
     	} catch (\Exception $e) {

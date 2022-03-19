@@ -33,11 +33,13 @@
 						<td>{{ optional($data->getKantorTugas)->kantor }}</td>
 						<td>
 							@if($data->status =='pending')
-							Belum Verifikasi
+								<button type="button"  class="btn btn-xs btn-warning ">Belum Upload Berkas</button>
 							@elseif($data->status =='sukses')
-							Aktif
+								<button type="button"  class="btn btn-xs btn-success ">SP disetujui</button>
+							@elseif($data->status =='proses-verifikasi')
+								<button type="button"  class="btn btn-xs btn-success ">Proses Verifikasi</button>
 							@else
-							Verifikasi Ditolak
+								<button type="button"  class="btn btn-xs btn-danger ">Gagal</button>
 							@endif
 						</td>
 						<td>
@@ -53,12 +55,15 @@
 							@endif
 						</td>
 						<td>
-							@if($data->status =='pending')
-							<a href="Javascript:void(0)" class="btn btn-xs btn-primary @if(empty($data->sk)) disable-links @endif modal-button"  data-target="ModalForm" data-url="{{ action('SuratPeringatanController@verifikasiForm', $data->id ) }}">Verifikasi</a>
+                            @if(!empty($data->sk))
+							@if($data->status =='proses-verifikasi')
+                            <a href="Javascript:void(0)" class="btn btn-xs btn-primary @if(empty($data->sk)) disable-links @endif modal-button"  data-target="ModalForm" data-url="{{ action('SuratPeringatanController@verifikasiForm', $data->id ) }}">Verifikasi</a>
 							@else
-							<a href="Javascript:void(0)" class="btn btn-xs btn-info">Terverifikasi</a>
-							@endif
+							{{-- <a href="Javascript:void(0)" class="btn btn-xs btn-info">Terverifikasi</a> --}}
 							<a href="Javascript:void(0)" class="btn btn-xs btn-danger modal-button">Ubah</a>
+							@endif
+                            @endif
+
 						</td>
 						<td><a class="btn btn-xs btn-info modal-button" href="">Download</a></td>
 						<td>

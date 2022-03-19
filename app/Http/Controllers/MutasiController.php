@@ -59,7 +59,7 @@ class MutasiController extends Controller
     		$input['kantor_awal'] = $request->kantor_kini_id;
     		$input['kantor_baru'] = $request->kantor_baru;
     		// $input['sk'] = ;
-    		$input['status'] = 'verifikasi';
+    		$input['status'] = 'pending';
     		// $input['approved_by'] = ;
     		// $input['created_by'] = ;
     		// $input['updated_by'] = ;
@@ -150,6 +150,7 @@ class MutasiController extends Controller
     			$path = Storage::putFileAs('public', $request->file('file'), $imgName);
     			$lamar['sk'] = $path;
     		}
+            $lamar['status'] = 'proses-verifikasi';
     		$mutasi = Mutasi::where('id', $id)->first();
     		$mutasi->update($lamar);
 
@@ -190,14 +191,15 @@ class MutasiController extends Controller
     		]);
 
     		$mutasi = Mutasi::where('id', $id)->first();
-               
+
     		$mutasi->update([
     			'status' => $request->status,
-    			'approved_by' => auth()->user()->id
+                'approved_by' => auth()->user()->id,
+                'approved_at' => now(),
     		]);
 
             if($request->status == 'sukses'){
-                 $input['pesan'] = 'Mutasi Kayawan, Karyawan '. optional($mutasi->getPegawai)->nama .' mutasi dari kantor/cabang '.optional($mutasi->getKantorAwal)->kantor . ' ke kantor/cabang '. optional($mutasi->getKantorBaru)->kantor. ' oleh '. auth()->user()->getProfile->nama ;
+                 $input['pesan'] = 'Mutasi Karyawan, Karyawan '. optional($mutasi->getPegawai)->nama .' mutasi dari kantor/cabang '.optional($mutasi->getKantorAwal)->kantor . ' ke kantor/cabang '. optional($mutasi->getKantorBaru)->kantor. ' oleh '. auth()->user()->getProfile->nama ;
                 $input['modul'] = 'App\Models\Mutasi';
 
                 HistoryLog::create($input);

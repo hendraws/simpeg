@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Persus;
 use App\Models\Lamaran;
+use App\Models\HistoryLog;
 use Illuminate\Http\Request;
 use App\Models\SuratPeringatan;
 use App\Models\JenisPelanggaran;
@@ -150,6 +151,7 @@ class SuratPeringatanController extends Controller
                 $path = Storage::putFileAs('public', $request->file('file'), $imgName);
                 $lamar['sk'] = $path;
             }
+            $lamar['status'] = 'proses-verifikasi';
             $suratPeringatan = SuratPeringatan::where('id', $id)->first();
             $suratPeringatan->update($lamar);
         } catch (\Exception $e) {
@@ -187,12 +189,20 @@ class SuratPeringatanController extends Controller
             $request->validate([
                 'status' => 'required'
             ]);
-
             $suratPeringatan = SuratPeringatan::where('id', $id)->first();
             $suratPeringatan->update([
                 'status' => $request->status,
                 'approved_by' => auth()->user()->id,
+                'approved_at' => now(),
             ]);
+
+            if ($request->status == 'sukses') {
+                $input['pesan'] = strtoupper($suratPeringatan->sp).' Karyawan ' . optional($suratPeringatan->getPegawai)->nama . ', Jenis Pelanggaran ' . optional($suratPeringatan->getJenisPelanggaran)->jenis_pelanggaran . ', Dikeluarkan oleh ' . optional($suratPeringatan->getApprovedBy)->name;
+                $input['modul'] = 'App\Models\SuratPeringatan';
+
+                HistoryLog::create($input);
+            }
+
         } catch (\Exception $e) {
             DB::rollback();
             dd($e->getMessage());
