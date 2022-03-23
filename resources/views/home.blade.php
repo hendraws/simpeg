@@ -66,7 +66,7 @@
             <!-- small box -->
             <div class="small-box bg-danger">
                 <div class="inner">
-                    <h3></h3>
+                    <h3>{{ $verifikasiLaporanPegawai  }}</h3>
 
                     <p>Verifikasi Laporan Pegawai</p>
                 </div>
@@ -81,7 +81,7 @@
             <!-- small box -->
             <div class="small-box bg-danger">
                 <div class="inner">
-                    <h3>{{ 'a' }}</h3>
+                    <h3>{{ $verifikasiAll }}</h3>
 
                     <p>Verifikasi Proses Resmi Pegawai</p>
                 </div>
