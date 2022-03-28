@@ -7,6 +7,7 @@ use App\Models\Jabatan;
 use App\Models\Lamaran;
 use App\Models\Mutasi;
 use App\Models\kantor;
+use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -30,7 +31,7 @@ class MutasiController extends Controller
      */
     public function create(Request $request)
     {
-        if($request->ajax()){
+    	if($request->ajax()){
     		$result['code'] = '200';
     		$result['pegawai'] = Lamaran::find($request->pegawai_id);
     		return response()->json($result);
@@ -48,7 +49,7 @@ class MutasiController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+    	$request->validate([
     		'lamaran_id' => 'required',
     		'kantor_baru' => 'required',
     	]);
@@ -150,7 +151,7 @@ class MutasiController extends Controller
     			$path = Storage::putFileAs('public', $request->file('file'), $imgName);
     			$lamar['sk'] = $path;
     		}
-            $lamar['status'] = 'proses-verifikasi';
+    		$lamar['status'] = 'proses-verifikasi';
     		$mutasi = Mutasi::where('id', $id)->first();
     		$mutasi->update($lamar);
 
@@ -194,16 +195,16 @@ class MutasiController extends Controller
 
     		$mutasi->update([
     			'status' => $request->status,
-                'approved_by' => auth()->user()->id,
-                'approved_at' => now(),
+    			'approved_by' => auth()->user()->id,
+    			'approved_at' => now(),
     		]);
 
-            if($request->status == 'sukses'){
-                 $input['pesan'] = 'Mutasi Karyawan, Karyawan '. optional($mutasi->getPegawai)->nama .' mutasi dari kantor/cabang '.optional($mutasi->getKantorAwal)->kantor . ' ke kantor/cabang '. optional($mutasi->getKantorBaru)->kantor. ' oleh '. auth()->user()->getProfile->nama ;
-                $input['modul'] = 'App\Models\Mutasi';
+    		if($request->status == 'sukses'){
+    			$input['pesan'] = 'Mutasi Karyawan, Karyawan '. optional($mutasi->getPegawai)->nama .' mutasi dari kantor/cabang '.optional($mutasi->getKantorAwal)->kantor . ' ke kantor/cabang '. optional($mutasi->getKantorBaru)->kantor. ' oleh '. auth()->user()->getProfile->nama ;
+    			$input['modul'] = 'App\Models\Mutasi';
 
-                HistoryLog::create($input);
-            }
+    			HistoryLog::create($input);
+    		}
     	} catch (\Exception $e) {
     		DB::rollback();
     		dd($e->getMessage());
@@ -222,5 +223,14 @@ class MutasiController extends Controller
     	return back();
 
     	return view('admin.proses_resmi.mutasi.verifikasi_form', compact('id'));
+    }
+
+    public function downloadDraf($id){
+    	// dd($id);
+    	$data  = Mutasi::find($id);
+    	$data = $data->toArray();
+    	// dd($data);
+    	$pdf = PDF::loadView('admin.proses_resmi.mutasi.surat', compact('data'));
+    	return $pdf->download('draft-sk-mutasi.pdf');
     }
 }

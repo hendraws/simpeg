@@ -98,7 +98,8 @@ class PenilaianPegawaiController extends Controller
     {
 
         $data = PenilaianPegawai::findOrFail($id);
-       	 $qrcode = QrCode::format('svg')->size(100)->generate(optional($data->getPenilai)->nama);
+        $ttd = optional($data->getPenilai)->nama . "(".$data->created_at.") - Penilaian Pegawai" ;
+       	$qrcode = QrCode::format('svg')->size(100)->generate($ttd);
        return view('admin.penilaian_pegawai.detail', compact('data','qrcode'));
     }
 

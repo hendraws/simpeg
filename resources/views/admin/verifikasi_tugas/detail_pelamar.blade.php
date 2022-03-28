@@ -170,10 +170,18 @@
                             </table>
                         </div>
                     </div>
-
+                    @if($data->status_lamaran == 'menunggu-verifikasi')
                     <div class="row mt-5">
                         <a href="{{ action('LamaranController@verifikasiLamaran', $data->id) }}" class="btn btn-warning col-md-12">Verfikasi Lamaran</a>
                     </div>
+                    @endif
+
+                    @if($data->status_lamaran == 'interview')
+					 <div class="row mt-5 text-center">
+                        <a href="{{ action('LamaranController@terimaLamaran', $data->id) }}" class="btn btn-success col-md-5 m-1">Terima</a>
+                        <a href="{{ action('LamaranController@tolakLamaran', $data->id) }}" class="btn btn-danger col-md-5 m-1">Tolak</a>
+`	                 </div>
+                    @endif
                 </div>
 
             </div>

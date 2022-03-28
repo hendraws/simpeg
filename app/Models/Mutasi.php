@@ -17,7 +17,7 @@ class Mutasi extends Model
 
 	protected static $logAttributes = [ 'lamaran_id', 'kantor_awal', 'kantor_baru', 'sk', 'status', 'approved_by', 'created_by', 'updated_by', 'deleted_by','approved_at'];
 
-	protected $with = ['getPegawai', 'getKantorAwal','getKantorBaru'];
+	protected $with = ['getPegawai', 'getKantorAwal','getKantorBaru','getDiajukanOleh'];
 
 
     public function getPegawai(){
@@ -34,5 +34,9 @@ class Mutasi extends Model
 
 	public function getApprovedBy(){
 		return $this->belongsTo(User::class, 'kantor_baru','id');
+	}
+
+	public function getDiajukanOleh(){
+		return $this->belongsTo(Lamaran::class, 'created_by','user_id');
 	}
 }

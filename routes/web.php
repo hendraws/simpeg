@@ -33,6 +33,7 @@ Route::group(['middleware' => 'auth'], function () {
 		Route::resource('/indikator-penilaian', 'IndikatorPenilaianController');
 	});
 
+	Route::get('test-kirim-email', 'LamaranController@testEmail');
 	Route::get('/verifikasi-tugas', 'LamaranController@calonKaryawan');
 	Route::get('/verifikasi-tugas/{id}/detail-pelamar', 'LamaranController@detailPelamar');
 	Route::get('/verifikasi-tugas/{id}/verifikasi-lamaran', 'LamaranController@verifikasiLamaran');
@@ -54,6 +55,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::put('proses-resmi/mutasi/{id}/upload-form-update', 'MutasiController@upload');
 	Route::get('proses-resmi/mutasi/{id}/verifikasi-form', 'MutasiController@verifikasiForm');
 	Route::put('proses-resmi/mutasi/{id}/verifikasi-form-update', 'MutasiController@verifikasi');
+	Route::get('proses-resmi/mutasi/{id}/download-draf', 'MutasiController@downloadDraf');
 
 	Route::resource('proses-resmi/sponsor', 'SponsorController');
 	Route::get('proses-resmi/sponsor/{id}/upload-form', 'SponsorController@uploadForm');
@@ -94,5 +96,5 @@ Route::group(['middleware' => 'auth'], function () {
 			return 'Clear Cache';
 		});
 	});
-
+	Route::view('surat','admin.proses_resmi.mutasi.surat' );
 });

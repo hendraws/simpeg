@@ -89,7 +89,7 @@
                             @if($data->status_lamaran == 'interview')
                             <label class="col-sm-3">Tanggal Interview</label>
                             <div class="col-sm-9">
-                               : {{ date('d F Y', strtodate($data->tanggal_interview)) }}
+                               : {{ date('d F Y', strtotime($data->tanggal_interview)) }}
                             </div>
                             @endif
                             @if($data->status_lamaran == 'diterima')

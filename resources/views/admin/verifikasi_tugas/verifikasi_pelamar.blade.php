@@ -102,7 +102,7 @@
     								<tr>
     									<td style="width:50%">Usia > 18 Tahun</td>
     									<td>: <input type="checkbox" onclick="return false;"  value="{{ $data->surat_lamaran }}"
-    										{{ $data->usia != '18 s/d 24' ? 'checked' : '' }}></td>
+    										{{ $data->usia != '< 18 Tahun' ? 'checked' : '' }}></td>
     									</tr>
     									<tr>
     										<td style="width:50%">Surat Lamaran</td>

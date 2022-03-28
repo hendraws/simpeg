@@ -84,10 +84,10 @@
 										<th scope="col">Tiket</th>
 										<th scope="col">Tanggal</th>
 										<th scope="col">Nama</th>
-										<th scope="col">Kantor/Cabang</th>
+										{{-- <th scope="col">Kantor/Cabang</th> --}}
 										<th scope="col">Interview</th>
 										<th scope="col">Hasil</th>
-										<th scope="col">Penempatan</th>
+										{{-- <th scope="col">Penempatan</th> --}}
 										<th scope="col">Jabatan</th>
 										<th scope="col">Aksi</th>
 									</tr>
@@ -99,10 +99,10 @@
 										<td>{{ $value->no_tiket }}</td>
 										<td>{{ date('d-m-Y', strtotime($value->created_at)) }}</td>
 										<td>{{ $value->nama }}</td>
-										<td></td>
+										{{-- <td></td> --}}
 										<td>{{ date('d-m-Y h:i', strtotime($value->tanggal_interview))  }}</td>
 										<td>{{ $value->status_lamaran }}</td>
-										<td></td>
+										{{-- <td></td> --}}
 										<td>{{ $value->getJabatan->jabatan }}</td>
 										<td>
 											<a class="btn btn-sm btn-primary"href="{{ action('LamaranController@detailPelamar', $value->id) }}">Detail</a>
