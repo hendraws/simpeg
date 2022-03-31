@@ -9,6 +9,7 @@ use App\Models\Sponsor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Barryvdh\DomPDF\Facade as PDF;
 
 class SponsorController extends Controller
 {
@@ -29,7 +30,7 @@ class SponsorController extends Controller
      */
     public function create(Request $request)
     {
-        if($request->ajax()){
+    	if($request->ajax()){
     		$result['code'] = '200';
     		$result['pegawai'] = Lamaran::find($request->pegawai_id);
     		return response()->json($result);
@@ -47,7 +48,7 @@ class SponsorController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+    	$request->validate([
     		'lamaran_id' => 'required',
     		'kantor_tugas' => 'required',
     		'tanggal_mulai' => 'required|date_format:Y/m/d',
@@ -128,7 +129,7 @@ class SponsorController extends Controller
         //
     }
 
-  	public function uploadForm($id)
+    public function uploadForm($id)
     {
 
     	return view('admin.proses_resmi.sponsor.upload_form', compact('id'));
@@ -150,7 +151,7 @@ class SponsorController extends Controller
     			$path = Storage::putFileAs('public', $request->file('file'), $imgName);
     			$lamar['sk'] = $path;
     		}
-            $lamar['status'] = 'proses-verifikasi';
+    		$lamar['status'] = 'proses-verifikasi';
     		$sponsor = Sponsor::where('id', $id)->first();
     		$sponsor->update($lamar);
 
@@ -198,8 +199,8 @@ class SponsorController extends Controller
     		$sponsor->update([
     			'status' => $request->status,
     			'keterangan' => $keterangan,
-                'approved_by' => auth()->user()->id,
-                'approved_at' => now(),
+    			'approved_by' => auth()->user()->id,
+    			'approved_at' => now(),
     		]);
 
     	} catch (\Exception $e) {
@@ -222,4 +223,11 @@ class SponsorController extends Controller
     	return view('admin.proses_resmi.sponsor.verifikasi_form', compact('id'));
     }
 
+    public function downloadDraf($id){
+    	$data  = Sponsor::find($id);
+    	$data = $data->toArray();
+    	// dd($data);
+    	$pdf = PDF::loadView('admin.proses_resmi.sponsor.surat', compact('data'));
+    	return $pdf->download('draft-sk-sponsor.pdf');
+    }
 }

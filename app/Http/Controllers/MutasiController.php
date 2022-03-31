@@ -9,6 +9,7 @@ use App\Models\Mutasi;
 use App\Models\kantor;
 use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
@@ -226,10 +227,8 @@ class MutasiController extends Controller
     }
 
     public function downloadDraf($id){
-    	// dd($id);
     	$data  = Mutasi::find($id);
     	$data = $data->toArray();
-    	// dd($data);
     	$pdf = PDF::loadView('admin.proses_resmi.mutasi.surat', compact('data'));
     	return $pdf->download('draft-sk-mutasi.pdf');
     }

@@ -49,6 +49,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::put('proses-resmi/promosi/{id}/upload-form-update', 'PromosiController@upload');
 	Route::get('proses-resmi/promosi/{id}/verifikasi-form', 'PromosiController@verifikasiForm');
 	Route::put('proses-resmi/promosi/{id}/verifikasi-form-update', 'PromosiController@verifikasi');
+	Route::get('proses-resmi/promosi/{id}/download-draf', 'PromosiController@downloadDraf');
 
 	Route::resource('proses-resmi/mutasi', 'MutasiController');
 	Route::get('proses-resmi/mutasi/{id}/upload-form', 'MutasiController@uploadForm');
@@ -62,18 +63,21 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::put('proses-resmi/sponsor/{id}/upload-form-update', 'SponsorController@upload');
 	Route::get('proses-resmi/sponsor/{id}/verifikasi-form', 'SponsorController@verifikasiForm');
 	Route::put('proses-resmi/sponsor/{id}/verifikasi-form-update', 'SponsorController@verifikasi');
+	Route::get('proses-resmi/sponsor/{id}/download-draf', 'SponsorController@downloadDraf');
 
 	Route::resource('proses-resmi/surat-peringatan', 'SuratPeringatanController');
 	Route::get('proses-resmi/surat-peringatan/{id}/upload-form', 'SuratPeringatanController@uploadForm');
 	Route::put('proses-resmi/surat-peringatan/{id}/upload-form-update', 'SuratPeringatanController@upload');
 	Route::get('proses-resmi/surat-peringatan/{id}/verifikasi-form', 'SuratPeringatanController@verifikasiForm');
 	Route::put('proses-resmi/surat-peringatan/{id}/verifikasi-form-update', 'SuratPeringatanController@verifikasi');
+	Route::get('proses-resmi/surat-peringatan/{id}/download-draf', 'SuratPeringatanController@downloadDraf');
 
 	Route::resource('proses-resmi/pemberhentian', 'PemberhentianController');
 	Route::get('proses-resmi/pemberhentian/{id}/upload-form', 'PemberhentianController@uploadForm');
 	Route::put('proses-resmi/pemberhentian/{id}/upload-form-update', 'PemberhentianController@upload');
 	Route::get('proses-resmi/pemberhentian/{id}/verifikasi-form', 'PemberhentianController@verifikasiForm');
 	Route::put('proses-resmi/pemberhentian/{id}/verifikasi-form-update', 'PemberhentianController@verifikasi');
+	Route::get('proses-resmi/pemberhentian/{id}/download-draf', 'PemberhentianController@downloadDraf');
 
 	Route::resource('/data-pegawai', 'PegawaiController');
 	Route::resource('/laporan', 'LaporanController');
@@ -81,8 +85,8 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::put('/laporan/{id}/verifikasi-form-update', 'LaporanController@verifikasi');
 
 	Route::get('/user', 'UserController@index');
-    Route::resource('penilaian-pegawai', 'PenilaianPegawaiController');
-    Route::get('penilaian-pegawai/{id}/daftar-pegawai', 'PenilaianPegawaiController@detailGroup');
+	Route::resource('penilaian-pegawai', 'PenilaianPegawaiController');
+	Route::get('penilaian-pegawai/{id}/daftar-pegawai', 'PenilaianPegawaiController@detailGroup');
     // command
 	Route::group(['prefix'=>'/command/artisan','as'=>'account.'], function(){
 		Route::get('/migrate', function(){

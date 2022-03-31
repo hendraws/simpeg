@@ -52,7 +52,7 @@
 							@endif
                             @endif
 						</td>
-						<td><a class="btn btn-xs btn-info modal-button" href="">Download</a></td>
+						<td><a class="btn btn-xs btn-info" href="{{ action('SponsorController@downloadDraf', $data->id) }}">Download</a></td>
 						<td>
                             @if(empty($data->sk))
 							<a class="btn btn-xs btn-warning modal-button @if(!empty($data->sk)) disable-links @endif" href="Javascript:void(0)"  data-target="ModalForm" data-url="{{ action('SponsorController@uploadForm', $data->id ) }}" >Upload Berkas</a>

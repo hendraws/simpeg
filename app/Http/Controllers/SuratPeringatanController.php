@@ -10,6 +10,7 @@ use App\Models\SuratPeringatan;
 use App\Models\JenisPelanggaran;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Barryvdh\DomPDF\Facade as PDF;
 
 class SuratPeringatanController extends Controller
 {
@@ -222,4 +223,12 @@ class SuratPeringatanController extends Controller
 
         return view('admin.proses_resmi.surat_peringatan.verifikasi_form', compact('id'));
     }
+
+    public function downloadDraf($id){
+    	$data  = SuratPeringatan::find($id);
+    	$data = $data->toArray();
+    	$pdf = PDF::loadView('admin.proses_resmi.surat_peringatan.surat', compact('data'));
+    	return $pdf->download('draft-sk-surat-peringatan.pdf');
+    }
+
 }

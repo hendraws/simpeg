@@ -9,6 +9,7 @@ use App\Models\HistoryLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Barryvdh\DomPDF\Facade as PDF;
 
 class PromosiController extends Controller
 {
@@ -222,5 +223,13 @@ class PromosiController extends Controller
     	return back();
 
     	return view('admin.proses_resmi.promosi.verifikasi_form', compact('id'));
+    }
+
+    public function downloadDraf($id){
+    	$data  = Promosi::find($id);
+    	$data = $data->toArray();
+    
+    	$pdf = PDF::loadView('admin.proses_resmi.promosi.surat', compact('data'));
+    	return $pdf->download('draft-sk-promosi.pdf');
     }
 }

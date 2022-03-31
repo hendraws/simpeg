@@ -16,7 +16,7 @@ class Promosi extends Model
 
 	protected static $logAttributes = [ 'lamaran_id', 'jabatan_awal', 'jabatan_baru', 'sk', 'status', 'approved_by', 'created_by', 'updated_by', 'deleted_by','approved_at' ];
 
-	protected $with = ['getPegawai', 'getJabatanAwal','getJabatanBaru'];
+	protected $with = ['getPegawai', 'getJabatanAwal','getJabatanBaru','getDiajukanOleh'];
 
 	public function getPegawai(){
 		return $this->belongsTo(Lamaran::class, 'lamaran_id','id');
@@ -28,6 +28,10 @@ class Promosi extends Model
 
 	public function getJabatanBaru(){
 		return $this->belongsTo(Jabatan::class, 'jabatan_baru','id');
+	}
+
+	public function getDiajukanOleh(){
+		return $this->belongsTo(Lamaran::class, 'created_by','user_id');
 	}
 
 }

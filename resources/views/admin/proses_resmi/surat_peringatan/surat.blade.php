@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Draft Surat Mutasi</title>
+	<title>Draft Surat Peringatan</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
 	<style type="text/css">
@@ -77,15 +77,15 @@
 			<br>
 			@php
 			$array_bln = array(1=>"I","II","III", "IV", "V","VI","VII","VIII","IX","X", "XI","XII");
-			$bln = $array_bln[date('n')];
+			$bln = $array_bln[date('n', strtotime($data['created_at']))];
 			@endphp
 			<div class="text-center"><b><u>SURAT KEPUTUSAN</u></b></div>
-			<div class="text-center">NO. {{ $data['id'] }}/SMART/{{ $bln }}/{{ date('Y') }}</div>
+			<div class="text-center">NO. {{ $data['id'] }}/SMART/{{ $bln }}/{{ date('Y', strtotime($data['created_at'])) }}</div>
 			<br>
 			<br>
-			<div>Perihal <span class="ml-100">: Mutasi Karyawan</span></div>
+			<div>Perihal <span class="ml-100">: Surat Peringatan</span></div>
 			<br><br>
-			<div class="text-justify">Setelah melakukan evaluasi terhadap perkembangan perusahaan terhadap kebutuhan SDM yang ada, terhitung mulai tanggal {{ Carbon\Carbon::parse($data['created_at'])->translatedFormat('d F Y'); }} Manajemen KSP Satria Mulia Arthomoro, dengan ini memutuskan :</div>
+			<div class="text-justify">Berdasarkan Evaluasi perusahaan terhadap kinerja saudara, maka Manajemen KSP Satria Mulia Arthomoro, dengan ini memberikan {{ $data['sp'] }} kepada :</div>
 			<br><br>
 			<table>
 				<tr>
@@ -97,16 +97,18 @@
 					<td>: {{ $data['get_pegawai']['nama'] }}</td>
 				</tr>
 				<tr>
-					<td>Kantor Cabang Sebelumnya</td>
-					<td>: {{ $data['get_kantor_awal']['kantor'] }}</td>
+					<td>Kantor Cabang</td>
+					<td>: {{ $data['get_pegawai']['get_kantor']['kantor'] }}</td>
 				</tr>
 			</table>
 			<br>
-			<div class="text-justify">Secara resmi memindah tugaskan yang bersangkutan di kantor cabang {{ $data['get_kantor_baru']['kantor'] }} dengan ketentuan sebagai berikut :</div>
+			<div class="text-justify">Dengan Rincian dan ketentuan sebagai berikut :</div>
 			<br>
 			<div class="ml-50 text-justify">1. <span class="text-justify">Surat keputusan ini berlaku sejak surat ini diterbitkan dan telah disetujui.</span></div>
-			<div class="ml-50 text-justify">2. <span class="text-justify">Jika ada keberatan atas keputusan yang telah dibuat, yang bersangkutan dapat mengajukan keberatan dengan alas an yang sesuai dan yang dapat diterima.</span></div>
-			<div class="ml-50 text-justify">3. <span class="text-justify">Penolakan atas keputusan yang telah dibuat dianggap sebegai bentuk pelanggaran yang dapat dikenai sanksi sesuai Persus yang ada.</span></div>
+			<div class="ml-50 text-justify">2. <span class="text-justify">Tanggal berakhir SP adalah {{ Carbon\Carbon::parse($data['tanggal_akhir'])->translatedFormat('d F Y'); }}</span></div>
+			<div class="ml-50 text-justify">3. <span class="text-justify">Jenis Pelanggaran yang dilanggar adalah {{ $data['get_jenis_pelanggaran']['jenis_pelanggaran'] }}.</span></div>
+			<div class="ml-50 text-justify">4. <span class="text-justify">Bentuk Pelanggaran tersebut adalah Pelanggaran dari Persus  {{ $data['get_persus']['judul'] }}</span></div>
+			<div class="ml-50 text-justify">5. <span class="text-justify">Apabila yang bersangkutan selama masa SP ini atau dikemudian hari mengulang kesalahan atau melakukan kesalahan lain maka dapat dikenakan SP 2</span></div>
 			<br>
 			<div>Demikian Surat keputusan ini dibuat, bilamana pada kemudian hari ditemukan kesalahan dengan penerbitan surat keputusan ini, maka perusahaan akan melakukan penyesuaian ulang sebagaimana mestinya, Atas perhatian dan kerjasamanya kami sampaikan terima kasih.</div>
 			<br>
@@ -117,7 +119,7 @@
 				<tr>
 					<td width="33%"></td>
 					<td width="33%"></td>
-					<td width="33%">Banyumas, {{ Carbon\Carbon::parse(now())->translatedFormat('d F Y'); }}  </td>
+					<td width="33%">Banyumas, {{ Carbon\Carbon::parse($data['created_at'])->translatedFormat('d F Y'); }} </td>
 				</tr>
 				<tr>
 					<td width="33%">Diterima Dan Disetujui  <br><br><br><br><br><br></td>

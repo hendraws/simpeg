@@ -65,7 +65,7 @@
                             @endif
 
 						</td>
-						<td><a class="btn btn-xs btn-info modal-button" href="">Download</a></td>
+						<td><a class="btn btn-xs btn-info" href="{{ action('SuratPeringatanController@downloadDraf', $data->id) }}">Download</a></td>
 						<td>
 							<a class="btn btn-xs btn-warning modal-button @if(!empty($data->sk)) disable-links @endif" href="Javascript:void(0)"  data-target="ModalForm" data-url="{{ action('SuratPeringatanController@uploadForm', $data->id ) }}" >Upload Berkas</a>
 							<a class="btn btn-xs btn-info" href="">Download</a>

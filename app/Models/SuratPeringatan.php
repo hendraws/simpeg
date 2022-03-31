@@ -17,7 +17,7 @@ class SuratPeringatan extends Model
 
     protected static $logAttributes = ['lamaran_id', 'sp', 'tanggal_akhir',  'jenis_pelanggaran', 'persus', 'sk', 'status', 'approved_by', 'created_by', 'updated_by', 'deleted_by', 'approved_at', ];
 
-    protected $with = ['getPegawai','getJenisPelanggaran','getPersus'];
+    protected $with = ['getPegawai','getJenisPelanggaran','getPersus','getDiajukanOleh'];
 
 	public function getPegawai(){
 		return $this->belongsTo(Lamaran::class, 'lamaran_id','id');
@@ -33,5 +33,9 @@ class SuratPeringatan extends Model
 
     public function getApprovedBy(){
 		return $this->belongsTo(User::class, 'approved_by','id');
+	}
+
+	public function getDiajukanOleh(){
+		return $this->belongsTo(Lamaran::class, 'created_by','user_id');
 	}
 }

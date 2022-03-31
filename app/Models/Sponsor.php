@@ -15,7 +15,7 @@ class Sponsor extends Model
 
     protected static $logAttributes = ['lamaran_id', 'tanggal_mulai', 'tanggal_akhir', 'keterangan', 'sk','kantor_tugas', 'status', 'approved_by', 'created_by', 'updated_by', 'deleted_by', 'approved_at'];
 
-    protected $with = ['getPegawai','getKantorTugas'];
+    protected $with = ['getPegawai','getKantorTugas','getDiajukanOleh'];
 
 	public function getPegawai(){
 		return $this->belongsTo(Lamaran::class, 'lamaran_id','id');
@@ -23,5 +23,9 @@ class Sponsor extends Model
 
     public function getKantorTugas(){
 		return $this->belongsTo(kantor::class, 'kantor_tugas','id');
+	}
+
+	public function getDiajukanOleh(){
+		return $this->belongsTo(Lamaran::class, 'created_by','user_id');
 	}
 }
