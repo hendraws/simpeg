@@ -58,14 +58,11 @@ class PromosiController extends Controller
     		$input['lamaran_id'] = $request->lamaran_id;
     		$input['jabatan_awal'] = $request->jabatan_kini_id;
     		$input['jabatan_baru'] = $request->jabatan_baru;
-    		// $input['sk'] = ;
     		$input['status'] = 'pending';
-    		// $input['approved_by'] = ;
-    		// $input['created_by'] = ;
-    		// $input['updated_by'] = ;
-    		// $input['deleted_by'] = ;
-    		$input['approved_at'] = now();
+    		$input['gaji'] = 'pending';
+    		$input['modul'] = 'promosi';
 
+            
     		Promosi::create($input);
 
     	} catch (\Exception $e) {
@@ -228,7 +225,7 @@ class PromosiController extends Controller
     public function downloadDraf($id){
     	$data  = Promosi::find($id);
     	$data = $data->toArray();
-    
+
     	$pdf = PDF::loadView('admin.proses_resmi.promosi.surat', compact('data'));
     	return $pdf->download('draft-sk-promosi.pdf');
     }

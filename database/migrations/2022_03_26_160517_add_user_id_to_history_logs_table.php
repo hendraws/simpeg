@@ -14,7 +14,8 @@ class AddUserIdToHistoryLogsTable extends Migration
     public function up()
     {
         Schema::table('history_logs', function (Blueprint $table) {
-            $table->bigInteger('user_id')->nullable();
+            $table->bigInteger('user_id')->after('modul')->nullable();
+            $table->bigInteger('modul_id')->after('modul')->nullable();
         });
     }
 

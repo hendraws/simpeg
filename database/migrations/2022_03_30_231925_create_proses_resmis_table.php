@@ -23,7 +23,11 @@ class CreateProsesResmisTable extends Migration
             $table->string('status_verifikasi')->nullable();
             $table->string('dokumen')->nullable();
             $table->string('no_surat')->nullable();
+            $table->string('sp')->nullable();
+            $table->unsignedBigInteger('jenis_pelanggaran')->nullable();
+    		$table->unsignedBigInteger('persus')->nullable();
             $table->string('gaji')->nullable();
+            $table->string('modul')->nullable();
             $table->bigInteger('approved_by')->nullable();
             $table->bigInteger('created_by')->nullable();
             $table->bigInteger('updated_by')->nullable();

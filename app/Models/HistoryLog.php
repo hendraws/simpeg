@@ -14,5 +14,5 @@ class HistoryLog extends Model
 
     protected $fillable = [ 'pesan', 'modul', 'created_by', 'updated_by', 'deleted_by', ];
 
-	protected static $logAttributes = [ 'pesan', 'modul', 'created_by', 'updated_by', 'deleted_by',   ];
+	protected static $logAttributes = [ 'pesan', 'modul', 'modul_id','created_by', 'updated_by', 'deleted_by',   ];
 }

@@ -43,6 +43,8 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::put('/verifikasi-tugas/{id}/penempatan', 'LamaranController@penempatanLamaran');
 	Route::delete('/verifikasi-tugas/{id}/destroy', 'LamaranController@destroy');
 
+    Route::post('proses-resmi/store-promosi', 'ProsesResmiController@storePromosi');
+
 	Route::get('proses-resmi', 'ProsesResmiController@index');
 	Route::resource('proses-resmi/promosi', 'PromosiController');
 	Route::get('proses-resmi/promosi/{id}/upload-form', 'PromosiController@uploadForm');
