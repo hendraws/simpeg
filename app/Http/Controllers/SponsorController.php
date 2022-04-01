@@ -6,10 +6,13 @@ use App\Models\kantor;
 use App\Models\Jabatan;
 use App\Models\Lamaran;
 use App\Models\Sponsor;
+use App\Models\HistoryLog;
+use App\Models\ProsesResmi;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-use Barryvdh\DomPDF\Facade as PDF;
 
 class SponsorController extends Controller
 {
@@ -48,6 +51,7 @@ class SponsorController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request->all());
     	$request->validate([
     		'lamaran_id' => 'required',
     		'kantor_tugas' => 'required',
@@ -58,16 +62,38 @@ class SponsorController extends Controller
         // dd($request->all());
     	DB::beginTransaction();
     	try {
-    		$input['lamaran_id'] = $request->lamaran_id;
-    		$input['tanggal_mulai'] = $request->tanggal_mulai;
-    		$input['tanggal_akhir'] = $request->tanggal_akhir;
-    		$input['keterangan'] = 'Tidak Aktif';
-    		$input['kantor_tugas'] = $request->kantor_tugas;
-    		$input['kantor_baru'] = $request->kantor_baru;
-    		$input['status'] = 'pending';
-    		// $input['approved_at'] = now();
 
-    		Sponsor::create($input);
+            // $input['lamaran_id'] = $request->lamaran_id;
+    		// $input['tanggal_mulai'] = $request->tanggal_mulai;
+    		// $input['tanggal_akhir'] = $request->tanggal_akhir;
+    		// $input['keterangan'] = 'Tidak Aktif';
+    		// $input['kantor_tugas'] = $request->kantor_tugas;
+    		// $input['kantor_baru'] = $request->kantor_baru;
+    		// $input['status'] = 'pending';
+    		// // $input['approved_at'] = now();
+
+    		// Sponsor::create($input);
+
+            $noSurat =  ProsesResmi::whereMonth('created_at', date('m'))->whereYear('created_at', date('Y'))->max('no_surat') ?? 0;
+			$input['lamaran_id'] = $request->lamaran_id;
+			$input['lama'] = $request->kantor_kini_id;
+			$input['baru'] =  $request->kantor_tugas;
+			$input['tanggal_mulai'] =  $request->tanggal_mulai;
+			$input['tanggal_akhir'] =  $request->tanggal_akhir;
+    		$input['status_verifikasi'] = 'pending'; //pending (upload dokumen)| verifikasi (sudah upload sk) | diterima | ditolak
+    		$input['modul'] = 'sponsor';
+    		$input['approved_at'] = now();
+    		$input['no_surat'] = $noSurat + 1;
+
+    		$data = ProsesResmi::create($input);
+
+    		$history['pesan'] = 'Pengajuan Sponsor Karyawan, Karyawan '. optional($data->getPegawai)->nama .' mendapat tugas dari '.optional($data->getKantorAwal)->kantor . ' ke '. optional($data->getKantorBaru)->kantor. ' oleh '. auth()->user()->getProfile->nama ;
+
+    		$history['user_id'] = $request->lamaran_id;
+    		$history['modul_id'] = $data->id;
+    		$history['modul'] = 'sponsor';
+
+    		HistoryLog::create($history);
 
     	} catch (\Exception $e) {
     		DB::rollback();
@@ -149,11 +175,20 @@ class SponsorController extends Controller
     			$extension = $request->file('file')->extension();
     			$imgName = 'berkas_sk/sponsor/' . date('dmh') . '-' .rand(1,10).'-'. $id . '.' . $extension;
     			$path = Storage::putFileAs('public', $request->file('file'), $imgName);
-    			$lamar['sk'] = $path;
+    			$lamar['dokumen'] = $path;
     		}
-    		$lamar['status'] = 'proses-verifikasi';
-    		$sponsor = Sponsor::where('id', $id)->first();
+    		$lamar['status_verifikasi'] = 'verifikasi';
+    		$sponsor = ProsesResmi::where('id', $id)->first();
     		$sponsor->update($lamar);
+
+            $history['pesan'] = 'Pengajuan Sponsor Karyawan, Karyawan '. optional($sponsor->getPegawai)->nama .' sudah mengupload dokumen SK dan menunggu diverifikasi oleh '. optional($sponsor->getDiajukanOleh)->nama ;
+
+    		$history['user_id'] = $sponsor->lamaran_id;
+    		$history['modul_id'] = $sponsor->id;
+    		$history['modul'] = 'sponsor';
+
+    		HistoryLog::create($history);
+
 
     	} catch (\Exception $e) {
     		DB::rollback();
@@ -191,17 +226,20 @@ class SponsorController extends Controller
     			'status' => 'required'
     		]);
 
-    		$keterangan = 'Tidak Aktif';
-    		if($request->status == 'sukses'){
-    			$keterangan = 'Aktif';
-    		}
-    		$sponsor = Sponsor::where('id', $id)->first();
-    		$sponsor->update([
-    			'status' => $request->status,
-    			'keterangan' => $keterangan,
+    		$data = ProsesResmi::where('id', $id)->first();
+    		$data->update([
+    			'status_verifikasi' => $request->status,
     			'approved_by' => auth()->user()->id,
     			'approved_at' => now(),
     		]);
+
+            $history['pesan'] = 'Pengajuan Sponsor Karyawan '.ucfirst($request->status).' , Karyawan '. optional($data->getPegawai)->nama .' mendapat tugas ke '. optional($data->getKantorBaru)->kantor. ' mulai dari tanggal '.  Carbon::parse($data->tanggal_mulai)->translatedFormat('d F Y') . ' sampai tanggal '. Carbon::parse($data->tanggal_akhir)->translatedFormat('d F Y') .' oleh '. auth()->user()->getProfile->nama ;
+
+    		$history['user_id'] = $data->lamaran_id;
+    		$history['modul_id'] = $data->id;
+    		$history['modul'] = 'sponsor';
+
+    		HistoryLog::create($history);
 
     	} catch (\Exception $e) {
     		DB::rollback();
@@ -224,8 +262,9 @@ class SponsorController extends Controller
     }
 
     public function downloadDraf($id){
-    	$data  = Sponsor::find($id);
+    	$data  = ProsesResmi::find($id);
     	$data = $data->toArray();
+        // dd($data);
     	// dd($data);
     	$pdf = PDF::loadView('admin.proses_resmi.sponsor.surat', compact('data'));
     	return $pdf->download('draft-sk-sponsor.pdf');

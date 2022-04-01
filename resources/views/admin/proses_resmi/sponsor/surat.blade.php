@@ -8,7 +8,7 @@
 		*{
 			margin: 0;
 			padding: 0;
-			box-sizing: border-box; 
+			box-sizing: border-box;
 		}
 
 		body{
@@ -85,7 +85,7 @@
 			<br>
 			<div>Perihal <span class="ml-100">: Sponsor Karyawan</span></div>
 			<br><br>
-			<div class="text-justify">Berdasarkan Evaluasi perusahaan terhadap Perkembangan Kantor {{ $data['get_kantor_tugas']['kantor'] }} , maka Manajemen KSP Satria Mulia Arthomoro, dengan ini memutuskan :</div>
+			<div class="text-justify">Berdasarkan Evaluasi perusahaan terhadap Perkembangan Kantor {{ $data['get_kantor_baru']['kantor'] }} , maka Manajemen KSP Satria Mulia Arthomoro, dengan ini memutuskan :</div>
 			<br><br>
 			<table>
 				<tr>
@@ -102,7 +102,7 @@
 				</tr>
 			</table>
 			<br>
-			<div class="text-justify">Secara resmi menugaskan yang bersangkutan di kantor {{ $data['get_kantor_tugas']['kantor'] }}  dengan ketentuan sebagai berikut :</div>
+			<div class="text-justify">Secara resmi menugaskan yang bersangkutan di kantor {{ $data['get_kantor_baru']['kantor'] }}  dengan ketentuan sebagai berikut :</div>
 			<br>
 			<div class="ml-50 text-justify">1. <span class="text-justify">Surat keputusan ini berlaku sejak surat ini diterbitkan dan telah disetujui.</span></div>
 			<div class="ml-50 text-justify">2. <span class="text-justify">Tanggal Aktif mulai tugas Sponsor adalah dari {{ Carbon\Carbon::parse($data['tanggal_mulai'])->translatedFormat('d F Y'); }} sampai dengan {{ Carbon\Carbon::parse($data['tanggal_akhir'])->translatedFormat('d F Y'); }}.</span></div>

@@ -5,12 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\Persus;
 use App\Models\Lamaran;
 use App\Models\HistoryLog;
+use App\Models\ProsesResmi;
 use Illuminate\Http\Request;
 use App\Models\SuratPeringatan;
 use App\Models\JenisPelanggaran;
+use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-use Barryvdh\DomPDF\Facade as PDF;
 
 class SuratPeringatanController extends Controller
 {
@@ -61,15 +62,36 @@ class SuratPeringatanController extends Controller
 
         DB::beginTransaction();
         try {
+            // $input['lamaran_id'] = $request->lamaran_id;
+            // $input['sp'] = $request->sp;
+            // $input['jenis_pelanggaran'] = $request->jenis_pelanggaran;
+            // $input['tanggal_akhir'] = $request->tanggal_akhir;
+            // $input['persus'] = $request->persus;
+            // $input['status'] = 'pending';
+            // // $input['approved_at'] = now();
+
+            // ProsesResmi::create($input);
+
+            $noSurat =  ProsesResmi::whereMonth('created_at', date('m'))->whereYear('created_at', date('Y'))->max('no_surat') ?? 0;
             $input['lamaran_id'] = $request->lamaran_id;
             $input['sp'] = $request->sp;
             $input['jenis_pelanggaran'] = $request->jenis_pelanggaran;
             $input['tanggal_akhir'] = $request->tanggal_akhir;
             $input['persus'] = $request->persus;
-            $input['status'] = 'pending';
-            // $input['approved_at'] = now();
+            $input['status_verifikasi'] = 'pending'; //pending (upload dokumen)| verifikasi (sudah upload sk) | diterima | ditolak
+            $input['modul'] = 'surat-peringatan';
+            $input['approved_at'] = now();
+            $input['no_surat'] = $noSurat + 1;
 
-            SuratPeringatan::create($input);
+            $data = ProsesResmi::create($input);
+
+            $history['pesan'] = 'Surat Peringatan Karyawan, Karyawan ' . optional($data->getPegawai)->nama . ' mendapat  ' . $request->sp .  ' oleh ' . auth()->user()->getProfile->nama;
+
+            $history['user_id'] = $request->lamaran_id;
+            $history['modul_id'] = $data->id;
+            $history['modul'] = 'surat-peringatan';
+
+            HistoryLog::create($history);
         } catch (\Exception $e) {
             DB::rollback();
             toastr()->success($e->getMessage(), 'Error');
@@ -150,11 +172,20 @@ class SuratPeringatanController extends Controller
                 $extension = $request->file('file')->extension();
                 $imgName = 'berkas_sk/surat_peringatan/' . date('dmh') . '-' . rand(1, 10) . '-' . $id . '.' . $extension;
                 $path = Storage::putFileAs('public', $request->file('file'), $imgName);
-                $lamar['sk'] = $path;
+                $lamar['dokumen'] = $path;
             }
-            $lamar['status'] = 'proses-verifikasi';
-            $suratPeringatan = SuratPeringatan::where('id', $id)->first();
-            $suratPeringatan->update($lamar);
+            $lamar['status_verifikasi'] = 'verifikasi';
+            $data = ProsesResmi::where('id', $id)->first();
+            $data->update($lamar);
+
+
+            $history['pesan'] = 'Surat Peringatan Karyawan, Karyawan ' . optional($data->getPegawai)->nama . ' sudah mengupload dokumen SK dan menunggu diverifikasi oleh ' . optional($data->getDiajukanOleh)->nama;
+
+            $history['user_id'] = $data->lamaran_id;
+            $history['modul_id'] = $data->id;
+            $history['modul'] = 'surat-peringatan';
+
+            HistoryLog::create($history);
         } catch (\Exception $e) {
             DB::rollback();
             dd($e->getMessage());
@@ -190,19 +221,20 @@ class SuratPeringatanController extends Controller
             $request->validate([
                 'status' => 'required'
             ]);
-            $suratPeringatan = SuratPeringatan::where('id', $id)->first();
+            $suratPeringatan = ProsesResmi::where('id', $id)->first();
             $suratPeringatan->update([
-                'status' => $request->status,
+                'status_verifikasi' => $request->status,
                 'approved_by' => auth()->user()->id,
                 'approved_at' => now(),
             ]);
 
-            if ($request->status == 'sukses') {
-                $input['pesan'] = strtoupper($suratPeringatan->sp).' Karyawan ' . optional($suratPeringatan->getPegawai)->nama . ', Jenis Pelanggaran ' . optional($suratPeringatan->getJenisPelanggaran)->jenis_pelanggaran . ', Dikeluarkan oleh ' . optional($suratPeringatan->getApprovedBy)->name;
-                $input['modul'] = 'App\Models\SuratPeringatan';
+            $history['pesan'] = 'Surat Peringatan Karayawan '. optional($suratPeringatan->getPegawai)->nama .' '.ucfirst($request->status).' dibuat, diverifikasi oleh '. auth()->user()->getProfile->nama ;
 
-                HistoryLog::create($input);
-            }
+    		$history['user_id'] = $suratPeringatan->lamaran_id;
+    		$history['modul_id'] = $suratPeringatan->id;
+    		$history['modul'] = 'surat-peringatan';
+
+    		HistoryLog::create($history);
 
         } catch (\Exception $e) {
             DB::rollback();
@@ -224,11 +256,11 @@ class SuratPeringatanController extends Controller
         return view('admin.proses_resmi.surat_peringatan.verifikasi_form', compact('id'));
     }
 
-    public function downloadDraf($id){
-    	$data  = SuratPeringatan::find($id);
-    	$data = $data->toArray();
-    	$pdf = PDF::loadView('admin.proses_resmi.surat_peringatan.surat', compact('data'));
-    	return $pdf->download('draft-sk-surat-peringatan.pdf');
+    public function downloadDraf($id)
+    {
+        $data  = ProsesResmi::find($id);
+        $data = $data->toArray();
+        $pdf = PDF::loadView('admin.proses_resmi.surat_peringatan.surat', compact('data'));
+        return $pdf->download('draft-sk-surat-peringatan.pdf');
     }
-
 }

@@ -13,7 +13,7 @@ class ProsesResmi extends Model
 
     protected $fillable = [ 'lamaran_id', 'lama', 'baru', 'tanggal_mulai', 'tanggal_akhir', 'status_verifikasi', 'dokumen', 'no_surat', 'sp', 'jenis_pelanggaran', 'persus', 'gaji', 'modul', 'approved_by', 'created_by', 'updated_by', 'deleted_by', 'approved_at' ];
 
-    protected $with = ['getPegawai', 'getDiajukanOleh','getJabatanAwal','getJabatanBaru', 'getKantorAwal','getKantorBaru'];
+    protected $with = ['getPegawai', 'getDiajukanOleh','getJabatanAwal','getJabatanBaru', 'getKantorAwal','getKantorBaru','getJenisPelanggaran','getPersus'];
 
     public function getPegawai(){
 		return $this->belongsTo(Lamaran::class, 'lamaran_id','id');
@@ -38,5 +38,13 @@ class ProsesResmi extends Model
 
 	public function getKantorBaru(){
 		return $this->belongsTo(kantor::class, 'baru','id');
+	}
+
+    public function getJenisPelanggaran(){
+		return $this->belongsTo(JenisPelanggaran::class, 'jenis_pelanggaran','id');
+	}
+
+	public function getPersus(){
+		return $this->belongsTo(Persus::class, 'persus','id');
 	}
 }

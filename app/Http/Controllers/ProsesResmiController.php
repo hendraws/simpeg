@@ -19,9 +19,12 @@ class ProsesResmiController extends Controller
 	{
 		$dataPromosi = ProsesResmi::where('modul', 'promosi')->orderBy('updated_at', 'DESC')->get();
 		$dataMutasi = ProsesResmi::where('modul', 'mutasi')->orderBy('updated_at', 'DESC')->get();
-		$dataSponsor = Sponsor::orderBy('updated_at', 'DESC')->get();
-		$dataSp = SuratPeringatan::orderBy('updated_at', 'DESC')->get();
-		$dataPemberhentian = Pemberhentian::orderBy('updated_at', 'DESC')->get();
+		$dataSponsor = ProsesResmi::where('modul', 'sponsor')->orderBy('updated_at', 'DESC')->get();
+		$dataSp = ProsesResmi::where('modul', 'surat-peringatan')->orderBy('updated_at', 'DESC')->get();
+		$dataPemberhentian = ProsesResmi::where('modul', 'pemberhentian')->orderBy('updated_at', 'DESC')->get();
+		// $dataSponsor = Sponsor::orderBy('updated_at', 'DESC')->get();
+		// $dataSp = SuratPeringatan::orderBy('updated_at', 'DESC')->get();
+		// $dataPemberhentian = Pemberhentian::orderBy('updated_at', 'DESC')->get();
 		return view('admin.proses_resmi.index', compact('dataPromosi', 'dataMutasi', 'dataSponsor','dataSp','dataPemberhentian'));
 	}
 
@@ -42,7 +45,7 @@ class ProsesResmiController extends Controller
     		$input['modul'] = 'promosi';
     		$input['approved_at'] = now();
     		$input['no_surat'] = $noSurat + 1;
-    		
+
     		$data = ProsesResmi::create($input);
 
     		$history['pesan'] = 'Pengajuan Promosi Karyawan, Karyawan '. optional($data->getPegawai)->nama .' mendapat promosi dari jabatan '.optional($data->getJabatanAwal)->jabatan . ' menjadi jabatan '. optional($data->getJabatanBaru)->jabatan. ' oleh '. auth()->user()->getProfile->nama ;

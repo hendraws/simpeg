@@ -43,7 +43,7 @@
 						<td>
                             @if(!empty($data->dokumen))
 							@if($data->status_verifikasi =='verifikasi')
-							<a href="Javascript:void(0)" class="btn btn-xs btn-primary @if(empty($data->dokumen)) disable-links @endif modal-button"  data-target="ModalForm" data-url="{{ action('MutasiController@verifikasiForm', $data->id ) }}">Verifikasi Data</a>
+							<a href="Javascript:void(0)" class="btn btn-xs btn-primary a-glow @if(empty($data->dokumen)) disable-links @endif modal-button"  data-target="ModalForm" data-url="{{ action('MutasiController@verifikasiForm', $data->id ) }}">Verifikasi Data</a>
 							@else
 							{{-- <a href="Javascript:void(0)" class="btn btn-xs btn-info">Terverifikasi</a> --}}
 							<a href="Javascript:void(0)" class="btn btn-xs btn-danger modal-button">Ubah</a>

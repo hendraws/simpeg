@@ -80,7 +80,7 @@ class MutasiController extends Controller
     		$input['modul'] = 'mutasi';
     		$input['approved_at'] = now();
     		$input['no_surat'] = $noSurat + 1;
-    		
+
     		$data = ProsesResmi::create($input);
 
     		$history['pesan'] = 'Pengajuan Mutasi Karyawan, Karyawan '. optional($data->getPegawai)->nama .' dipindah tugaskan dari '.optional($data->getKantorAwal)->kantor . ' ke '. optional($data->getKantorBaru)->kantor. ' oleh '. auth()->user()->getProfile->nama ;
@@ -171,11 +171,20 @@ class MutasiController extends Controller
     			$extension = $request->file('file')->extension();
     			$imgName = 'berkas_sk/mutasi/' . date('dmh') . '-' .rand(1,10).'-'. $id . '.' . $extension;
     			$path = Storage::putFileAs('public', $request->file('file'), $imgName);
-    			$lamar['sk'] = $path;
+    			$lamar['dokumen'] = $path;
     		}
-    		$lamar['status'] = 'proses-verifikasi';
+    		$lamar['status_verifikasi'] = 'verifikasi';
     		$mutasi = ProsesResmi::where('id', $id)->first();
     		$mutasi->update($lamar);
+
+            $history['pesan'] = 'Pengajuan Mutasi Karyawan, Karyawan '. optional($mutasi->getPegawai)->nama .' sudah mengupload dokumen SK dan menunggu diverifikasi oleh '. optional($mutasi->getDiajukanOleh)->nama ;
+
+    		$history['user_id'] = $mutasi->lamaran_id;
+    		$history['modul_id'] = $mutasi->id;
+    		$history['modul'] = 'mutasi';
+
+    		HistoryLog::create($history);
+
 
     	} catch (\Exception $e) {
     		DB::rollback();
@@ -216,17 +225,19 @@ class MutasiController extends Controller
     		$mutasi = ProsesResmi::where('id', $id)->first();
 
     		$mutasi->update([
-    			'status' => $request->status,
+    			'status_verifikasi' => $request->status,
     			'approved_by' => auth()->user()->id,
     			'approved_at' => now(),
     		]);
 
-    		if($request->status == 'sukses'){
-    			$input['pesan'] = 'Mutasi Karyawan, Karyawan '. optional($mutasi->getPegawai)->nama .' mutasi dari kantor/cabang '.optional($mutasi->getKantorAwal)->kantor . ' ke kantor/cabang '. optional($mutasi->getKantorBaru)->kantor. ' oleh '. auth()->user()->getProfile->nama ;
-    			$input['modul'] = 'App\Models\Mutasi';
+            $history['pesan'] = 'Pengajuan Mutasi Karyawan '.ucfirst($request->status).', Karyawan '. optional($mutasi->getPegawai)->nama .' '.$request->status.' dipindah tugaskan dari kantor '.optional($mutasi->getKantorLama)->kantor . ' ke '. optional($mutasi->getKantorBaru)->kantor. ' oleh '. auth()->user()->getProfile->nama ;
 
-    			HistoryLog::create($input);
-    		}
+    		$history['user_id'] = $mutasi->lamaran_id;
+    		$history['modul_id'] = $mutasi->id;
+    		$history['modul'] = 'mutasi';
+
+    		HistoryLog::create($history);
+
     	} catch (\Exception $e) {
     		DB::rollback();
     		dd($e->getMessage());
