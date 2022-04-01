@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\HistoryLog;
 use App\Models\Jabatan;
 use App\Models\Lamaran;
 use App\Models\Promosi;
-use App\Models\HistoryLog;
+use App\Models\ProsesResmi;
+use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-use Barryvdh\DomPDF\Facade as PDF;
 
 class PromosiController extends Controller
 {
@@ -48,36 +49,38 @@ class PromosiController extends Controller
      */
     public function store(Request $request)
     {
-    	$request->validate([
-    		'lamaran_id' => 'required',
-    		'jabatan_baru' => 'required',
-    	]);
-        // dd($request->all());
-    	DB::beginTransaction();
-    	try {
-    		$input['lamaran_id'] = $request->lamaran_id;
-    		$input['jabatan_awal'] = $request->jabatan_kini_id;
-    		$input['jabatan_baru'] = $request->jabatan_baru;
-    		$input['status'] = 'pending';
-    		$input['gaji'] = 'pending';
-    		$input['modul'] = 'promosi';
+    	// Data ada di ProsesResmi
 
-            
-    		Promosi::create($input);
+    	// $request->validate([
+    	// 	'lamaran_id' => 'required',
+    	// 	'jabatan_baru' => 'required',
+    	// ]);
+     //    // dd($request->all());
+    	// DB::beginTransaction();
+    	// try {
+    	// 	$input['lamaran_id'] = $request->lamaran_id;
+    	// 	$input['jabatan_awal'] = $request->jabatan_kini_id;
+    	// 	$input['jabatan_baru'] = $request->jabatan_baru;
+    	// 	$input['status'] = 'pending';
+    	// 	$input['gaji'] = 'pending';
+    	// 	$input['modul'] = 'promosi';
 
-    	} catch (\Exception $e) {
-    		DB::rollback();
-    		toastr()->success($e->getMessage(), 'Error');
-    		return back();
-    	}catch (\Throwable $e) {
-    		DB::rollback();
-    		toastr()->success($e->getMessage(), 'Error');
-    		throw $e;
-    	}
 
-    	DB::commit();
-    	toastr()->success('Data telah ditambahkan', 'Berhasil');
-    	return redirect(action('ProsesResmiController@index'));
+    	// 	Promosi::create($input);
+
+    	// } catch (\Exception $e) {
+    	// 	DB::rollback();
+    	// 	toastr()->success($e->getMessage(), 'Error');
+    	// 	return back();
+    	// }catch (\Throwable $e) {
+    	// 	DB::rollback();
+    	// 	toastr()->success($e->getMessage(), 'Error');
+    	// 	throw $e;
+    	// }
+
+    	// DB::commit();
+    	// toastr()->success('Data telah ditambahkan', 'Berhasil');
+    	// return redirect(action('ProsesResmiController@index'));
     }
 
     /**
@@ -145,12 +148,21 @@ class PromosiController extends Controller
     			$extension = $request->file('file')->extension();
     			$imgName = 'berkas_sk/promosi/' . date('dmh') . '-' .rand(1,10).'-'. $id . '.' . $extension;
     			$path = Storage::putFileAs('public', $request->file('file'), $imgName);
-    			$lamar['sk'] = $path;
+    			$lamar['dokumen'] = $path;
     		}
 
-    		$promosi = Promosi::where('id', $id)->first();
-            $lamar['status'] = 'proses-verifikasi';
+    		$promosi = ProsesResmi::where('id', $id)->firstOrFail();
+    		$lamar['status_verifikasi'] = 'verifikasi';
     		$promosi->update($lamar);
+
+    		$history['pesan'] = 'Pengajuan Promosi Karyawan, Karyawan '. optional($promosi->getPegawai)->nama .' mengupload dokumen SK dan menunggu diverifikasi oleh '. optional($promosi->getDiajukanOleh)->nama ;
+
+    		$history['user_id'] = $promosi->lamaran_id;
+    		$history['modul_id'] = $promosi->id;
+    		$history['modul'] = 'promosi';
+
+    		HistoryLog::create($history);
+
 
     	} catch (\Exception $e) {
     		DB::rollback();
@@ -188,20 +200,20 @@ class PromosiController extends Controller
     			'status' => 'required'
     		]);
 
-    		$promosi = Promosi::where('id', $id)->first();
+    		$promosi = ProsesResmi::where('id', $id)->firstOrFail();
     		$promosi->update([
-                'status' => $request->status,
-                'approved_by' => auth()->user()->id,
-                'approved_at' => now(),
-            ]);
+    			'status_verifikasi' => $request->status,
+    			'approved_by' => auth()->user()->id,
+    			'approved_at' => now(),
+    		]);
 
-        //     if($request->status == 'sukses'){
-        //         $input['pesan'] = 'Promosi Karyawan, Karyawan '. optional($mutasi->getPegawai)->nama .' mutasi dari kantor/cabang '.optional($mutasi->getKantorAwal)->kantor . ' ke kantor/cabang '. optional($mutasi->getKantorBaru)->kantor. ' oleh '. auth()->user()->getProfile->nama ;
-        //        $input['modul'] = 'App\Models\Mutasi';
+    		$history['pesan'] = 'Pengajuan Promosi Karyawan '.ucfirst($request->status).', Karyawan '. optional($promosi->getPegawai)->nama .' '.$request->status.' mendapat promosi dari jabatan '.optional($promosi->getJabatanAwal)->jabatan . ' menjadi jabatan '. optional($promosi->getJabatanBaru)->jabatan. ' oleh '. auth()->user()->getProfile->nama ;
 
-        //        HistoryLog::create($input);
-        //    }
+    		$history['user_id'] = $promosi->lamaran_id;
+    		$history['modul_id'] = $promosi->id;
+    		$history['modul'] = 'promosi';
 
+    		HistoryLog::create($history);
     	} catch (\Exception $e) {
     		DB::rollback();
     		dd($e->getMessage());
@@ -223,7 +235,7 @@ class PromosiController extends Controller
     }
 
     public function downloadDraf($id){
-    	$data  = Promosi::find($id);
+    	$data  = ProsesResmi::find($id);
     	$data = $data->toArray();
 
     	$pdf = PDF::loadView('admin.proses_resmi.promosi.surat', compact('data'));

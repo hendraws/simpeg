@@ -44,6 +44,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::delete('/verifikasi-tugas/{id}/destroy', 'LamaranController@destroy');
 
     Route::post('proses-resmi/store-promosi', 'ProsesResmiController@storePromosi');
+    Route::post('proses-resmi/store-mutasi', 'ProsesResmiController@storeMutasi');
 
 	Route::get('proses-resmi', 'ProsesResmiController@index');
 	Route::resource('proses-resmi/promosi', 'PromosiController');

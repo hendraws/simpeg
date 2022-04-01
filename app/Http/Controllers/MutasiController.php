@@ -6,6 +6,7 @@ use App\Models\HistoryLog;
 use App\Models\Jabatan;
 use App\Models\Lamaran;
 use App\Models\Mutasi;
+use App\Models\ProsesResmi;
 use App\Models\kantor;
 use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Http\Request;
@@ -57,18 +58,38 @@ class MutasiController extends Controller
         // dd($request->all());
     	DB::beginTransaction();
     	try {
-    		$input['lamaran_id'] = $request->lamaran_id;
-    		$input['kantor_awal'] = $request->kantor_kini_id;
-    		$input['kantor_baru'] = $request->kantor_baru;
-    		// $input['sk'] = ;
-    		$input['status'] = 'pending';
-    		// $input['approved_by'] = ;
-    		// $input['created_by'] = ;
-    		// $input['updated_by'] = ;
-    		// $input['deleted_by'] = ;
-    		// $input['approved_at'] = now();
+    		// dd($request->all());
+    		// $input['lamaran_id'] = $request->lamaran_id;
+    		// $input['kantor_awal'] = $request->kantor_kini_id;
+    		// $input['kantor_baru'] = $request->kantor_baru;
+    		// // $input['sk'] = ;
+    		// $input['status'] = 'pending';
+    		// // $input['approved_by'] = ;
+    		// // $input['created_by'] = ;
+    		// // $input['updated_by'] = ;
+    		// // $input['deleted_by'] = ;
+    		// // $input['approved_at'] = now();
 
-    		Mutasi::create($input);
+    		// Mutasi::create($input);
+
+    		$noSurat =  ProsesResmi::whereMonth('created_at', date('m'))->whereYear('created_at', date('Y'))->max('no_surat') ?? 0;
+			$input['lamaran_id'] = $request->lamaran_id;
+			$input['lama'] = $request->kantor_kini_id;
+			$input['baru'] =  $request->kantor_baru;
+    		$input['status_verifikasi'] = 'pending'; //pending (upload dokumen)| verifikasi (sudah upload sk) | diterima | ditolak
+    		$input['modul'] = 'mutasi';
+    		$input['approved_at'] = now();
+    		$input['no_surat'] = $noSurat + 1;
+    		
+    		$data = ProsesResmi::create($input);
+
+    		$history['pesan'] = 'Pengajuan Mutasi Karyawan, Karyawan '. optional($data->getPegawai)->nama .' dipindah tugaskan dari '.optional($data->getKantorAwal)->kantor . ' ke '. optional($data->getKantorBaru)->kantor. ' oleh '. auth()->user()->getProfile->nama ;
+
+    		$history['user_id'] = $request->lamaran_id;
+    		$history['modul_id'] = $data->id;
+    		$history['modul'] = 'promosi';
+
+    		HistoryLog::create($history);
 
     	} catch (\Exception $e) {
     		DB::rollback();
@@ -153,7 +174,7 @@ class MutasiController extends Controller
     			$lamar['sk'] = $path;
     		}
     		$lamar['status'] = 'proses-verifikasi';
-    		$mutasi = Mutasi::where('id', $id)->first();
+    		$mutasi = ProsesResmi::where('id', $id)->first();
     		$mutasi->update($lamar);
 
     	} catch (\Exception $e) {
@@ -192,7 +213,7 @@ class MutasiController extends Controller
     			'status' => 'required'
     		]);
 
-    		$mutasi = Mutasi::where('id', $id)->first();
+    		$mutasi = ProsesResmi::where('id', $id)->first();
 
     		$mutasi->update([
     			'status' => $request->status,
@@ -227,7 +248,7 @@ class MutasiController extends Controller
     }
 
     public function downloadDraf($id){
-    	$data  = Mutasi::find($id);
+    	$data  = ProsesResmi::find($id);
     	$data = $data->toArray();
     	$pdf = PDF::loadView('admin.proses_resmi.mutasi.surat', compact('data'));
     	return $pdf->download('draft-sk-mutasi.pdf');

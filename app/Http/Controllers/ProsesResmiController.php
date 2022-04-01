@@ -15,39 +15,44 @@ use Illuminate\Support\Facades\DB;
 class ProsesResmiController extends Controller
 {
 
-    public function index(Request $request)
-    {
-    	$dataPromosi = Promosi::orderBy('updated_at', 'DESC')->get();
-    	$dataMutasi = Mutasi::orderBy('updated_at', 'DESC')->get();
-    	$dataSponsor = Sponsor::orderBy('updated_at', 'DESC')->get();
-    	$dataSp = SuratPeringatan::orderBy('updated_at', 'DESC')->get();
-    	$dataPemberhentian = Pemberhentian::orderBy('updated_at', 'DESC')->get();
-    	return view('admin.proses_resmi.index', compact('dataPromosi', 'dataMutasi', 'dataSponsor','dataSp','dataPemberhentian'));
-    }
+	public function index(Request $request)
+	{
+		$dataPromosi = ProsesResmi::where('modul', 'promosi')->orderBy('updated_at', 'DESC')->get();
+		$dataMutasi = ProsesResmi::where('modul', 'mutasi')->orderBy('updated_at', 'DESC')->get();
+		$dataSponsor = Sponsor::orderBy('updated_at', 'DESC')->get();
+		$dataSp = SuratPeringatan::orderBy('updated_at', 'DESC')->get();
+		$dataPemberhentian = Pemberhentian::orderBy('updated_at', 'DESC')->get();
+		return view('admin.proses_resmi.index', compact('dataPromosi', 'dataMutasi', 'dataSponsor','dataSp','dataPemberhentian'));
+	}
 
-    public function storePromosi(Request $request)
-    {
-        $request->validate([
-    		'lamaran_id' => 'required',
-    		'jabatan_baru' => 'required',
-    	]);
+	public function storePromosi(Request $request)
+	{
+		$request->validate([
+			'lamaran_id' => 'required',
+			'jabatan_baru' => 'required',
+		]);
         // dd($request->all());
-    	DB::beginTransaction();
-    	try {
-    		$input['lamaran_id'] = $request->lamaran_id;
-    		$input['lama'] = $request->jabatan_kini_id;
-    		$input['baru'] = $request->jabatan_baru;
+		DB::beginTransaction();
+		try {
+			$noSurat =  ProsesResmi::whereMonth('created_at', date('m'))->whereYear('created_at', date('Y'))->max('no_surat') ?? 0;
+			$input['lamaran_id'] = $request->lamaran_id;
+			$input['lama'] = $request->jabatan_kini_id;
+			$input['baru'] = $request->jabatan_baru;
     		$input['status_verifikasi'] = 'pending'; //pending (upload dokumen)| verifikasi (sudah upload sk) | diterima | ditolak
+    		$input['modul'] = 'promosi';
     		$input['approved_at'] = now();
-
+    		$input['no_surat'] = $noSurat + 1;
+    		
     		$data = ProsesResmi::create($input);
 
-            if ($request->status == 'sukses') {
-                $input['pesan'] = strtoupper($suratPeringatan->sp).' Karyawan ' . optional($suratPeringatan->getPegawai)->nama . ', Jenis Pelanggaran ' . optional($suratPeringatan->getJenisPelanggaran)->jenis_pelanggaran . ', Dikeluarkan oleh ' . optional($suratPeringatan->getApprovedBy)->name;
-                $input['modul'] = 'App\Models\SuratPeringatan';
+    		$history['pesan'] = 'Pengajuan Promosi Karyawan, Karyawan '. optional($data->getPegawai)->nama .' mendapat promosi dari jabatan '.optional($data->getJabatanAwal)->jabatan . ' menjadi jabatan '. optional($data->getJabatanBaru)->jabatan. ' oleh '. auth()->user()->getProfile->nama ;
 
-                HistoryLog::create($input);
-            }
+    		$history['user_id'] = $request->lamaran_id;
+    		$history['modul_id'] = $data->id;
+    		$history['modul'] = 'promosi';
+
+    		HistoryLog::create($history);
+
 
     	} catch (\Exception $e) {
     		DB::rollback();
@@ -62,6 +67,6 @@ class ProsesResmiController extends Controller
     	DB::commit();
     	toastr()->success('Data telah ditambahkan', 'Berhasil');
     	return redirect(action('ProsesResmiController@index'));
-        dd($request->all());
+
     }
 }

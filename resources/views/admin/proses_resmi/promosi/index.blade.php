@@ -30,20 +30,20 @@
 						<td>{{ optional($data->getJabatanAwal)->jabatan }}</td>
 						<td>{{ optional($data->getJabatanBaru)->jabatan }}</td>
 						<td>
-							@if($data->status =='pending')
+							@if($data->status_verifikasi =='pending')
 								<button type="button"  class="btn btn-xs btn-warning ">Belum Upload Berkas</button>
-							@elseif($data->status =='sukses')
+							@elseif($data->status_verifikasi =='sukses')
 								<button type="button"  class="btn btn-xs btn-success ">Promosi disetujui</button>
-							@elseif($data->status =='proses-verifikasi')
-								<button type="button"  class="btn btn-xs btn-success ">Proses Verifikasi</button>
+							@elseif($data->status_verifikasi =='verifikasi')
+								<button type="button"  class="btn btn-xs btn-success ">Sedang Di Verifikasi</button>
 							@else
 								<button type="button"  class="btn btn-xs btn-danger ">Gagal</button>
 							@endif
 						</td>
 						<td>
-                            @if(!empty($data->sk))
-							@if($data->status =='proses-verifikasi')
-							<a href="Javascript:void(0)" class="btn btn-xs btn-primary @if(empty($data->sk)) disable-links @endif modal-button"  data-target="ModalForm" data-url="{{ action('PromosiController@verifikasiForm', $data->id ) }}">Verifikasi Berkas</a>
+                            @if(!empty($data->dokumen))
+							@if($data->status_verifikasi =='verifikasi')
+							<a href="Javascript:void(0)" class="btn btn-xs btn-primary @if(empty($data->dokumen)) disable-links @endif modal-button"  data-target="ModalForm" data-url="{{ action('PromosiController@verifikasiForm', $data->id ) }}">Verifikasi Berkas</a>
 							@else
 							{{-- <a href="Javascript:void(0)" class="btn btn-xs btn-info">Terverifikasi</a> --}}
 							<a href="Javascript:void(0)" class="btn btn-xs btn-danger modal-button">Ubah</a>
@@ -52,10 +52,10 @@
 						</td>
 						<td><a class="btn btn-xs btn-info" href="{{ action('PromosiController@downloadDraf', $data->id) }}">Download</a></td>
 						<td>
-                            @if(empty($data->sk))
-							<a class="btn btn-xs btn-warning modal-button @if(!empty($data->sk)) disable-links @endif" href="Javascript:void(0)"  data-target="ModalForm" data-url="{{ action('PromosiController@uploadForm', $data->id ) }}" >Upload Berkas</a>
+                            @if(empty($data->dokumen))
+							<a class="btn btn-xs btn-primary modal-button @if(!empty($data->dokumen)) disable-links @endif" href="Javascript:void(0)"  data-target="ModalForm" data-url="{{ action('PromosiController@uploadForm', $data->id ) }}" >Upload Berkas</a>
                             @else
-							<a class="btn btn-xs btn-info" href="">Download</a>
+							<a class="btn btn-xs btn-info" href="{{ Storage::url($data->dokumen) }}" target="_blank">Download</a>
                             @endif
 						</td>
 					</tr>

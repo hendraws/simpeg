@@ -80,7 +80,7 @@
 			$bln = $array_bln[date('n', strtotime($data['created_at']))];
 			@endphp
 			<div class="text-center"><b><u>SURAT KEPUTUSAN</u></b></div>
-			<div class="text-center">NO. {{ $data['id'] }}/SMART/{{ $bln }}/{{ date('Y', strtotime($data['created_at'])) }}</div>
+			<div class="text-center">NO. {{ $data['no_surat'] }}/SMART/{{ $bln }}/{{ date('Y', strtotime($data['created_at'])) }}</div>
 			<br>
 			<br>
 			<div>Perihal <span class="ml-100">: Perubahan Jabatan</span></div>
