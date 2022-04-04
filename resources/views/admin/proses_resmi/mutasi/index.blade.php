@@ -31,32 +31,36 @@
 						<td>{{ optional($data->getKantorBaru)->kantor }}</td>
 						<td>
 							@if($data->status_verifikasi =='pending')
-								<button type="button"  class="btn btn-xs btn-warning ">Belum Upload Berkas</button>
+							<button type="button"  class="btn btn-xs btn-warning ">Belum Upload Berkas</button>
 							@elseif($data->status_verifikasi =='sukses')
-								<button type="button"  class="btn btn-xs btn-success ">Mutasi disetujui</button>
+							<button type="button"  class="btn btn-xs btn-success ">Mutasi disetujui</button>
 							@elseif($data->status_verifikasi =='verifikasi')
-								<button type="button"  class="btn btn-xs btn-success ">Proses Verifikasi</button>
+							<button type="button"  class="btn btn-xs btn-success ">Proses Verifikasi</button>
 							@else
-								<button type="button"  class="btn btn-xs btn-danger ">Gagal</button>
+							<button type="button"  class="btn btn-xs btn-danger ">Gagal</button>
 							@endif
 						</td>
 						<td>
-                            @if(!empty($data->dokumen))
+							@if(!empty($data->dokumen))
+							@if(auth()->user()->id == $data->created_by)
 							@if($data->status_verifikasi =='verifikasi')
 							<a href="Javascript:void(0)" class="btn btn-xs btn-primary a-glow @if(empty($data->dokumen)) disable-links @endif modal-button"  data-target="ModalForm" data-url="{{ action('MutasiController@verifikasiForm', $data->id ) }}">Verifikasi Data</a>
 							@else
 							{{-- <a href="Javascript:void(0)" class="btn btn-xs btn-info">Terverifikasi</a> --}}
 							<a href="Javascript:void(0)" class="btn btn-xs btn-danger modal-button">Ubah</a>
 							@endif
-                            @endif
+							@endif
+							@endif
 						</td>
 						<td><a class="btn btn-xs btn-info" href="{{ action('MutasiController@downloadDraf', $data->id) }}">Download</a></td>
 						<td>
-                            @if(empty($data->dokumen))
+							@if(empty($data->dokumen))
+							@if(optional(optional(auth()->user())->getProfile)->id == $data->lamaran_id)
 							<a class="btn btn-xs btn-warning modal-button @if(!empty($data->dokumen)) disable-links @endif" href="Javascript:void(0)"  data-target="ModalForm" data-url="{{ action('MutasiController@uploadForm', $data->id ) }}" >Upload Berkas</a>
-                            @else
-							<a class="btn btn-xs btn-info" href="">Download</a>
-                            @endif
+							@endif
+							@else
+							<a class="btn btn-xs btn-info" href="{{ Storage::url($data->dokumen) }}" target="_blank">Download</a>
+							@endif
 						</td>
 					</tr>
 					@endforeach

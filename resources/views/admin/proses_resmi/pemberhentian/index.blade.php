@@ -46,11 +46,13 @@
 						</td>
 						<td>
                             @if(!empty($data->dokumen))
+                              @if(auth()->user()->id == $data->created_by)
 							@if($data->status_verifikasi =='verifikasi')
                             <a href="Javascript:void(0)" class="btn btn-xs btn-primary  @if(empty($data->dokumen)) disable-links @endif modal-button"  data-target="ModalForm" data-url="{{ action('PemberhentianController@verifikasiForm', $data->id ) }}">Verifikasi</a>
 							@else
 							{{-- <a href="Javascript:void(0)" class="btn btn-xs btn-info">Terverifikasi</a> --}}
 							<a href="Javascript:void(0)" class="btn btn-xs btn-danger modal-button">Ubah</a>
+							@endif
 							@endif
                             @endif
 
@@ -58,9 +60,11 @@
 						<td><a class="btn btn-xs btn-info" href="{{ action('PemberhentianController@downloadDraf', $data->id) }}">Download</a></td>
 						<td>
                             @if(empty($data->dokumen))
+                               @if(optional(optional(auth()->user())->getProfile)->id == $data->lamaran_id)
 							<a class="btn btn-xs btn-warning modal-button a-glow @if(!empty($data->dokumen)) disable-links @endif" href="Javascript:void(0)"  data-target="ModalForm" data-url="{{ action('PemberhentianController@uploadForm', $data->id ) }}" >Upload Berkas</a>
+							@endif
                             @else
-							<a class="btn btn-xs btn-info" href="">Download</a>
+							<a class="btn btn-xs btn-info" href="{{ Storage::url($data->dokumen) }}" target="_blank">Download</a>
                             @endif
 						</td>
 					</tr>

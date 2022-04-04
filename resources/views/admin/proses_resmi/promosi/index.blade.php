@@ -42,18 +42,22 @@
 						</td>
 						<td>
                             @if(!empty($data->dokumen))
+                              @if(auth()->user()->id == $data->created_by)
 							@if($data->status_verifikasi =='verifikasi')
 							<a href="Javascript:void(0)" class="btn btn-xs btn-primary a-glow @if(empty($data->dokumen)) disable-links @endif modal-button"  data-target="ModalForm" data-url="{{ action('PromosiController@verifikasiForm', $data->id ) }}">Verifikasi Berkas</a>
 							@else
 							{{-- <a href="Javascript:void(0)" class="btn btn-xs btn-info">Terverifikasi</a> --}}
 							<a href="Javascript:void(0)" class="btn btn-xs btn-danger modal-button">Ubah</a>
 							@endif
+							@endif
                             @endif
 						</td>
 						<td><a class="btn btn-xs btn-info" href="{{ action('PromosiController@downloadDraf', $data->id) }}">Download</a></td>
 						<td>
                             @if(empty($data->dokumen))
+                               @if(optional(optional(auth()->user())->getProfile)->id == $data->lamaran_id)
 							<a class="btn btn-xs btn-primary modal-button @if(!empty($data->dokumen)) disable-links @endif" href="Javascript:void(0)"  data-target="ModalForm" data-url="{{ action('PromosiController@uploadForm', $data->id ) }}" >Upload Berkas</a>
+							@endif
                             @else
 							<a class="btn btn-xs btn-info" href="{{ Storage::url($data->dokumen) }}" target="_blank">Download</a>
                             @endif
