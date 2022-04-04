@@ -11,6 +11,7 @@ use App\Models\Pemberhentian;
 use App\Models\JenisPelanggaran;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Barryvdh\DomPDF\Facade as PDF;
 
 class PemberhentianController extends Controller
 {
@@ -217,15 +218,27 @@ class PemberhentianController extends Controller
     	DB::beginTransaction();
     	try {
 
-    		$request->validate([
+            $request->validate([
     			'status' => 'required'
     		]);
 
-    		$pemberhentian = Pemberhentian::where('id', $id)->first();
-    		$pemberhentian->update([
-    			'status' => $request->status,
+    		$data = ProsesResmi::where('id', $id)->first();
+
+    		$data->update([
+    			'status_verifikasi' => $request->status,
     			'approved_by' => auth()->user()->id,
+    			'approved_at' => now(),
     		]);
+
+            $history['pesan'] = 'Pemberhentian Kayawan '.ucfirst($request->status).', Karyawan '. optional($data->getPegawai)->nama .' '.$request->status.' Diberhentikan oleh '. auth()->user()->getProfile->nama ;
+
+    		$history['user_id'] = $data->lamaran_id;
+    		$history['modul_id'] = $data->id;
+    		$history['modul'] = 'pemberhentian';
+
+    		HistoryLog::create($history);
+
+
     	} catch (\Exception $e) {
     		DB::rollback();
     		dd($e->getMessage());
@@ -247,9 +260,10 @@ class PemberhentianController extends Controller
     }
 
     public function downloadDraf($id){
-    	$data  = Pemberhentian::find($id);
+    	$data  = ProsesResmi::find($id);
     	$data = $data->toArray();
-    	$pdf = PDF::loadView('admin.proses_resmi.mutasi.surat', compact('data'));
-    	return $pdf->download('draft-sk-mutasi.pdf');
+
+    	$pdf = PDF::loadView('admin.proses_resmi.pemberhentian.surat', compact('data'));
+    	return $pdf->download('draft-sk-phk.pdf');
     }
 }

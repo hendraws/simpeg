@@ -35,20 +35,25 @@
 						</td>
 						<td>
 							@if($data->status_verifikasi =='pending')
-							<button type="button"  class="btn btn-xs btn-warning ">Pending</button>
+								<button type="button"  class="btn btn-xs btn-warning ">Belum Upload Berkas</button>
 							@elseif($data->status_verifikasi =='sukses')
-							<button type="button"  class="btn btn-xs btn-success ">Sukses</button>
+								<button type="button"  class="btn btn-xs btn-success ">SP disetujui</button>
+							@elseif($data->status_verifikasi =='verifikasi')
+								<button type="button"  class="btn btn-xs btn-success ">Proses Verifikasi</button>
 							@else
-							<button type="button"  class="btn btn-xs btn-danger ">Gagal</button>
+								<button type="button"  class="btn btn-xs btn-danger ">Gagal</button>
 							@endif
 						</td>
 						<td>
-							@if($data->status_verifikasi =='pending')
-							<a href="Javascript:void(0)" class="btn btn-xs btn-primary  @if(empty($data->dokumen)) disable-links @endif modal-button"  data-target="ModalForm" data-url="{{ action('PemberhentianController@verifikasiForm', $data->id ) }}">Verifikasi</a>
+                            @if(!empty($data->dokumen))
+							@if($data->status_verifikasi =='verifikasi')
+                            <a href="Javascript:void(0)" class="btn btn-xs btn-primary  @if(empty($data->dokumen)) disable-links @endif modal-button"  data-target="ModalForm" data-url="{{ action('PemberhentianController@verifikasiForm', $data->id ) }}">Verifikasi</a>
 							@else
-							<a href="Javascript:void(0)" class="btn btn-xs btn-info">Terverifikasi</a>
-							@endif
+							{{-- <a href="Javascript:void(0)" class="btn btn-xs btn-info">Terverifikasi</a> --}}
 							<a href="Javascript:void(0)" class="btn btn-xs btn-danger modal-button">Ubah</a>
+							@endif
+                            @endif
+
 						</td>
 						<td><a class="btn btn-xs btn-info" href="{{ action('PemberhentianController@downloadDraf', $data->id) }}">Download</a></td>
 						<td>
