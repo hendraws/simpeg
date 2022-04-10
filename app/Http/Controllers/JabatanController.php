@@ -39,6 +39,7 @@ class JabatanController extends Controller
     {
     	$request->validate([
     		'jabatan' => 'required|max:255',
+    		'open' => 'required|max:255',
     	]);
 
     	DB::beginTransaction();

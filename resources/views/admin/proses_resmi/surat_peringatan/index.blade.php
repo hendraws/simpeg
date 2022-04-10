@@ -1,7 +1,9 @@
 <div class="card">
+	@hasanyrole('super-admin|hrd|general-manager|koordinator-dan-spv')
 	<div class="card-header">
 		<a class="btn btn-sm btn-primary" href="{{ action('SuratPeringatanController@create') }}"  data-toggle="tooltip" data-placement="top" title="Tambah" >Tambah Surat Peringatan</a>
 	</div>
+	@endhasanyrole
 
 	<div class="card-body">
 		<div class="table-responsive" style="font-size: 13px;">
@@ -13,11 +15,13 @@
 						<th>Nama</th>
 						<th>SP</th>
 						<th>Tanggal Selesai</th>
-						<th>Kantor / Cabang</th>
+						{{-- <th>Kantor / Cabang</th> --}}
 						<th>Ket.</th>
 						<th>Aksi</th>
 						<th>Status</th>
+						@hasanyrole('super-admin|hrd|general-manager|koordinator-dan-spv')
 						<th>Proses</th>
+						@endhasanyrole
 						<th>Draft SK</th>
 						<th>SK Resmi</th>
 					</tr>
@@ -30,7 +34,7 @@
 						<td>{{ optional($data->getPegawai)->nama }}</td>
 						<td>{{ $data->sp }}</td>
 						<td>{{ date('d-m-Y', strtotime($data->tanggal_akhir)) }}</td>
-						<td>{{ optional($data->getKantorTugas)->kantor }}</td>
+						{{-- <td>{{ optional($data->getKantorTugas)->kantor }}</td> --}}
 						<td>
 							@if($data->status_verifikasi =='pending')
 								<button type="button"  class="btn btn-xs btn-warning ">Belum Upload Berkas</button>
@@ -54,19 +58,21 @@
 							<button type="button"  class="btn btn-xs btn-danger ">Gagal</button>
 							@endif
 						</td>
+						@hasanyrole('super-admin|hrd|general-manager|koordinator-dan-spv')
 						<td>
                             @if(!empty($data->dokumen))
-                            @if(auth()->user()->id == $data->created_by)
+                            {{-- @if(auth()->user()->id == $data->created_by) --}}
 							@if($data->status_verifikasi =='verifikasi')
                             <a href="Javascript:void(0)" class="btn btn-xs btn-primary @if(empty($data->dokumen)) disable-links @endif modal-button"  data-target="ModalForm" data-url="{{ action('SuratPeringatanController@verifikasiForm', $data->id ) }}">Verifikasi</a>
-                            @endif
 							@else
 							{{-- <a href="Javascript:void(0)" class="btn btn-xs btn-info">Terverifikasi</a> --}}
 							<a href="Javascript:void(0)" class="btn btn-xs btn-danger modal-button">Ubah</a>
-							@endif
+							{{-- @endif --}}
+                            @endif
                             @endif
 
 						</td>
+						@endhasanyrole
 						<td><a class="btn btn-xs btn-info" href="{{ action('SuratPeringatanController@downloadDraf', $data->id) }}">Download</a></td>
 						<td>
                             @if(empty($data->dokumen))

@@ -24,6 +24,7 @@
 					</li>
 				</ul>
 			</li> --}}
+			@hasanyrole('super-admin|hrd|general-manager')
 			<li class="nav-item">
 				<a href="{{ action('HomeController@index') }}" class="nav-link">
 					<i class="nav-icon fa fa-tachometer-alt"></i>
@@ -95,6 +96,7 @@
 					</p>
 				</a>
 			</li>
+			@role('hrd')
 			<li class="nav-item">
 				<a href="{{ action('LamaranController@calonKaryawan') }}" class="nav-link">
                     <i class="nav-icon fas fa-user-check"></i><p>Verifikasi Tugas
@@ -102,6 +104,7 @@
 					</p>
 				</a>
 			</li>
+			@endrole
 			<li class="nav-item">
 				<a href="{{ action('PenilaianPegawaiController@index')}}" class="nav-link">
 					<i class="nav-icon far fa-file"></i>
@@ -129,8 +132,26 @@
 					</p>
 				</a>
 			</li>
-
-
+			@endhasanyrole
+			@role('koordinator-dan-spv')
+			<li class="nav-item">
+				<a href="{{ action('HomeController@index') }}" class="nav-link">
+					<i class="nav-icon fa fa-tachometer-alt"></i>
+					<p>
+						Dashboard
+					</p>
+				</a>
+			</li>
+				<li class="nav-item">
+				<a href="{{ action('ProsesResmiController@index') }}" class="nav-link">
+					<i class="nav-icon fa fa-calendar"></i>
+					<p>
+						Proses Resmi
+						{{-- <span class="right badge badge-danger">New</span> --}}
+					</p>
+				</a>
+			</li>
+			@endrole
 		</ul>
 	</nav>
 	<!-- /.sidebar-menu -->

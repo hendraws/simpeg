@@ -1,7 +1,9 @@
 <div class="card">
+	@hasanyrole('super-admin|hrd|general-manager|koordinator-dan-spv')
 	<div class="card-header">
 		<a class="btn btn-sm btn-primary" href="{{ action('MutasiController@create') }}"  data-toggle="tooltip" data-placement="top" title="Tambah" >Tambah Mutasi</a>
 	</div>
+	@endhasanyrole
 
 	<div class="card-body">
 		<div class="table-responsive" style="font-size: 13px;">
@@ -15,7 +17,9 @@
 						<th>Kantor/Cabang Awal</th>
 						<th>Kantor/Cabang Baru</th>
 						<th>Status</th>
+						@hasanyrole('super-admin|hrd|general-manager')
 						<th>Proses</th>
+						@endhasanyrole
 						<th>Draft SK</th>
 						<th>SK Resmi</th>
 					</tr>
@@ -40,18 +44,20 @@
 							<button type="button"  class="btn btn-xs btn-danger ">Gagal</button>
 							@endif
 						</td>
+						@hasanyrole('super-admin|hrd|general-manager')
 						<td>
 							@if(!empty($data->dokumen))
-							@if(auth()->user()->id == $data->created_by)
+						{{-- 	@if(auth()->user()->id == $data->created_by) --}}
 							@if($data->status_verifikasi =='verifikasi')
 							<a href="Javascript:void(0)" class="btn btn-xs btn-primary a-glow @if(empty($data->dokumen)) disable-links @endif modal-button"  data-target="ModalForm" data-url="{{ action('MutasiController@verifikasiForm', $data->id ) }}">Verifikasi Data</a>
 							@else
 							{{-- <a href="Javascript:void(0)" class="btn btn-xs btn-info">Terverifikasi</a> --}}
 							<a href="Javascript:void(0)" class="btn btn-xs btn-danger modal-button">Ubah</a>
 							@endif
-							@endif
+							{{-- @endif --}}
 							@endif
 						</td>
+						@endhasanyrole
 						<td><a class="btn btn-xs btn-info" href="{{ action('MutasiController@downloadDraf', $data->id) }}">Download</a></td>
 						<td>
 							@if(empty($data->dokumen))

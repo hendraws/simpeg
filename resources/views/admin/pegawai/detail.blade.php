@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Detail Pelamar')
+@section('title', 'Detail Pegawai')
 @section('content-title', 'Data ' . $data->nama)
 @section('css')
 <link href="{{ asset('vendors/DataTables/datatables.min.css') }}" rel="stylesheet">

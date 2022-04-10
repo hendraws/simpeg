@@ -83,7 +83,7 @@
 								<tbody>
 									@foreach($data as $value)
 									<tr>
-										<th scope="row">1</th>
+										<th scope="row">{{ $loop->index + 1 }}</th>
 										<td>{{ $value->jabatan }}</td>
 										<td>
 											<a class="btn btn-warning btn-sm modal-button" href="Javascript:void(0)"  data-target="ModalForm" data-url="{{ action('JabatanController@edit',$value) }}"  data-toggle="tooltip" data-placement="top" title="Edit" >Edit</a>

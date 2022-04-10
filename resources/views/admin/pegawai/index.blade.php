@@ -1,6 +1,6 @@
 @extends('layouts.app')
-@section('title', 'Verifikasi Tugas')
-@section('content-title', 'Verifikasi Tugas')
+@section('title', 'Data Pegawai')
+@section('content-title', 'Data Pegawai')
 @section('css')
 <link href="{{ asset('vendors/DataTables/datatables.min.css') }}" rel="stylesheet">
 @endsection
