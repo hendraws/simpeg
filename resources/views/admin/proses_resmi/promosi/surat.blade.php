@@ -8,7 +8,7 @@
 		*{
 			margin: 0;
 			padding: 0;
-			box-sizing: border-box; 
+			box-sizing: border-box;
 		}
 
 		body{
@@ -105,7 +105,7 @@
 			<div class="text-justify">Secara resmi menaikan jabatannya menjadi {{ $data['get_jabatan_baru']['jabatan'] }} dengan ketentuan sebagai berikut :</div>
 			<br>
 			<div class="ml-50 text-justify">1. <span class="text-justify">Surat keputusan ini berlaku sejak surat ini diterbitkan dan telah disetujui.</span></div>
-			<div class="ml-50 text-justify">2. <span class="text-justify">Dengan gaji sebesar Rp……………(sesuai inputan di form promosi)</span></div>
+			<div class="ml-50 text-justify">2. <span class="text-justify">Dengan gaji sebesar Rp. {{ number_format($data['gaji']) }}</span></div>
 			<br>
 			<div>Demikian Surat keputusan ini dibuat, bilamana pada kemudian hari ditemukan kesalahan dengan penerbitan surat keputusan ini, maka perusahaan akan melakukan penyesuaian ulang sebagaimana mestinya, Atas perhatian dan kerjasamanya kami sampaikan terima kasih.</div>
 			<br>

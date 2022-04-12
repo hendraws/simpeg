@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\HistoryPegawai;
 use App\Models\Lamaran;
 use Illuminate\Http\Request;
 
@@ -49,8 +50,8 @@ class PegawaiController extends Controller
     public function show($id)
     {
         $data = Lamaran::find($id);
-
-        return view('admin.pegawai.detail', compact('data'));
+        $history = HistoryPegawai::where('user_id', $id)->get();
+        return view('admin.pegawai.detail', compact('data', 'history'));
     }
 
     /**

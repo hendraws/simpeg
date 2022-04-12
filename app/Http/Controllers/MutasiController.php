@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\HistoryLog;
+use App\Models\kantor;
+use App\Models\Mutasi;
 use App\Models\Jabatan;
 use App\Models\Lamaran;
-use App\Models\Mutasi;
+use App\Models\HistoryLog;
 use App\Models\ProsesResmi;
-use App\Models\kantor;
-use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Http\Request;
+use App\Models\HistoryPegawai;
 use Illuminate\Support\Carbon;
+use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
@@ -90,6 +91,14 @@ class MutasiController extends Controller
     		$history['modul'] = 'promosi';
 
     		HistoryLog::create($history);
+
+            HistoryPegawai::create([
+                'pesan' => 'Pengajuan Mutasi ',
+                'user_id' => $data->lamaran_id,
+                'dokumen' => '',
+                'cabang' => optional($data->getKantorBaru)->kantor,
+                'created_by' => optional(optional(auth()->user())->getProfile)->id,
+            ]);
 
     	} catch (\Exception $e) {
     		DB::rollback();
@@ -237,6 +246,15 @@ class MutasiController extends Controller
     		$history['modul'] = 'mutasi';
 
     		HistoryLog::create($history);
+
+            HistoryPegawai::create([
+                'pesan' => 'Pengajuan Mutasi '.ucfirst($request->status),
+                'user_id' => $mutasi->lamaran_id,
+                'dokumen' => $mutasi->dokumen,
+                'cabang' => optional($mutasi->getKantorBaru)->kantor,
+                'created_by' => optional(optional(auth()->user())->getProfile)->id,
+            ]);
+
 
     	} catch (\Exception $e) {
     		DB::rollback();

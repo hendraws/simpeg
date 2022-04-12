@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\HistoryLog;
 use App\Models\Jabatan;
 use App\Models\Lamaran;
 use App\Models\Promosi;
+use App\Models\HistoryLog;
 use App\Models\ProsesResmi;
-use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Http\Request;
+use App\Models\HistoryPegawai;
+use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
@@ -214,6 +215,15 @@ class PromosiController extends Controller
     		$history['modul'] = 'promosi';
 
     		HistoryLog::create($history);
+
+            HistoryPegawai::create([
+                'pesan' => 'Pengajuan Promosi '. optional($promosi->getJabatanAwal)->jabatan . ' '.ucfirst($request->status),
+                'user_id' => $promosi->lamaran_id,
+                'dokumen' => $promosi->dokumen,
+                'cabang' => '',
+                'created_by' => optional(optional(auth()->user())->getProfile)->id,
+            ]);
+
     	} catch (\Exception $e) {
     		DB::rollback();
     		dd($e->getMessage());

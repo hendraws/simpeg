@@ -100,7 +100,8 @@
 										<td>{{ date('d-m-Y', strtotime($value->created_at)) }}</td>
 										<td>{{ $value->nama }}</td>
 										{{-- <td></td> --}}
-										<td>{{ date('d-m-Y h:i', strtotime($value->tanggal_interview))  }}</td>
+
+										<td>{{ !empty($value->tanggal_interview) ? date('d-m-Y h:i', strtotime($value->tanggal_interview)) : ''  }}</td>
 										<td>{{ $value->status_lamaran }}</td>
 										{{-- <td></td> --}}
 										<td>{{ $value->getJabatan->jabatan }}</td>

@@ -7,6 +7,7 @@ use App\Models\Lamaran;
 use App\Models\HistoryLog;
 use App\Models\ProsesResmi;
 use Illuminate\Http\Request;
+use App\Models\HistoryPegawai;
 use App\Models\SuratPeringatan;
 use App\Models\JenisPelanggaran;
 use Barryvdh\DomPDF\Facade as PDF;
@@ -92,6 +93,7 @@ class SuratPeringatanController extends Controller
             $history['modul'] = 'surat-peringatan';
 
             HistoryLog::create($history);
+
         } catch (\Exception $e) {
             DB::rollback();
             toastr()->success($e->getMessage(), 'Error');
@@ -235,6 +237,16 @@ class SuratPeringatanController extends Controller
     		$history['modul'] = 'surat-peringatan';
 
     		HistoryLog::create($history);
+            if($request->status == 'sukses'){
+
+                HistoryPegawai::create([
+                    'pesan' => 'Surat Peringatan '. $request->sp,
+                    'user_id' => $suratPeringatan->lamaran_id,
+                    'dokumen' => '',
+                    'cabang' => optional($suratPeringatan->getKantorAwal)->kantor,
+                    'created_by' => optional(optional(auth()->user())->getProfile)->id,
+                ]);
+            }
 
         } catch (\Exception $e) {
             DB::rollback();

@@ -2,19 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\LamaranEmail;
-use App\Models\HistoryLog;
-use App\Models\Jabatan;
-use App\Models\Lamaran;
-use App\Models\RefOption;
 use App\Models\User;
 use App\Models\kantor;
+use App\Models\Jabatan;
+use App\Models\Lamaran;
+use App\Mail\CustomEmail;
+use App\Models\RefOption;
+use App\Mail\LamaranEmail;
+use App\Models\HistoryLog;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\HistoryPegawai;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 
 class LamaranController extends Controller
 {
@@ -184,6 +186,13 @@ class LamaranController extends Controller
     		]);
     		Mail::to(request()->email)->send(new LamaranEmail($details));
 
+            HistoryPegawai::create([
+                'pesan' => 'Masuk Lamaran',
+                'user_id' => $lamar->id,
+                'dokumen' => $lamar['surat_lamaran'],
+                'cabang' => '',
+                'created_by' => $lamar->id,
+            ]);
     	} catch (\ValidationException $e) {
     		DB::rollback();
     		dd($e->getErrors());
@@ -289,10 +298,26 @@ class LamaranController extends Controller
     	]);
 
     	HistoryLog::create([
-    			'pesan' => 'lamaran '. $request->nama.' ditolak',
+    			'pesan' => 'lamaran '. $data->nama.' ditolak',
     			'modul' => 'App\Models\Lamaran',
     			'user_id' => $data->id,
     		]);
+
+        HistoryPegawai::create([
+            'pesan' => 'Lamaran Ditolak',
+            'user_id' => $data->id,
+            'dokumen' => '',
+            'cabang' => '',
+            'created_by' => optional(optional(auth()->user())->getProfile)->id,
+        ]);
+
+        $details = [
+            'nama' => $data->nama,
+            'pesan' => 'Terima kasih atas ketertarikan Anda untuk melamar di KSP SATRIA MULIA ARTHOMORO. Kami telah membaca resume Anda, namun tidak dapat meneruskannya ke seleksi tahap selanjutnya. Saat ini kami sedang mencari kandidat dengan pengalaman dan keterampilan yang tepat untuk posisi tersebut.'
+        ];
+
+        Mail::to($data->email)->send(new CustomEmail($details));
+
     	toastr()->success('Data Berhasil Di Update', 'Berhasil');
     	return redirect(action('LamaranController@calonKaryawan'));
     }
@@ -315,6 +340,23 @@ class LamaranController extends Controller
     			'modul' => 'App\Models\Lamaran',
     			'user_id' => $lamaran->id,
     		]);
+
+            HistoryPegawai::create([
+                'pesan' => 'Interview',
+                'user_id' => $lamaran->id,
+                'dokumen' => '',
+                'cabang' => '',
+                'created_by' => optional(optional(auth()->user())->getProfile)->id,
+            ]);
+
+            $details = [
+                'nama' => $lamaran->nama,
+                'pesan' => 'Menanggapi surat lamaran kerja Saudara di KSP SATRIA MULIA ARTHOMORO, maka dengan ini kami mengharap kedatangan Saudara pada jam dan tanggal '. $request->tanggal_interview. ' untuk keperluan wawancara kerja.',
+            ];
+
+            Mail::to($lamaran->email)->send(new CustomEmail($details));
+
+
     	} catch (\Exception $e) {
     		DB::rollback();
     		dd($e->getMessage());
@@ -338,7 +380,7 @@ class LamaranController extends Controller
     	$data = Lamaran::where('id',$id)->first();
     	$jabatan = Jabatan::pluck('jabatan','id');
     	$kantor = kantor::pluck('kantor','id');
-    	
+
     	return view('admin.verifikasi_tugas.penempatan', compact('data', 'kantor','jabatan'));
     }
 
@@ -377,6 +419,20 @@ class LamaranController extends Controller
     			'user_id' => $dataKaryawan->id,
     		]);
 
+            HistoryPegawai::create([
+                'pesan' => 'Diterima Karyawan',
+                'user_id' => $dataKaryawan->id,
+                'dokumen' => '',
+                'cabang' => $kantor->kantor,
+                'created_by' => optional(optional(auth()->user())->getProfile)->id,
+            ]);
+
+            $details = [
+                'nama' => $dataKaryawan->nama,
+                'pesan' => 'Selamat Anda Diterima di KSP SATRIA MULIA ARTHOMORO sebagai ' .$jabatan->jabatan. ' dan akan ditempatkan di '. $kantor->kantor,
+            ];
+
+            Mail::to($dataKaryawan->email)->send(new CustomEmail($details));
 
             // dd($dataKaryawan);
     	} catch (\Exception $e) {

@@ -65,9 +65,9 @@
 						<td><a class="btn btn-xs btn-info" href="{{ action('PemberhentianController@downloadDraf', $data->id) }}">Download</a></td>
 						<td>
                             @if(empty($data->dokumen))
-                               @if(optional(optional(auth()->user())->getProfile)->id == $data->lamaran_id)
+                            @hasanyrole('super-admin|hrd|general-manager')
 							<a class="btn btn-xs btn-warning modal-button a-glow @if(!empty($data->dokumen)) disable-links @endif" href="Javascript:void(0)"  data-target="ModalForm" data-url="{{ action('PemberhentianController@uploadForm', $data->id ) }}" >Upload Berkas</a>
-							@endif
+                            @endhasanyrole
                             @else
 							<a class="btn btn-xs btn-info" href="{{ Storage::url($data->dokumen) }}" target="_blank">Download</a>
                             @endif

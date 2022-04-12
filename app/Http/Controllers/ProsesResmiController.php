@@ -9,6 +9,7 @@ use App\Models\HistoryLog;
 use App\Models\ProsesResmi;
 use Illuminate\Http\Request;
 use App\Models\Pemberhentian;
+use App\Models\HistoryPegawai;
 use App\Models\SuratPeringatan;
 use Illuminate\Support\Facades\DB;
 
@@ -43,6 +44,7 @@ class ProsesResmiController extends Controller
 			$input['baru'] = $request->jabatan_baru;
     		$input['status_verifikasi'] = 'pending'; //pending (upload dokumen)| verifikasi (sudah upload sk) | diterima | ditolak
     		$input['modul'] = 'promosi';
+    		$input['gaji'] = $request->gaji;
     		$input['approved_at'] = now();
     		$input['no_surat'] = $noSurat + 1;
 
@@ -56,6 +58,13 @@ class ProsesResmiController extends Controller
 
     		HistoryLog::create($history);
 
+            HistoryPegawai::create([
+                'pesan' => 'Pengajuan Promosi '. optional($data->getJabatanAwal)->jabatan,
+                'user_id' => $request->lamaran_id,
+                'dokumen' => '',
+                'cabang' => '',
+                'created_by' => optional(optional(auth()->user())->getProfile)->id,
+            ]);
 
     	} catch (\Exception $e) {
     		DB::rollback();

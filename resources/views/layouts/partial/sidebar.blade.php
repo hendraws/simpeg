@@ -96,7 +96,7 @@
 					</p>
 				</a>
 			</li>
-			@role('hrd')
+			@role('hrd|super-admin')
 			<li class="nav-item">
 				<a href="{{ action('LamaranController@calonKaryawan') }}" class="nav-link">
                     <i class="nav-icon fas fa-user-check"></i><p>Verifikasi Tugas

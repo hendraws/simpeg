@@ -117,6 +117,13 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
+                                    <label for="gaji" class="col-sm-2 col-form-label">Gaji</label>
+                                    <div class="col-sm-8">
+                                        <input required type="text" class="form-control" id="gaji" value=""
+                                        name="gaji">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
                                     <label for="penerbit_sk" class="col-sm-2 col-form-label">Penerbit SK</label>
                                     <div class="col-sm-8">
                                         <input required type="text" class="form-control" id="penerbit_sk"

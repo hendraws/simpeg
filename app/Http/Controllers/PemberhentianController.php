@@ -8,10 +8,11 @@ use App\Models\HistoryLog;
 use App\Models\ProsesResmi;
 use Illuminate\Http\Request;
 use App\Models\Pemberhentian;
+use App\Models\HistoryPegawai;
 use App\Models\JenisPelanggaran;
+use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-use Barryvdh\DomPDF\Facade as PDF;
 
 class PemberhentianController extends Controller
 {
@@ -237,6 +238,16 @@ class PemberhentianController extends Controller
     		$history['modul'] = 'pemberhentian';
 
     		HistoryLog::create($history);
+
+            if ($request->status == 'sukses') {
+                HistoryPegawai::create([
+                    'pesan' => 'Pemberhentian Karyawan ',
+                    'user_id' => $data->lamaran_id,
+                    'dokumen' => '',
+                    'cabang' => optional($data->getKantorAwal)->kantor,
+                    'created_by' => optional(optional(auth()->user())->getProfile)->id,
+                ]);
+            }
 
 
     	} catch (\Exception $e) {
