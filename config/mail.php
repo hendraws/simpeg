@@ -34,58 +34,65 @@ return [
     */
 
     'mailers' => [
-        'smtp' => [
-            'transport' => 'smtp',
-            'host' => env('MAIL_HOST', 'smtp.mailgun.org'),
-            'port' => env('MAIL_PORT', 587),
+    	'smtp' => [
+    		'transport' => 'smtp',
+    		'driver' => env('MAIL_DRIVER', 'mail'),
+    		'host' => env('MAIL_HOST', 'mail.wijayatech.my.id'),
+    		'port' => env('MAIL_PORT', 465),
             // 'encryption' => env('MAIL_ENCRYPTION', 'tls'),
-            'encryption' => env('MAIL_ENCRYPTION', ''),
-            'username' => env('MAIL_USERNAME'),
-            'password' => env('MAIL_PASSWORD'),
-            'timeout' => null,
-            'auth_mode' => null,
-            'stream' => [
-            'ssl' => [
-                'allow_self_signed' => true,
-                'verify_peer' => false,
-                'verify_peer_name' => false,
-            ],
-        ],
-        ],
+    		'encryption' => env('MAIL_ENCRYPTION', 'ssl'),
+    		'username' => env('MAIL_USERNAME'),
+    		'password' => env('MAIL_PASSWORD'),
+    		'from' => [
+		        'address' => 'hendra@wijayatech.my.id',
+		        'name' => 'wijayatech.my.id',
+		    ],
+    		'timeout' => null,
+    		'auth_mode' => null,
+    		'stream' => [
+    			'ssl' => [
+    				'allow_self_signed' => true,
+    				'verify_peer' => false,
+    				'verify_peer_name' => false,
+    			],
+    			
 
-        'ses' => [
-            'transport' => 'ses',
-        ],
+    		],
+    	],
 
-        'mailgun' => [
-            'transport' => 'mailgun',
-        ],
+    	'ses' => [
+    		'transport' => 'ses',
+    	],
 
-        'postmark' => [
-            'transport' => 'postmark',
-        ],
+    	'mailgun' => [
+    		'transport' => 'mailgun',
+    	],
 
-        'sendmail' => [
-            'transport' => 'sendmail',
-            'path' => env('MAIL_SENDMAIL_PATH', '/usr/sbin/sendmail -t -i'),
-        ],
+    	'postmark' => [
+    		'transport' => 'postmark',
+    	],
 
-        'log' => [
-            'transport' => 'log',
-            'channel' => env('MAIL_LOG_CHANNEL'),
-        ],
+    	'sendmail' => [
+    		'transport' => 'sendmail',
+    		'path' => env('MAIL_SENDMAIL_PATH', '/usr/sbin/sendmail -t -i'),
+    	],
 
-        'array' => [
-            'transport' => 'array',
-        ],
+    	'log' => [
+    		'transport' => 'log',
+    		'channel' => env('MAIL_LOG_CHANNEL'),
+    	],
 
-        'failover' => [
-            'transport' => 'failover',
-            'mailers' => [
-                'smtp',
-                'log',
-            ],
-        ],
+    	'array' => [
+    		'transport' => 'array',
+    	],
+
+    	'failover' => [
+    		'transport' => 'failover',
+    		'mailers' => [
+    			'smtp',
+    			'log',
+    		],
+    	],
 
     ],
 
@@ -101,8 +108,8 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
-        'name' => env('MAIL_FROM_NAME', 'Example'),
+    	'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
+    	'name' => env('MAIL_FROM_NAME', 'Example'),
     ],
 
     /*
@@ -117,11 +124,11 @@ return [
     */
 
     'markdown' => [
-        'theme' => 'default',
+    	'theme' => 'default',
 
-        'paths' => [
-            resource_path('views/vendor/mail'),
-        ],
+    	'paths' => [
+    		resource_path('views/vendor/mail'),
+    	],
     ],
 
 
