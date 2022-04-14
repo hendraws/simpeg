@@ -69,9 +69,9 @@
     </script>
     @endsection
     @section('button-title')
-    <a class="btn btn-sm btn-primary modal-button" href="Javascript:void(0)" data-target="ModalForm"
+{{--     <a class="btn btn-sm btn-primary modal-button" href="Javascript:void(0)" data-target="ModalForm"
     data-url="{{ action('IndikatorPenilaianController@create') }}" data-toggle="tooltip" data-placement="top"
-    title="Tambah">Tambah</a>
+    title="Tambah">Tambah</a> --}}
     @endsection
     @section('content')
     <div class="">

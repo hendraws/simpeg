@@ -189,6 +189,11 @@ class UserController extends Controller
     public function destroy($id)
     {
     	$user = User::find($id); 
+
+    	$user->getProfile()->update([
+    		'user_id' => null
+    	]);
+    	
     	$user->delete();
     	$result['code'] = '200';
     	return response()->json($result);
