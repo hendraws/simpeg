@@ -395,11 +395,11 @@ class LamaranController extends Controller
 
     		$dataKaryawan = Lamaran::where('id', $id)->first();
 
-    		$user = User::create([
-    			'name' => $dataKaryawan->nama,
-    			'email' => $dataKaryawan->email,
-    			'password' => Hash::make(date('ymd', strtotime($dataKaryawan->tanggal_lahir))),
-    		]);
+    		// $user = User::create([
+    		// 	'name' => $dataKaryawan->nama,
+    		// 	'email' => $dataKaryawan->email,
+    		// 	'password' => Hash::make(date('ymd', strtotime($dataKaryawan->tanggal_lahir))),
+    		// ]);
 			// dd($user);
 
     		$dataKaryawan->update([
@@ -407,7 +407,7 @@ class LamaranController extends Controller
     			'penempatan' => $request->penempatan,
     			'jabatan' => $request->jabatan,
     			'status_lamaran' => 'diterima',
-    			'user_id' => $user->id,
+			    'status_karyawan' => 'aktif',
     			'tanggal_diterima' => date('Y-m-d'),
     		]);
 

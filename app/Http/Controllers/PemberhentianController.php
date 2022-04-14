@@ -227,6 +227,7 @@ class PemberhentianController extends Controller
 
     		$data->update([
     			'status_verifikasi' => $request->status,
+				'status_karyawan' => 'berhenti',
     			'approved_by' => auth()->user()->id,
     			'approved_at' => now(),
     		]);

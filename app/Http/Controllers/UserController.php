@@ -33,16 +33,25 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
         
-        $jabatan = Jabatan::pluck('jabatan', 'id');
-        $pendidikanAkhir = RefOption::where('modul', 'jenjang_pendidikan')->pluck('option', 'key');
-        $agama = RefOption::where('modul', 'agama')->pluck('option', 'key');
-        $statusPernikahan = RefOption::where('modul', 'status_pernikahan')->pluck('option', 'key');
+        // $jabatan = Jabatan::pluck('jabatan', 'id');
+        // $pendidikanAkhir = RefOption::where('modul', 'jenjang_pendidikan')->pluck('option', 'key');
+        // $agama = RefOption::where('modul', 'agama')->pluck('option', 'key');
+        // $statusPernikahan = RefOption::where('modul', 'status_pernikahan')->pluck('option', 'key');
+        // $penempatan = kantor::pluck('kantor','id');
+
+        if($request->ajax()){
+    		$result['code'] = '200';
+    		$result['pegawai'] = Lamaran::find($request->pegawai_id);
+    		return response()->json($result);
+    	}
+
+    	$data = Lamaran::where('status_lamaran','diterima')->whereNotNull('nip')->whereNull('user_id')->get();
         $roles = Role::pluck('name');
-        $penempatan = kantor::pluck('kantor','id');
-        return view('admin.user.create',compact('jabatan', 'pendidikanAkhir', 'agama', 'statusPernikahan', 'roles','penempatan'));
+
+        return view('admin.user.create',compact('data','roles'));
     }
 
     /**
@@ -53,58 +62,27 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-
+    	// dd($request->all());
 
         DB::beginTransaction();
     	try {
     		$lamar = $this->validate($request, [
-    			'jabatan' => 'required',
-    			'nik' => 'required',
-    			'nama' => 'required',
-    			'tempat' => 'required',
-    			'tanggal_lahir' => 'required',
-    			'alamat' => 'required',
-    			'pendidikan_terakhir' => 'required',
-    			'agama' => 'required',
-    			'status' => 'required',
-    			'no_hp' => 'required',
-    			'no_hp_darurat' => 'required',
     			'email' => 'required',
-    			'foto' => 'max:550',
     			'password' => 'required|confirmed',
-    			'penempatan' => 'required',
-
+    			'role' => 'required',
     		], [   'required' => 'inputan :attribute wajib diisi.' ]);
-
-
-    		$no = 1;
-    		do {
-    			$nip = 'SMART/'.date('ymd'). $no++;
-    		} while (Lamaran::where('nip', $nip)->exists());
-
-    		if ($request->has('foto') && !empty($request->foto)) {
-    			$extension = $request->file('foto')->extension();
-    			$imgName = 'lamaran/' . date('dmh') . '-' .rand(1,10).'-'. Str::slug($request->nama) . '7.' . $extension;
-    			$path = Storage::putFileAs('public', $request->file('foto'), $imgName);
-    			$lamar['foto'] = $path;
-    		}
-    	
-
-    		$lamar['status_karyawan'] = 'diterima';
-    		$lamar['status_dokumen'] = 'belum-diverifikasi';
-    		$lamar['status_lamaran'] = 'diterima';
     		
+    		$dataProfile = Lamaran::find($request->lamaran_id);
+
     		$user = User::create([
     			'name' => $request->nama,
     			'email' => $request->email,
     			'password' => Hash::make($request->password),
     		]);
 
-    		$lamar['user_id'] = $user->id;
-    		$lamar['tanggal_diterima'] = date('Y-m-d');
-    		$lamar['nip'] = $nip;
-    		
-    		$lamar = Lamaran::create($lamar);
+    		$dataProfile->update([
+    			'user_id' => $user->id
+    		]);
     		
     		$user->assignRole($request->role);
 
@@ -140,9 +118,21 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request, $id)
     {
-        //
+    
+        if($request->ajax()){
+    		$result['code'] = '200';
+    		$result['pegawai'] = Lamaran::find($request->pegawai_id);
+    		return response()->json($result);
+    	}
+
+        $data = User::find($id);
+    	$pegawai = Lamaran::where('status_lamaran','diterima')->whereNotNull('nip')->whereNull('user_id')->orWhere('id', optional($data->getProfile)->id)->get();
+    	// dd($pegawai, $data->getProfile);
+        $roles = Role::pluck('name');
+        return view('admin.user.edit',compact('pegawai','roles', 'data'));
+
     }
 
     /**
@@ -154,7 +144,40 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+
+
+        DB::beginTransaction();
+    	try {
+    		$lamar = $this->validate($request, [
+    			'email' => 'required',
+    			'password' => 'nullable|confirmed',
+    			'role' => 'required',
+    		], [   'required' => 'inputan :attribute wajib diisi.' ]);
+    		
+
+    		$user = User::find($id);
+
+    		if(!empty($request->password)){
+	    		$input['password'] = Hash::make($request->password);
+    		}
+    		$input['email'] = $request->email;
+
+    		$user->update($input);
+    		$user->syncRoles([$request->role]);
+
+
+    	} catch (\ValidationException $e) {
+    		DB::rollback();
+    		dd($e->getErrors());
+    		// dd($e->validator->messages(), $e);
+    		// toastr()->error($e->getMessage()->all(), 'Error');
+
+    		return back();
+    	}
+        // dd($request);
+    	DB::commit();
+    	toastr()->success('Data telah diubah', 'Berhasil');
+    	return redirect(action('UserController@index'));
     }
 
     /**
@@ -165,6 +188,9 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+    	$user = User::find($id); 
+    	$user->delete();
+    	$result['code'] = '200';
+    	return response()->json($result);
     }
 }

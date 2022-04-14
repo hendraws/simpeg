@@ -102,9 +102,9 @@
     									<td>{{ $loop->index + 1 }}</td>
     									<td>{{ $value->nip }}</td>
     									<td>{{ $value->nama }}</td>
-    									<td>{{ $value->getJabatan->jabatan }}</td>
-    									<td>{{ $value->getKantor->kantor }}</td>
-    									<td>{{ $value->getUser->is_active }}</td>
+    									<td>{{ optional($value->getJabatan)->jabatan }}</td>
+    									<td>{{ optional($value->getKantor)->kantor }}</td>
+    									<td>{{ $value->status_karyawan  }}</td>
     									<td>
     										<a class="btn btn-sm btn-primary" href="{{ action('PegawaiController@show', $value->id) }}">Detail</a>
     										<button class="btn btn-sm btn-danger hapus"

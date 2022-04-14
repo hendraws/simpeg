@@ -88,7 +88,8 @@
 										<th scope="col">No</th>
 										<th scope="col">Nama</th>
 										<th scope="col">Email</th>
-										<th scope="col">Aktif</th>
+										<th scope="col">Role/Jabatan</th>
+										<th scope="col">Action</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -97,7 +98,11 @@
 										<td>{{ $loop->index + 1 }}</td>
 										<td>{{ $value->name }}</td>
 										<td>{{ $value->email }}</td>
-										<td>{{ $value->is_active }}</td>
+										<td>{{ $value->getRoleNames()->first() }}</td>
+										<td>
+											<a href="{{ action('UserController@edit', $value->id) }}" class="btn btn-xs btn-warning">Edit</a>
+											<button type="button" class="btn btn-xs btn-danger hapus" data-url="{{ action('UserController@destroy', $value->id) }}">Hapus</button>
+										</td>
 									</tr>
 									@endforeach
 								{{-- 	@foreach($data as $value)
