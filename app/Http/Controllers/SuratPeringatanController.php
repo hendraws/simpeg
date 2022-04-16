@@ -126,9 +126,13 @@ class SuratPeringatanController extends Controller
      * @param  \App\Models\SuratPeringatan  $suratPeringatan
      * @return \Illuminate\Http\Response
      */
-    public function edit(SuratPeringatan $suratPeringatan)
+    public function edit($id)
     {
-        //
+    	$data = ProsesResmi::find($id);
+		$jenisPelanggaran = JenisPelanggaran::pluck('jenis_pelanggaran', 'id');
+        $persus = Persus::pluck('judul', 'id');
+        $sp = ['sp1', 'sp2', 'sp3'];
+    	return view('admin.proses_resmi.surat_peringatan.edit', compact('data','jenisPelanggaran','persus','sp'));
     }
 
     /**
@@ -138,9 +142,74 @@ class SuratPeringatanController extends Controller
      * @param  \App\Models\SuratPeringatan  $suratPeringatan
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, SuratPeringatan $suratPeringatan)
+    public function update(Request $request, $id)
     {
-        //
+        // dd($request->all());
+
+        DB::beginTransaction();
+    	try {
+    		
+    		
+    		
+    		$input['tanggal_akhir'] = $request->tanggal_akhir;
+    		$input['sp'] = $request->sp;
+    		$input['jenis_pelanggaran'] = $request->jenis_pelanggaran;
+    		$input['persus'] = $request->persus;
+
+    		$data = ProsesResmi::where('id', $id)->first();
+    		
+    		// $kantor_baru = kantor::find($request->kantor_baru);
+
+    		$pesan = 'Ubah Pengajuan Surat Peringatan ';
+    		if($data->status_verifikasi == 'sukses'){
+    			$pegawai = Lamaran::find($data->lamaran_id);
+    			if($request->status == $data->status_verifikasi){
+    				// $pegawai->update([
+    				// 	'penempatan' => $request->kantor_baru
+    				// ]);
+
+    				$input['status_verifikasi'] = $request->status;
+    			}else{
+    				// $pegawai->update([
+    				// 	'penempatan' => $data->lama
+    				// ]);
+
+    				$input['status_verifikasi'] = $request->status;
+    				$pesan = 'Ubah Pengajuan Surat Peringatan & status menjadi '. $request->status;
+    			}
+    		}
+
+    		$data->update($input);
+
+    		 $history['pesan'] = 'Edit Surat Peringatan Karyawan, Karyawan ' . optional($data->getPegawai)->nama . ' mendapat  ' . $request->sp .  ' oleh ' . auth()->user()->getProfile->nama;
+
+    		$history['user_id'] = $data->lamaran_id;
+    		$history['modul_id'] = $data->id;
+    		$history['modul'] = 'surat_peringatan';
+
+    		HistoryLog::create($history);
+
+    		HistoryPegawai::create([
+    			'pesan' => $pesan,
+    			'user_id' => $data->lamaran_id,
+    			'dokumen' => '',
+    			'cabang' => '',
+    			'created_by' => optional(optional(auth()->user())->getProfile)->id,
+    		]);
+
+    	} catch (\Exception $e) {
+    		DB::rollback();
+    		toastr()->success($e->getMessage(), 'Error');
+    		return back();
+    	}catch (\Throwable $e) {
+    		DB::rollback();
+    		toastr()->success($e->getMessage(), 'Error');
+    		throw $e;
+    	}
+
+    	DB::commit();
+    	toastr()->success('Data Surat Peringatan telah diubah', 'Berhasil');
+    	return redirect(action('ProsesResmiController@index'));
     }
 
     /**

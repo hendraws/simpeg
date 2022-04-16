@@ -132,9 +132,13 @@ class MutasiController extends Controller
      * @param  \App\Models\Mutasi  $mutasi
      * @return \Illuminate\Http\Response
      */
-    public function edit(Mutasi $mutasi)
+    public function edit($id)
     {
-        //
+        
+    	$data = ProsesResmi::find($id);
+    	$dataKantor = kantor::get();
+        // dd($data);
+    	return view('admin.proses_resmi.mutasi.edit', compact('data','dataKantor'));
     }
 
     /**
@@ -144,9 +148,69 @@ class MutasiController extends Controller
      * @param  \App\Models\Mutasi  $mutasi
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Mutasi $mutasi)
+    public function update(Request $request, $id)
     {
-        //
+        
+
+    	DB::beginTransaction();
+    	try {
+    		
+    		$input['baru'] = $request->kantor_baru;
+
+    		$data = ProsesResmi::where('id', $id)->first();
+    		
+    		$kantor_baru = kantor::find($request->kantor_baru);
+
+    		$pesan = 'Ubah Pengajuan Mutasi ';
+    		if($data->status_verifikasi == 'sukses'){
+				$pegawai = Lamaran::find($data->lamaran_id);
+    			if($request->status == $data->status_verifikasi){
+    				$pegawai->update([
+    					'penempatan' => $request->kantor_baru
+    				]);
+
+    				$input['status_verifikasi'] = $request->status;
+    			}else{
+    				$pegawai->update([
+    					'penempatan' => $data->lama
+    				]);
+
+    				$input['status_verifikasi'] = $request->status;
+    				$pesan = 'Ubah Pengajuan Mutasi & status menjadi '. $request->status;
+    			}
+    		}
+
+    		$data->update($input);
+
+			$history['pesan'] = 'Edit Pengajuan Mutasi Karyawan, Karyawan '. optional($data->getPegawai)->nama .' dipindah tugaskan dari '.optional($data->getKantorAwal)->kantor . ' ke '. optional($data->getKantorBaru)->kantor. ' oleh '. auth()->user()->getProfile->nama ;
+
+    		$history['user_id'] = $data->lamaran_id;
+    		$history['modul_id'] = $data->id;
+    		$history['modul'] = 'mutasi';
+
+    		HistoryLog::create($history);
+
+    		HistoryPegawai::create([
+    			'pesan' => $pesan,
+    			'user_id' => $data->lamaran_id,
+    			'dokumen' => '',
+    			'cabang' => '',
+    			'created_by' => optional(optional(auth()->user())->getProfile)->id,
+    		]);
+
+    	} catch (\Exception $e) {
+    		DB::rollback();
+    		toastr()->success($e->getMessage(), 'Error');
+    		return back();
+    	}catch (\Throwable $e) {
+    		DB::rollback();
+    		toastr()->success($e->getMessage(), 'Error');
+    		throw $e;
+    	}
+
+    	DB::commit();
+    	toastr()->success('Data Mutasi telah diubah', 'Berhasil');
+    	return redirect(action('ProsesResmiController@index'));
     }
 
     /**

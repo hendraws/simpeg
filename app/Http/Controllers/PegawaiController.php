@@ -55,7 +55,7 @@ class PegawaiController extends Controller
     {
         DB::beginTransaction();
         try {
-
+        	// dd($request);
             $lamar = $this->validate($request, [
                 'nik' => 'required',
                 'nama' => 'required',
@@ -67,7 +67,7 @@ class PegawaiController extends Controller
                 'status' => 'required',
                 'no_hp' => 'required',
                 'no_hp_darurat' => 'required',
-                'tanggal_masuk' => 'required',
+                'tanggal_diterima' => 'required',
                 'jabatan' => 'required',
                 'penempatan' => 'required',
                 'email' => 'required',

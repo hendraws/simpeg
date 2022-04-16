@@ -1,7 +1,7 @@
 <div class="card">
 	@hasanyrole('super-admin|hrd|general-manager|koordinator-dan-spv')
 	<div class="card-header">
-		<a class="btn btn-sm btn-primary" href="{{ action('PemberhentianController@create') }}"  data-toggle="tooltip" data-placement="top" title="Tambah" >Tambah Surat Peringatan</a>
+		<a class="btn btn-sm btn-primary" href="{{ action('PemberhentianController@create') }}"  data-toggle="tooltip" data-placement="top" title="Tambah" >Tambah Pemberhentian</a>
 	</div>
 	@endhasanyrole
 	<div class="card-body">
@@ -40,7 +40,7 @@
 							@if($data->status_verifikasi =='pending')
 								<button type="button"  class="btn btn-xs btn-warning ">Belum Upload Berkas</button>
 							@elseif($data->status_verifikasi =='sukses')
-								<button type="button"  class="btn btn-xs btn-success ">SP disetujui</button>
+								<button type="button"  class="btn btn-xs btn-success ">Disetujui</button>
 							@elseif($data->status_verifikasi =='verifikasi')
 								<button type="button"  class="btn btn-xs btn-success ">Proses Verifikasi</button>
 							@else
@@ -53,12 +53,11 @@
                               {{-- @if(auth()->user()->id == $data->created_by) --}}
 							@if($data->status_verifikasi =='verifikasi')
                             <a href="Javascript:void(0)" class="btn btn-xs btn-primary  @if(empty($data->dokumen)) disable-links @endif modal-button"  data-target="ModalForm" data-url="{{ action('PemberhentianController@verifikasiForm', $data->id ) }}">Verifikasi</a>
-							@else
-							{{-- <a href="Javascript:void(0)" class="btn btn-xs btn-info">Terverifikasi</a> --}}
-							<a href="Javascript:void(0)" class="btn btn-xs btn-danger modal-button">Ubah</a>
+							
 							@endif
 							{{-- @endif --}}
                             @endif
+							<a href="{{ action('PemberhentianController@edit', $data->id) }}" class="btn btn-xs btn-warning">Ubah</a>
 
 						</td>
 						@endhasanyrole

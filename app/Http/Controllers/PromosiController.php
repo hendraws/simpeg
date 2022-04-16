@@ -101,9 +101,13 @@ class PromosiController extends Controller
      * @param  \App\Models\Promosi  $promosi
      * @return \Illuminate\Http\Response
      */
-    public function edit(Promosi $promosi)
+    public function edit($id)
     {
-        //
+
+    	$data = ProsesResmi::find($id);
+    	$dataJabatan = Jabatan::get();
+        // dd($data);
+    	return view('admin.proses_resmi.promosi.edit', compact('data','dataJabatan'));
     }
 
     /**
@@ -113,9 +117,69 @@ class PromosiController extends Controller
      * @param  \App\Models\Promosi  $promosi
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Promosi $promosi)
+    public function update(Request $request, $id)
     {
-        //
+   
+
+    	DB::beginTransaction();
+    	try {
+    		$input['gaji'] = $request->gaji;
+    		$input['baru'] = $request->jabatan_baru;
+
+    		$data = ProsesResmi::where('id', $id)->first();
+    		
+    		$jabatan_baru = Jabatan::find($request->jabatan_baru);
+
+    		$pesan = 'Ubah Pengajuan Promosi ';
+    		if($data->status_verifikasi == 'sukses'){
+				$pegawai = Lamaran::find($data->lamaran_id);
+    			if($request->status == $data->status_verifikasi){
+    				$pegawai->update([
+    					'jabatan' => $request->jabatan_baru
+    				]);
+
+    				$input['status_verifikasi'] = $request->status;
+    			}else{
+    				$pegawai->update([
+    					'jabatan' => $data->lama
+    				]);
+
+    				$input['status_verifikasi'] = $request->status;
+    				$pesan = 'Ubah Pengajuan Promosi & status menjadi '. $request->status;
+    			}
+    		}
+
+    		$data->update($input);
+
+    		$history['pesan'] = 'Edit Pengajuan Promosi Karyawan, Karyawan '. optional($data->getPegawai)->nama .' mendapat promosi dari jabatan '.optional($data->getJabatanAwal)->jabatan . ' menjadi jabatan '. $jabatan_baru->jabatan. ' oleh '. auth()->user()->getProfile->nama ;
+
+    		$history['user_id'] = $data->lamaran_id;
+    		$history['modul_id'] = $data->id;
+    		$history['modul'] = 'promosi';
+
+    		HistoryLog::create($history);
+
+    		HistoryPegawai::create([
+    			'pesan' => $pesan,
+    			'user_id' => $data->lamaran_id,
+    			'dokumen' => '',
+    			'cabang' => '',
+    			'created_by' => optional(optional(auth()->user())->getProfile)->id,
+    		]);
+
+    	} catch (\Exception $e) {
+    		DB::rollback();
+    		toastr()->success($e->getMessage(), 'Error');
+    		return back();
+    	}catch (\Throwable $e) {
+    		DB::rollback();
+    		toastr()->success($e->getMessage(), 'Error');
+    		throw $e;
+    	}
+
+    	DB::commit();
+    	toastr()->success('Data Promosi telah diubah', 'Berhasil');
+    	return redirect(action('ProsesResmiController@index'));
     }
 
     /**
@@ -216,20 +280,20 @@ class PromosiController extends Controller
 
     		HistoryLog::create($history);
 
-            HistoryPegawai::create([
-                'pesan' => 'Pengajuan Promosi '. optional($promosi->getJabatanBaru)->jabatan . ' '.ucfirst($request->status),
-                'user_id' => $promosi->lamaran_id,
-                'dokumen' => $promosi->dokumen,
-                'cabang' => '',
-                'created_by' => optional(optional(auth()->user())->getProfile)->id,
-            ]);
+    		HistoryPegawai::create([
+    			'pesan' => 'Pengajuan Promosi '. optional($promosi->getJabatanBaru)->jabatan . ' '.ucfirst($request->status),
+    			'user_id' => $promosi->lamaran_id,
+    			'dokumen' => $promosi->dokumen,
+    			'cabang' => '',
+    			'created_by' => optional(optional(auth()->user())->getProfile)->id,
+    		]);
 
-            if($request->status == 'sukses'){
-            	$pegawai = Lamaran::find($promosi->lamaran_id);
-            	$pegawai->update([
-            		'jabatan' => $promosi->baru
-            	]);
-            }
+    		if($request->status == 'sukses'){
+    			$pegawai = Lamaran::find($promosi->lamaran_id);
+    			$pegawai->update([
+    				'jabatan' => $promosi->baru
+    			]);
+    		}
 
     	} catch (\Exception $e) {
     		DB::rollback();

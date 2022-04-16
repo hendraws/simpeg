@@ -56,7 +56,7 @@ class PemberhentianController extends Controller
     		'lamaran_id' => 'required',
     		'jenis_pelanggaran' => 'required',
     		'persus' => 'required',
-    		'tanggal_phk' => 'required|date_format:Y/m/d',
+    		'tanggal_phk' => 'required',
     	]);
 
     	DB::beginTransaction();
@@ -84,7 +84,7 @@ class PemberhentianController extends Controller
 
     		$data = ProsesResmi::create($input);
 
-    		$history['pesan'] = 'Pemberhentian Karyawan, Karyawan '. optional($data->getPegawai)->nama .' akan di berhentikan ';
+    		$history['pesan'] = 'Pemberhentian (PHK) Karyawan, Karyawan '. optional($data->getPegawai)->nama .' akan di berhentikan ';
 
     		$history['user_id'] = $request->lamaran_id;
     		$history['modul_id'] = $data->id;
@@ -124,9 +124,12 @@ class PemberhentianController extends Controller
      * @param  \App\Models\Pemberhentian  $pemberhentian
      * @return \Illuminate\Http\Response
      */
-    public function edit(Pemberhentian $pemberhentian)
+    public function edit($id)
     {
-        //
+        $data = ProsesResmi::find($id);
+		$jenisPelanggaran = JenisPelanggaran::pluck('jenis_pelanggaran', 'id');
+    	$persus = Persus::pluck('judul', 'id');
+    	return view('admin.proses_resmi.pemberhentian.edit', compact('data','jenisPelanggaran','persus'));
     }
 
     /**
@@ -136,9 +139,71 @@ class PemberhentianController extends Controller
      * @param  \App\Models\Pemberhentian  $pemberhentian
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Pemberhentian $pemberhentian)
+    public function update(Request $request, $id)
     {
-        //
+       	  DB::beginTransaction();
+    	try {
+    		
+    		
+    		
+    		$input['tanggal_akhir'] = $request->tanggal_phk;
+    		$input['jenis_pelanggaran'] = $request->jenis_pelanggaran;
+    		$input['persus'] = $request->persus;
+
+    		$data = ProsesResmi::where('id', $id)->first();
+    		
+    		// $kantor_baru = kantor::find($request->kantor_baru);
+
+    		$pesan = 'Ubah Pengajuan Pemberhentian (PHK) ';
+    		if($data->status_verifikasi == 'sukses'){
+    			$pegawai = Lamaran::find($data->lamaran_id);
+    			if($request->status == $data->status_verifikasi){
+    				// $pegawai->update([
+    				// 	'penempatan' => $request->kantor_baru
+    				// ]);
+
+    				$input['status_verifikasi'] = $request->status;
+    			}else{
+    				// $pegawai->update([
+    				// 	'penempatan' => $data->lama
+    				// ]);
+
+    				$input['status_verifikasi'] = $request->status;
+    				$pesan = 'Ubah Pengajuan Surat Pemberhentian (PHK) & status menjadi '. $request->status;
+    			}
+    		}
+
+    		$data->update($input);
+
+    		 $history['pesan'] = 'Edit Surat Pemberhentian (PHK) Karyawan, Karyawan ' . optional($data->getPegawai)->nama . ' akan diberhentikan oleh ' . auth()->user()->getProfile->nama;
+
+    		$history['user_id'] = $data->lamaran_id;
+    		$history['modul_id'] = $data->id;
+    		$history['modul'] = 'surat_peringatan';
+
+    		HistoryLog::create($history);
+
+    		HistoryPegawai::create([
+    			'pesan' => $pesan,
+    			'user_id' => $data->lamaran_id,
+    			'dokumen' => '',
+    			'cabang' => '',
+    			'created_by' => optional(optional(auth()->user())->getProfile)->id,
+    		]);
+
+    	} catch (\Exception $e) {
+    		DB::rollback();
+    		toastr()->success($e->getMessage(), 'Error');
+    		return back();
+    	}catch (\Throwable $e) {
+    		DB::rollback();
+    		toastr()->success($e->getMessage(), 'Error');
+    		throw $e;
+    	}
+
+    	DB::commit();
+    	toastr()->success('Data Surat  Pemberhentian (PHK) telah diubah', 'Berhasil');
+    	return redirect(action('ProsesResmiController@index'));
     }
 
     /**
@@ -227,11 +292,17 @@ class PemberhentianController extends Controller
 
     		$data->update([
     			'status_verifikasi' => $request->status,
-				'status_karyawan' => 'berhenti',
     			'approved_by' => auth()->user()->id,
     			'approved_at' => now(),
     		]);
 
+    		if($request->status == 'sukses'){
+	    		$pegawai = Lamaran::where('id', $data->lamaran_id)->first();
+	    		$pegawai->update([
+	    			'status_karyawan' => 'berhenti mulai dari '. date('d M Y ', strtotime($data->tanggal_akhir)),
+	    		]);
+
+    		}
             $history['pesan'] = 'Pemberhentian Kayawan '.ucfirst($request->status).', Karyawan '. optional($data->getPegawai)->nama .' '.$request->status.' Diberhentikan oleh '. auth()->user()->getProfile->nama ;
 
     		$history['user_id'] = $data->lamaran_id;

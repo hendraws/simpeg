@@ -1,6 +1,6 @@
 @extends('layouts.app')
-@section('title', 'Surat Peringatan')
-@section('content-title', 'Surat Peringatan')
+@section('title', 'Pemberhentian')
+@section('content-title', 'Pemberhentian')
 @section('css')
 <link rel="stylesheet" href="{{ asset('plugins/select2/css/select2.min.css')}}">
 <link rel="stylesheet" href="{{ asset('plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css')}}">
@@ -28,7 +28,7 @@
 
         $('.tanggal').datetimepicker({
             timepicker: false,
-            format: 'Y/m/d',
+            format: 'Y-m-d',
         });
 
 		$('#pegawai').on("select2:select", function(e) {
@@ -150,7 +150,7 @@
     								</div>
     							</div>
     							<div class="form-group row">
-    								<label for="tanggal_phk" class="col-sm-2 col-form-label">PHK</label>
+    								<label for="tanggal_phk" class="col-sm-2 col-form-label">Tanggal PHK</label>
     								<div class="col-sm-8">
     									<input required type="text" class="form-control tanggal" id="tanggal_phk" value="" autocomplete="off" name="tanggal_phk">
     								</div>

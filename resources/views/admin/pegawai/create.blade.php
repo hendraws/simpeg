@@ -22,7 +22,7 @@
 
             $('.tanggal').datetimepicker({
                 timepicker: false,
-                format: 'Y/m/d',
+                format: 'Y-m-d',
             });
 
         });
@@ -119,7 +119,7 @@
                             </div>
                             <label for="tanggal_masuk" class="col-sm-2 col-form-label">Tanggal Masuk</label>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control tanggal" id="tanggal_masuk" name="tanggal_masuk"
+                                <input type="text" class="form-control tanggal" id="tanggal_diterima" name="tanggal_diterima"
                                     autocomplete="off">
                             </div>
                         </div>
@@ -144,7 +144,7 @@
                         <div class="form-group row">
                             <label for="email" class="col-sm-2 col-form-label">Email</label>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control" id="email" name="email" autocomplete="off">
+                                <input type="email" class="form-control" id="email" name="email" autocomplete="off">
                             </div>
                         </div>
                         <hr>

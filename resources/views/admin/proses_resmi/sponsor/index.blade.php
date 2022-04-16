@@ -63,12 +63,11 @@
                                                 class="btn btn-xs btn-primary @if (empty($data->dokumen)) disable-links @endif modal-button"
                                                 data-target="ModalForm"
                                                 data-url="{{ action('SponsorController@verifikasiForm', $data->id) }}">Verifikasi</a>
-                                        @else
-                                            {{-- <a href="Javascript:void(0)" class="btn btn-xs btn-info">Terverifikasi</a> --}}
-                                            <a href="Javascript:void(0)" class="btn btn-xs btn-danger modal-button">Ubah</a>
+                                        
                                         @endif
                                         {{-- @endif --}}
                                     @endif
+                                            <a href="{{ action('SponsorController@edit', $data->id) }}" class="btn btn-xs btn-warning">Ubah</a>
                                 </td>
                             @endhasanyrole
                             <td><a class="btn btn-xs btn-info"

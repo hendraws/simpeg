@@ -10,7 +10,8 @@
 				<table>
 					<tr>
 						<td style="width:50%">Status</td>
-						<td>: {{ optional($data->getUser)->is_active == 'Y' ? 'Aktif' : 'Tidak Aktif'  }}</td>
+						{{-- <td>: {{ optional($data->getUser)->is_active == 'Y' ? 'Aktif' : 'Tidak Aktif'  }}</td> --}}
+						<td>: {{ $data->status_karyawan  }}</td>
 					</tr>  
 					<tr>
 						<td style="width:50%">NIP</td>

@@ -28,7 +28,7 @@
 
         $('.tanggal').datetimepicker({
             timepicker: false,
-            format: 'Y/m/d',
+            format: 'Y-m-d',
         });
 
 		$('#pegawai').on("select2:select", function(e) {
