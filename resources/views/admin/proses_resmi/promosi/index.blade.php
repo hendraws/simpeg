@@ -50,12 +50,11 @@
                               {{-- @if(auth()->user()->id == $data->created_by) --}}
 							@if($data->status_verifikasi =='verifikasi')
 							<a href="Javascript:void(0)" class="btn btn-xs btn-primary a-glow @if(empty($data->dokumen)) disable-links @endif modal-button"  data-target="ModalForm" data-url="{{ action('PromosiController@verifikasiForm', $data->id ) }}">Verifikasi Berkas</a>
-							@else
-							{{-- <a href="Javascript:void(0)" class="btn btn-xs btn-info">Terverifikasi</a> --}}
-							<a href="Javascript:void(0)" class="btn btn-xs btn-danger modal-button">Ubah</a>
 							@endif
 							{{-- @endif --}}
                             @endif
+
+							<a href="{{ action('PromosiController@edit', $data->id) }}" class="btn btn-xs btn-warning">Ubah</a>
 						</td>
 						@endhasanyrole
 						<td><a class="btn btn-xs btn-info" href="{{ action('PromosiController@downloadDraf', $data->id) }}">Download</a></td>

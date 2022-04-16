@@ -39,7 +39,7 @@ return [
     		'driver' => env('MAIL_DRIVER', 'mail'),
     		'host' => env('MAIL_HOST', 'mail.wijayatech.my.id'),
     		'port' => env('MAIL_PORT', 465),
-            // 'encryption' => env('MAIL_ENCRYPTION', 'tls'),
+            // 'encryption' => env('MAIL_ENCRYPTION'php, 'tls'),
     		'encryption' => env('MAIL_ENCRYPTION', 'ssl'),
     		'username' => env('MAIL_USERNAME'),
     		'password' => env('MAIL_PASSWORD'),
@@ -55,7 +55,7 @@ return [
     				'verify_peer' => false,
     				'verify_peer_name' => false,
     			],
-    			
+
 
     		],
     	],
