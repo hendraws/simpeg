@@ -218,9 +218,26 @@ class SuratPeringatanController extends Controller
      * @param  \App\Models\SuratPeringatan  $suratPeringatan
      * @return \Illuminate\Http\Response
      */
-    public function destroy(SuratPeringatan $suratPeringatan)
+    public function destroy($id)
     {
-        //
+        $data = ProsesResmi::where('id',$id)->first();
+
+    	HistoryLog::create([
+    			'pesan' => 'Surat Peringatan '. optional($data->getPegawai)->nama.' dihapus',
+    			'modul' => 'App\Models\SuratPeringatan',
+    			'user_id' => $data->id,
+    		]);
+
+    	HistoryPegawai::create([
+    			'pesan' => 'Surat Peringatan '. optional($data->getPegawai)->nama.' dihapus',
+    			'user_id' => $data->lamaran_id,
+    			'dokumen' => '',
+    			'cabang' => '',
+    			'created_by' => optional(optional(auth()->user())->getProfile)->id,
+    		]);
+    	$data->delete();
+    	$result['code'] = '200';
+    	return response()->json($result);
     }
 
     public function uploadForm($id)

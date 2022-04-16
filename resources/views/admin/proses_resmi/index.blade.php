@@ -55,9 +55,7 @@
 
         $(document).on('click', '.hapus', function(e) {
             e.preventDefault();
-            var id = $(this).data('id');
-            var url = '{{ action('IndikatorPenilaianController@destroy', ':id') }}';
-            url = url.replace(':id', id);
+            var url = $(this).data('url');
 
             Swal.fire({
                 title: 'Apakah Anda Yakin ?',

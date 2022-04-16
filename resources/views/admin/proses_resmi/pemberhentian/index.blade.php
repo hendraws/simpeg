@@ -34,7 +34,7 @@
 						<td>{{ date('d-m-Y', strtotime($data->tanggal_akhir)) }}</td>
 						<td>{{ optional($data->getJenisPelanggaran)->jenis_pelanggaran }}</td>
 						<td>
-							<a href="">Hapus</a>
+							           <button type="button" class="btn btn-xs btn-danger hapus" data-url="{{ action('PemberhentianController@destroy', $data->id) }}">Hapus</button>
 						</td>
 						<td>
 							@if($data->status_verifikasi =='pending')

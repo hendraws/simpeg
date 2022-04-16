@@ -212,9 +212,32 @@ class PemberhentianController extends Controller
      * @param  \App\Models\Pemberhentian  $pemberhentian
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Pemberhentian $pemberhentian)
+    public function destroy($id)
     {
-        //
+        $data = ProsesResmi::where('id',$id)->first();
+
+    	HistoryLog::create([
+    			'pesan' => 'Pemberhentian (PHK) '. optional($data->getPegawai)->nama.' dihapus',
+    			'modul' => 'App\Models\Pemberhentian',
+    			'user_id' => $data->id,
+    		]);
+
+    	HistoryPegawai::create([
+    			'pesan' => 'Pemberhentian (PHK) '. optional($data->getPegawai)->nama.' dihapus',
+    			'user_id' => $data->lamaran_id,
+    			'dokumen' => '',
+    			'cabang' => '',
+    			'created_by' => optional(optional(auth()->user())->getProfile)->id,
+    		]);
+
+    	$pegawai = Lamaran::find($data->lamaran_id);
+    	$pegawai->update([
+    		'status_karyawan' => 'aktif'
+    	]);
+
+    	$data->delete();
+    	$result['code'] = '200';
+    	return response()->json($result);
     }
 
     public function uploadForm($id)

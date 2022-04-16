@@ -48,7 +48,7 @@
                                 @endif
                             </td>
                             <td>
-                                <a href="">Hapus</a>
+                                <button type="button" class="btn btn-xs btn-danger hapus" data-url="{{ action('SuratPeringatanController@destroy', $data->id) }}">Hapus</button>
                             </td>
                             <td>
                                 @if ($data->status_verifikasi == 'pending' || $data->status_verifikasi == 'verifikasi')
