@@ -63,15 +63,20 @@
 					</tr>
 					<tr>
 						<td style="width:50%">Masa Kerja</td>
-						<td>: {{ $data->masa_kerja }}</td>
+
+						<td>: {{ $masaKerja }}</td>
 					</tr>
 					<tr>
 						<td style="width:50%">SP Aktif</td>
-						<td>: --</td>
+						<td>: {{ $sp->sp ?? '-' }}</td>
 					</tr>
 					<tr>
 						<td style="width:50%">Jenis Pelanggaran</td>
-						<td>: --</td>
+						@if(!empty($sp))
+						<td>: {{ optional($sp->getJenisPelanggaran)->jenis_pelanggaran ?? '-'   }}</td>
+						@else
+						<td>-</td>
+						@endif
 					</tr>
 				</table>
 			</div>

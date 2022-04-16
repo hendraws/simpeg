@@ -217,12 +217,19 @@ class PromosiController extends Controller
     		HistoryLog::create($history);
 
             HistoryPegawai::create([
-                'pesan' => 'Pengajuan Promosi '. optional($promosi->getJabatanAwal)->jabatan . ' '.ucfirst($request->status),
+                'pesan' => 'Pengajuan Promosi '. optional($promosi->getJabatanBaru)->jabatan . ' '.ucfirst($request->status),
                 'user_id' => $promosi->lamaran_id,
                 'dokumen' => $promosi->dokumen,
                 'cabang' => '',
                 'created_by' => optional(optional(auth()->user())->getProfile)->id,
             ]);
+
+            if($request->status == 'sukses'){
+            	$pegawai = Lamaran::find($promosi->lamaran_id);
+            	$pegawai->update([
+            		'jabatan' => $promosi->baru
+            	]);
+            }
 
     	} catch (\Exception $e) {
     		DB::rollback();

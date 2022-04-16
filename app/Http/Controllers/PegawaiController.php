@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\PromosiController;
+use App\Models\HistoryLog;
 use App\Models\HistoryPegawai;
 use App\Models\Lamaran;
+use App\Models\ProsesResmi;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class PegawaiController extends Controller
@@ -51,7 +55,16 @@ class PegawaiController extends Controller
     {
         $data = Lamaran::find($id);
         $history = HistoryPegawai::where('user_id', $id)->get();
-        return view('admin.pegawai.detail', compact('data', 'history'));
+        // $history = HistoryLog::where('user_id', $id)->get();
+        $sp = 	ProsesResmi::where('modul', 'surat-peringatan')
+        		->where('status_verifikasi','sukses')
+        		->where('tanggal_akhir', '>=' , date('Y-m-d'))
+        		->latest()
+        		->first();
+        
+        $masaKerja =  Carbon::parse($data->tanggal_diterima)->diff(Carbon::now())->format('%y Tahun, %m Bulan, %d Hari');
+       
+        return view('admin.pegawai.detail', compact('data', 'history','masaKerja','sp'));
     }
 
     /**

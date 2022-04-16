@@ -255,6 +255,13 @@ class MutasiController extends Controller
                 'created_by' => optional(optional(auth()->user())->getProfile)->id,
             ]);
 
+              if($request->status == 'sukses'){
+            	$pegawai = Lamaran::find($mutasi->lamaran_id);
+            	$pegawai->update([
+            		'penempatan' => $mutasi->baru
+            	]);
+            }
+
 
     	} catch (\Exception $e) {
     		DB::rollback();

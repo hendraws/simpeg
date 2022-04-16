@@ -237,12 +237,13 @@ class SuratPeringatanController extends Controller
     		$history['modul'] = 'surat-peringatan';
 
     		HistoryLog::create($history);
+
             if($request->status == 'sukses'){
 
                 HistoryPegawai::create([
                     'pesan' => 'Surat Peringatan '. $request->sp,
                     'user_id' => $suratPeringatan->lamaran_id,
-                    'dokumen' => '',
+                    'dokumen' => $suratPeringatan->dokumen,
                     'cabang' => optional($suratPeringatan->getKantorAwal)->kantor,
                     'created_by' => optional(optional(auth()->user())->getProfile)->id,
                 ]);

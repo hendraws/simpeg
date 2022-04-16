@@ -1,4 +1,4 @@
-a<div class="card">
+<div class="card">
     @hasanyrole('super-admin|hrd|general-manager')
         <div class="card-header">
             <a class="btn btn-sm btn-primary" href="{{ action('SponsorController@create') }}" data-toggle="tooltip"

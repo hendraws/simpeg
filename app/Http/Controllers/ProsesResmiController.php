@@ -59,7 +59,7 @@ class ProsesResmiController extends Controller
     		HistoryLog::create($history);
 
             HistoryPegawai::create([
-                'pesan' => 'Pengajuan Promosi '. optional($data->getJabatanAwal)->jabatan,
+                'pesan' => 'Pengajuan Promosi '. optional($data->getJabatanBaru)->jabatan,
                 'user_id' => $request->lamaran_id,
                 'dokumen' => '',
                 'cabang' => '',
