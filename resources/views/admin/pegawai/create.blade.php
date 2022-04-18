@@ -1,6 +1,6 @@
 @extends('layouts.app')
-@section('title', 'Pembuatan User')
-@section('content-title', 'Pembuatan User')
+@section('title', 'Pembuatan Data Pegawai')
+@section('content-title', 'Pembuatan Data Pegawai')
 @section('css')
     <link rel="stylesheet" href="{{ asset('plugins/select2/css/select2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
