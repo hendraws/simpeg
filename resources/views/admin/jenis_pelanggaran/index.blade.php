@@ -13,7 +13,7 @@
 			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 		}
 	});
-	$(function() {	
+	$(function() {
 		$('#table').DataTable();
 	});
 
@@ -22,7 +22,7 @@
 		var id = $(this).data('id');
 		var url = '{{ action('JenisPelanggaranController@destroy',':id') }}';
 		url = url.replace(':id',id);
-	
+
 		Swal.fire({
 			title: 'Apakah Anda Yakin ?',
 			text: "Data akan terhapus tidak dapat dikembalikan lagi !",
@@ -46,7 +46,7 @@
 								'Your file has been deleted.',
 								'success'
 								);
-							 setTimeout(function() { 
+							 setTimeout(function() {
 									location.reload();
 						    }, 2000);
 						}
@@ -83,7 +83,7 @@
 								<tbody>
 									@foreach($data as $value)
 									<tr>
-										<th scope="row">1</th>
+										<th scope="row">{{ $loop->index + 1 }}</th>
 										<td>{{ $value->jenis_pelanggaran }}</td>
 										<td>
 											<a class="btn btn-warning btn-sm modal-button" href="Javascript:void(0)"  data-target="ModalForm" data-url="{{ action('JenisPelanggaranController@edit',$value) }}"  data-toggle="tooltip" data-placement="top" title="Edit" >Edit</a>

@@ -9,6 +9,7 @@ use App\Models\Lamaran;
 use App\Models\RefOption;
 use App\Models\HistoryLog;
 use App\Models\ProsesResmi;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\HistoryPegawai;
 use Illuminate\Support\Facades\DB;
