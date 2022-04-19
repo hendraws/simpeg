@@ -113,7 +113,7 @@
     						<div class="modal-body">
     							@csrf
     							@method('PUT')
-    							
+
     						<div class="form-group row">
     								<label for="nip" class="col-sm-2 col-form-label">NIP</label>
     								<div class="col-sm-8">
@@ -147,7 +147,7 @@
     								</div>
     							</div>
     							<div class="form-group row">
-    								<label for="tanggal_akhir" class="col-sm-2 col-form-label">Tanggal Mulai</label>
+    								<label for="tanggal_akhir" class="col-sm-2 col-form-label">Tanggal Akhir</label>
     								<div class="col-sm-8">
     									<input required type="text" class="form-control tanggal" id="tanggal_akhir" value="{{ $data->tanggal_akhir }}" autocomplete="off" name="tanggal_akhir">
     								</div>

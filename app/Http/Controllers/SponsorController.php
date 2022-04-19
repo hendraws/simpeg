@@ -56,8 +56,8 @@ class SponsorController extends Controller
     	$request->validate([
     		'lamaran_id' => 'required',
     		'kantor_tugas' => 'required',
-    		'tanggal_mulai' => 'required|date_format:Y/m/d',
-    		'tanggal_akhir' => 'required|date_format:Y/m/d',
+    		'tanggal_mulai' => 'required|date_format:Y-m-d',
+    		'tanggal_akhir' => 'required|date_format:Y-m-d',
     		'kantor_tugas' => 'required',
     	]);
         // dd($request->all());
@@ -156,14 +156,14 @@ class SponsorController extends Controller
 
     	DB::beginTransaction();
     	try {
-    		
-    		
+
+
     		$input['tanggal_mulai'] = $request->tanggal_mulai;
     		$input['tanggal_akhir'] = $request->tanggal_akhir;
     		$input['baru'] = $request->kantor_tugas;
 
     		$data = ProsesResmi::where('id', $id)->first();
-    		
+
     		$kantor_baru = kantor::find($request->kantor_baru);
 
     		$pesan = 'Ubah Pengajuan Sponsor ';

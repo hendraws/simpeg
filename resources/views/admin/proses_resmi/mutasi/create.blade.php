@@ -122,13 +122,13 @@
     								<div class="col-sm-8">
     									<input required type="text" class="form-control" id="nip" value="" name="nip" readonly>
     								</div>
-    							</div>    							
+    							</div>
     							<div class="form-group row">
     								<label for="nama" class="col-sm-2 col-form-label">Nama</label>
     								<div class="col-sm-8">
     									<input required type="text" class="form-control" id="nama" value="" name="nama" readonly>
     								</div>
-    							</div>	
+    							</div>
     							<div class="form-group row">
     								<label for="jabatan" class="col-sm-2 col-form-label">Jabatan</label>
     								<div class="col-sm-8">
@@ -136,14 +136,14 @@
     								</div>
     							</div>
     							<div class="form-group row">
-    								<label for="kantor_kini" class="col-sm-2 col-form-label">Kantor/Cabang Baru</label> 
+    								<label for="kantor_kini" class="col-sm-2 col-form-label">Kantor/Cabang Lama</label>
     								<div class="col-sm-8">
     									<input required type="text" class="form-control" id="kantor_kini" value="" name="kantor_kini" readonly>
     									<input type="hidden" class="form-control" value="" name="kantor_kini_id" id="kantor_kini_id" readonly>
     								</div>
     							</div>
     							<div class="form-group row">
-    								<label for="kantor_baru" class="col-sm-2 col-form-label">Kantor/Cabang Baru</label> 
+    								<label for="kantor_baru" class="col-sm-2 col-form-label">Kantor/Cabang Baru</label>
     								<div class="col-sm-8">
     									<select class="form-control " name="kantor_baru" id="kantor_baru">
     										{{-- <option></option> --}}
@@ -154,12 +154,12 @@
     								</div>
     							</div>
     							<div class="form-group row">
-    								<label for="penerbit_sk" class="col-sm-2 col-form-label">Penerbit SK</label> 
+    								<label for="penerbit_sk" class="col-sm-2 col-form-label">Penerbit SK</label>
     								<div class="col-sm-8">
     									<input required type="text" class="form-control" id="penerbit_sk" value="{{ auth()->user()->name }}" name="penerbit_sk" readonly>
     								</div>
     							</div>
-    							
+
     						</div>
     						<div class="modal-footer">
     							<button class="btn btn-brand btn-square btn-primary">Simpan</button>
