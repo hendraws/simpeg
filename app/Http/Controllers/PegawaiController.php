@@ -209,6 +209,7 @@ class PegawaiController extends Controller
         $sp =     ProsesResmi::where('modul', 'surat-peringatan')
             ->where('status_verifikasi', 'sukses')
             ->where('tanggal_akhir', '>=', date('Y-m-d'))
+            ->where('lamaran_id', $id)
             ->latest()
             ->first();
 

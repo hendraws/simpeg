@@ -6,7 +6,7 @@
             <!-- small box -->
             <div class="small-box bg-info">
                 <div class="inner">
-                    <h3>{{ $lamaran->count() }}</h3>
+                    <h3>{{ $lamaran }}</h3>
 
                     <p>Jumlah Pegawai</p>
                 </div>
@@ -21,7 +21,7 @@
             <!-- small box -->
             <div class="small-box bg-success">
                 <div class="inner">
-                    <h3>{{ $spAktif->count() }}</h3>
+                    <h3>{{ $spAktif }}</h3>
 
                     <p>Status SP Aktif</p>
                 </div>
@@ -36,7 +36,7 @@
             <!-- small box -->
             <div class="small-box bg-warning">
                 <div class="inner">
-                    <h3>{{ $sponsor->count() }}</h3>
+                    <h3>{{ $sponsor }}</h3>
 
                     <p>Sponsor Aktif</p>
                 </div>
@@ -51,7 +51,7 @@
             <!-- small box -->
             <div class="small-box bg-danger">
                 <div class="inner">
-                    <h3>{{ $verifikasiLamaran->count() }}</h3>
+                    <h3>{{ $verifikasiLamaran }}</h3>
 
                     <p>Verifikasi Pengajuan Lamaran</p>
                 </div>

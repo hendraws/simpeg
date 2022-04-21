@@ -8,6 +8,7 @@ use App\Models\Laporan;
 use App\Models\Mutasi;
 use App\Models\Pemberhentian;
 use App\Models\Promosi;
+use App\Models\ProsesResmi;
 use App\Models\Sponsor;
 use App\Models\SuratPeringatan;
 use Illuminate\Http\Request;
@@ -32,18 +33,15 @@ class HomeController extends Controller
     public function index()
     {
     	$historyLog  = HistoryLog::orderBy('created_at','desc')->take(15)->get();
-    	$lamaran = Lamaran::whereNotNull('nip')->get();
-    	$spAktif = SuratPeringatan::where('status','sukses')->where('tanggal_akhir', '>', date('Y-m-d'))->get();
-    	$sponsor = Sponsor::where('keterangan','Aktif')->where('tanggal_mulai', '<=', date('Y-m-d'))->where('tanggal_akhir','>=',date('Y-m-d') )->get();
-        $verifikasiLamaran = Lamaran::where('status_lamaran', 'menunggu-verifikasi')->get();
-        $verifikasiLaporanPegawai = Laporan::where('status', 'pending')->get()->count();
-        $verifikasiMutasi = Mutasi::where('status', 'pending')->get()->count();
-        $verifikasiPromosi = Promosi::where('status', 'pending')->get()->count();
-        $verifikasiSponsor = Sponsor::where('status', 'pending')->get()->count();
-        $verifikasiSuratPeringatan = SuratPeringatan::where('status', 'pending')->get()->count();
-        $verifikasiPemberhentian = Pemberhentian::where('status', 'pending')->get()->count();
-        
- $verifikasiAll =  $verifikasiLaporanPegawai + $verifikasiMutasi + $verifikasiPromosi + $verifikasiSponsor + $verifikasiSuratPeringatan + $verifikasiPemberhentian;
+    	$lamaran = Lamaran::whereNotNull('nip')->count();
+        $prosesResmi = ProsesResmi::where('status_verifikasi', 'sukses')->get();
+
+        $spAktif = $prosesResmi->where('modul','surat-peringatan')->where('tanggal_akhir', '>', date('Y-m-d'))->count();
+        $sponsor = $prosesResmi->where('modul','sponsor')->where('tanggal_mulai', '<=', date('Y-m-d'))->where('tanggal_akhir','>=',date('Y-m-d') )->count();
+
+        $verifikasiLamaran = Lamaran::where('status_lamaran', 'menunggu-verifikasi')->count();
+        $verifikasiLaporanPegawai = Laporan::where('status', 'pending')->count();
+        $verifikasiAll = ProsesResmi::where('status_verifikasi','pending')->count();
         return view('home', compact('historyLog', 'lamaran', 'spAktif', 'sponsor','verifikasiLamaran','verifikasiLaporanPegawai','verifikasiAll'));
     }
 }
