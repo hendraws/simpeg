@@ -101,7 +101,7 @@
 										<td>{{ $value->nama }}</td>
 										{{-- <td></td> --}}
 
-										<td>{{ !empty($value->tanggal_interview) ? date('d-m-Y h:i', strtotime($value->tanggal_interview)) : ''  }}</td>
+										<td>{{ !empty($value->tanggal_interview) ? date('d-m-Y G:i', strtotime($value->tanggal_interview)) : ''  }}</td>
 										<td>{{ $value->status_lamaran }}</td>
 										{{-- <td></td> --}}
 										<td>{{ $value->getJabatan->jabatan }}</td>
