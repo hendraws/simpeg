@@ -106,6 +106,7 @@
     									<td>{{ $value->status_karyawan  }}</td>
     									<td>
     										<a class="btn btn-sm btn-primary" href="{{ action('PegawaiController@show', $value->id) }}">Detail</a>
+    										<a class="btn btn-sm btn-warning" href="{{ action('PegawaiController@edit', $value->id) }}">Edit</a>
     										<button class="btn btn-sm btn-danger hapus"
     										data-url="{{ action('LamaranController@destroy', $value->id) }}">Hapus</button>
     									</td>
@@ -120,4 +121,3 @@
     	</div>
     </div>
     @endsection
-    

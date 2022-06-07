@@ -126,15 +126,15 @@
     									<input required type="text" class="form-control" id="jabatan" value="{{ optional(optional($data->getPegawai)->getJabatan)->jabatan }}" name="jabatan" readonly>
     								</div>
     							</div>
-    							
+
     							<div class="form-group row">
-    								<label for="cabang" class="col-sm-2 col-form-label">Kantor/Cabang</label>
+    								<label for="cabang" class="col-sm-2 col-form-label">Kantor/Cabang Lama</label>
     								<div class="col-sm-8">
     									<input required type="text" class="form-control" id="cabang" value="{{ optional($data->getKantorAwal)->kantor }}" name="cabang" readonly>
     								</div>
     							</div>
     							<div class="form-group row">
-    								<label for="kantor_baru" class="col-sm-2 col-form-label">Kantor/Cabang Baru</label> 
+    								<label for="kantor_baru" class="col-sm-2 col-form-label">Kantor/Cabang Baru</label>
     								<div class="col-sm-8">
     									<select class="form-control " name="kantor_baru" id="kantor_baru">
     										{{-- <option></option> --}}
@@ -145,7 +145,7 @@
     								</div>
     							</div>
     							<div class="form-group row">
-    								<label for="penerbit_sk" class="col-sm-2 col-form-label">Penerbit SK</label> 
+    								<label for="penerbit_sk" class="col-sm-2 col-form-label">Penerbit SK</label>
     								<div class="col-sm-8">
     									<input required type="text" class="form-control" id="penerbit_sk" value="{{ auth()->user()->name }}" name="penerbit_sk" readonly>
     								</div>

@@ -12,7 +12,7 @@
 						<td style="width:50%">Status</td>
 						{{-- <td>: {{ optional($data->getUser)->is_active == 'Y' ? 'Aktif' : 'Tidak Aktif'  }}</td> --}}
 						<td>: {{ $data->status_karyawan  }}</td>
-					</tr>  
+					</tr>
 					<tr>
 						<td style="width:50%">NIP</td>
 						<td>: {{ $data->nip }}</td>
@@ -93,40 +93,94 @@
 				<table>
 					<tr>
 						<td style="width:50%">Surat Lamaran</td>
-						<td>: <a href="{{ Storage::url($data->surat_lamaran) }}">Download</a></td>
+						<td>:
+                            @if(!empty($data->surat_lamaran))
+                            <a href="{{ Storage::url($data->surat_lamaran) }}">Download</a>
+                            @else
+                            File Belum Diupload
+                            @endif
+                        </td>
 					</tr>
 					<tr>
 						<td style="width:50%">Surat Pernyataan</td>
-						<td>: <a href="{{ Storage::url($data->surat_pernyataan) }}">Download</a></td>
+						<td>:
+                            @if(!empty($data->surat_pernyataan))
+                            <a href="{{ Storage::url($data->surat_pernyataan) }}">Download</a>
+                            @else
+                            File Belum Diupload
+                            @endif
+                        </td>
 					</tr>
 					<tr>
 						<td style="width:50%">Surat Pertanggung Jawaban</td>
-						<td>: <a href="{{ Storage::url($data->surat_tanggung_jawab) }}">Download</a></td>
+						<td>:
+                            @if(!empty($data->surat_tanggung_jawab))
+                            <a href="{{ Storage::url($data->surat_tanggung_jawab) }}">Download</a>
+                            @else
+                            File Belum Diupload
+                            @endif
+                        </td>
 					</tr>
 					<tr>
 						<td style="width:50%">Ijazah Terakhir</td>
-						<td>: <a href="{{ Storage::url($data->ijazah) }}">Download</a></td>
+						<td>:
+                            @if(!empty($data->ijazah))
+                            <a href="{{ Storage::url($data->ijazah) }}">Download</a>
+                            @else
+                            File Belum Diupload
+                            @endif
+                        </td>
 					</tr>
 					<tr>
 						<td style="width:50%">CV</td>
-						<td>: <a href="{{ Storage::url($data->cv) }}">Download</a></td>
+						<td>:
+                            @if(!empty($data->cv))
+                            <a href="{{ Storage::url($data->cv) }}">Download</a>
+                            @else
+                            File Belum Diupload
+                            @endif
+                        </td>
 					</tr>
 					<tr>
 						<td style="width:50%">KTP</td>
-						<td>: <a href="{{ Storage::url($data->ktp) }}">Download</a></td>
+						<td>:
+                            @if(!empty($data->ktp))
+                            <a href="{{ Storage::url($data->ktp) }}">Download</a>
+                            @else
+                            File Belum Diupload
+                            @endif
+                        </td>
 					</tr>
 					<tr>
 						<td style="width:50%">KK</td>
-						<td>: <a href="{{ Storage::url($data->kk) }}">Download</a></td>
+						<td>:
+                            @if(!empty($data->kk))
+                            <a href="{{ Storage::url($data->kk) }}">Download</a>
+                            @else
+                            File Belum Diupload
+                            @endif
+                        </td>
 					</tr>
 					<tr>
 						<td style="width:50%">KTP Orang Tua</td>
-						<td>: <a href="{{ Storage::url($data->ktp_orangtua) }}">Download</a></td>
+						<td>:
+                            @if(!empty($data->ktp_orangtua))
+                            <a href="{{ Storage::url($data->ktp_orangtua) }}">Download</a>
+                            @else
+                            File Belum Diupload
+                            @endif
+                        </td>
 					</tr>
 					@if (!empty($data->sim))
 					<tr>
 						<td style="width:50%">SIM</td>
-						<td>: <a href="{{ Storage::url($data->sim) }}">Download</a></td>
+						<td>:
+                            @if(!empty($data->sim))
+                            <a href="{{ Storage::url($data->sim) }}">Download</a>
+                            @else
+                            File Belum Diupload
+                            @endif
+                        </td>
 					</tr>
 					@endif
 				</table>
