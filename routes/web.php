@@ -83,6 +83,9 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('proses-resmi/pemberhentian/{id}/download-draf', 'PemberhentianController@downloadDraf');
 
 	Route::resource('/data-pegawai', 'PegawaiController');
+	Route::get('/data-pegawai/{id}/surat-perjanjian-kerja', 'PegawaiController@suratPernjanjianKerja');
+	Route::get('/data-pegawai/{id}/surat-pernyataan-sim', 'PegawaiController@suratPernyataanSim');
+	Route::get('/data-pegawai/{id}/surat-Penitipan-ijazah', 'PegawaiController@suratPenitipanIjazah');
 	Route::resource('/laporan', 'LaporanController');
 	Route::get('/laporan/{id}/verifikasi-form', 'LaporanController@verifikasiForm');
 	Route::put('/laporan/{id}/verifikasi-form-update', 'LaporanController@verifikasi');

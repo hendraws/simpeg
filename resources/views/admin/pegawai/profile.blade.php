@@ -89,7 +89,7 @@
 	<div class="card-body">
 		<div class="row">
 
-			<div class="col-md-6">
+			<div class="col-md-4">
 				<table>
 					<tr>
 						<td style="width:50%">Surat Lamaran</td>
@@ -185,7 +185,29 @@
 					@endif
 				</table>
 			</div>
-			<div class="col-md-6">
+			<div class="col-md-4">
+				<table>
+					<tr>
+						<td style="width:50%">Surat Perjanjian Kerja</td>
+						<td>:
+                            <a href="{{ action('PegawaiController@suratPernjanjianKerja', $data->id) }}">Download</a>
+                        </td>
+					</tr>
+					<tr>
+						<td style="width:50%">Surat Pernyataan SIM</td>
+						<td>:
+                            <a href="{{ action('PegawaiController@suratPernyataanSim', $data->id) }}">Download</a>
+                        </td>
+					</tr>
+					<tr>
+						<td style="width:50%">Surat Penitipan Ijazah</td>
+						<td>:
+                            <a href="{{ action('PegawaiController@suratPenitipanIjazah', $data->id) }}">Download</a>
+                        </td>
+					</tr>
+				</table>
+			</div>
+			<div class="col-md-4">
 				<img src="{{ Storage::url($data->foto) }}" alt="" class="img-responsive img-thumbnail"
 				style="max-height: 200px">
 			</div>
