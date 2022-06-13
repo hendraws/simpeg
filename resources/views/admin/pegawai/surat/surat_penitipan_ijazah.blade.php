@@ -114,7 +114,7 @@
 				<table style="width: 100%">
 				<tr>
 					<td width="40%">Ijazah</td>
-					<td>: Ijazah</td>
+					<td>: {{ $data->jenis_ijazah }}</td>
 				</tr>
 				<tr>
 					<td width="40%">Atas Nama Ijazah</td>
@@ -142,7 +142,7 @@
 				<tr>
 					<td class="text-center"> ({{ ucwords(strtolower($data->nama)) }})</td>
 					<td ></td>
-					<td class="text-center"> ({{ ucwords(strtolower($data->nama)) }})</td>
+					<td class="text-center"> ({{ ucwords(strtolower(optional($data->getAccUser)->name)) }})</td>
 				</tr>
 			</table>
 		</div>

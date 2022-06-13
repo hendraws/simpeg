@@ -83,7 +83,8 @@ class LamaranController extends Controller
     			'sim' => 'required|max:550',
     			'ktp' => 'required|max:550',
     			'ktp_orangtua' => 'required|max:550',
-    			'kk' => 'required|max:550'
+    			'kk' => 'required|max:550',
+    			'jenis_ijazah' => 'required',
 
     		], [   'required' => 'inputan :attribute wajib diisi.' ]);
 
@@ -333,6 +334,7 @@ class LamaranController extends Controller
     			'status_lamaran' => 'interview',
     			'tanggal_interview' => $request->tanggal_interview,
     			'status_dokumen' => 'terverifikasi',
+    			'verified_by' => auth()->user()->id,
     		]);
 
     		HistoryLog::create([
@@ -409,6 +411,7 @@ class LamaranController extends Controller
     			'status_lamaran' => 'diterima',
 			    'status_karyawan' => 'aktif',
     			'tanggal_diterima' => date('Y-m-d'),
+    			'diterima_by' => auth()->user()->id,
     		]);
 
     		$kantor = kantor::find($request->penempatan);

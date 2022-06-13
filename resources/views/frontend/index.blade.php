@@ -248,7 +248,7 @@
 										<div class="form-group row">
 											<label for="nik" class="col-sm-2 col-form-label">Nik</label>
 											<div class="col-sm-10">
-												<input type="text" class="form-control" id="nik" name="nik">
+												<input type="number" class="form-control" id="nik" name="nik">
 											</div>
 										</div>
 										<div class="form-group row">
@@ -313,14 +313,14 @@
 										<label for="no_hp" class="col-sm-2 col-form-label">No. Hp
 										(Whatsapp)</label>
 										<div class="col-sm-4">
-											<input type="text" class="form-control" id="no_hp" name="no_hp">
+											<input type="number" class="form-control" id="no_hp" name="no_hp">
 										</div>
 									</div>
 									<div class="form-group row">
 										<label for="no_hp_darurat" class="col-sm-2 col-form-label">Kontak
 										Darurat</label>
 										<div class="col-sm-4">
-											<input type="text" class="form-control" id="no_hp_darurat"
+											<input type="number" class="form-control" id="no_hp_darurat"
 											name="no_hp_darurat">
 										</div>
 										<label for="email" class="col-sm-2 col-form-label">Email</label>
@@ -350,10 +350,11 @@
 										<div class="col-sm-3">
 											<input type="file" class="form-control-file" name="surat_tanggung_jawab">
 										</div>
-										<label for="kontak_dadurat" class="col-sm-3 col-form-label">d. Foto
+										<label for="kontak_dadurat" class="col-sm-3 col-form-label">d. Jenis & Foto
 										Ijazah Terakhir Legalisir</label>
 										<div class="col-sm-3">
-											<input type="file" class="form-control-file" name="ijazah">
+											<input type="text" name="jenis_ijazah" placeholder="Jenis Ijazah"  class="form-control">
+											<input type="file" class="form-control-file my-2" name="ijazah" >
 										</div>
 										<label for="kontak_dadurat" class="col-sm-3 col-form-label">e.
 										Daftar Riwayat Hidup / CV </label>

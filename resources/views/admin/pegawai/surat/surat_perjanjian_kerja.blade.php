@@ -118,7 +118,7 @@ function penyebut($nilai) {
 			$array_bln = array(1=>"I","II","III", "IV", "V","VI","VII","VIII","IX","X", "XI","XII");
 			$bln = $array_bln[date('n', strtotime($data->created_at))];
 			@endphp
-			Nomor : {{ $data->id }}/830/SMART/SPK/{{ $bln }}/{{ date('Y', strtotime($data->created_at)) }}
+			Nomor : {{ $data->id }}/13/SMART/SPK/{{ $bln }}/{{ date('Y', strtotime($data->created_at)) }}
 		</div>
 		<br>
 		<p>Yang bertanda Tangan Dibawah ini : </p>
@@ -126,19 +126,20 @@ function penyebut($nilai) {
 			<tr>
 				<td class="text-right" width="5%">1.</td>
 				<td width="40%">Nama</td>
-				<td>: DAVID SETIAWAN </td>
+				<td>: {{ strtoupper(optional($data->getAccUser)->name) }} </td>
 				{{-- <td>: {{ ucwords(strtolower(optional($user->getProfile)->nama)) }}</td> --}}
 			</tr>
 			<tr>
 				<td class="text-right" width="5%"></td>
 				<td width="40%">Jabatan</td>
-				<td>: STAF UMUM</td>
+			
+				<td>: {{ strtoupper(optional(optional(optional($data->getAccUser)->getProfile)->getJabatan)->jabatan) }}</td>
 				{{-- <td>: {{ optional(optional($user->getProfile)->getJabatan)->jabatan }}</td> --}}
 			</tr>
 			<tr>
 				<td class="text-right" width="5%"></td>
 				<td width="40%">Alamat</td>
-				<td>: BANYUMAS</td>
+					<td>: {{ strtoupper(optional(optional($data->getAccUser)->getProfile)->alamat) }}</td>
 				{{-- <td>: {{ optional(optional($user->getProfile)->getKantor)->kantor }}</td> --}}
 			</tr>
 		</table>
@@ -336,7 +337,7 @@ function penyebut($nilai) {
 					<td width="33%"><b>PIHAK KEDUA</b> <br><br><br><br><br><br></td>
 				</tr>
 				<tr>
-					<td width="33%"><b>[David Setiawan]</b></td>
+					<td width="33%"><b>[{{ ucwords(strtolower(optional($data->getAccUser)->name)) }}]</b></td>
 					<td width="33%"></td>
 					<td width="33%"><b>	[{{ ucwords(strtolower($data->nama)) }}]</b></td>
 				</tr>
