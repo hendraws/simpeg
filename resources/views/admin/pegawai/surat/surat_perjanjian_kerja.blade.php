@@ -206,7 +206,7 @@ function penyebut($nilai) {
 				PASAL 2
 			</p>
 			<p class="text-justify">
-				<b>PIHAK KEDUA</b> akan ditempatkan sebagai ( Calon STAF ) pada (unit Banyumas) Apabila dipandang perlu dan juga dikehendaki, <b>PIHAK PERTAMA</b> dapat menempatkan <b>PIHAK KEDUA</b> dalam melaksanakan tugas dan pekerjaan lain yang oleh <b>PIHAK PERTAMA</b> dianggap lebih cocok serta sesuai dengan keahlian yang dimiliki <b>PIHAK KEDUA</b>, dengan syarat masih tetap berada di dalam lingkup kerja KSP Satria Mulia Arthomoro.
+				<b>PIHAK KEDUA</b> akan ditempatkan sebagai ( {{ optional($data->getJabatan)->jabatan }} ) pada ({{ optional($data->getKantor)->kantor }}) Apabila dipandang perlu dan juga dikehendaki, <b>PIHAK PERTAMA</b> dapat menempatkan <b>PIHAK KEDUA</b> dalam melaksanakan tugas dan pekerjaan lain yang oleh <b>PIHAK PERTAMA</b> dianggap lebih cocok serta sesuai dengan keahlian yang dimiliki <b>PIHAK KEDUA</b>, dengan syarat masih tetap berada di dalam lingkup kerja KSP Satria Mulia Arthomoro.
 			</p>
 			<p class="text-center font-weight-bold">
 				PASAL 3
